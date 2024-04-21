@@ -16,8 +16,11 @@ module.exports = {
         lightAccent: "#FBBF24",
 
         navbarTextColor:'#FFFFFF',
+        layoutTextColor:'#f3f4f6',
         primaryText: '#4B5563', 
         sky600: '#87CEEB', 
+        email:'#00b1b7',
+        facebook: '#3d59c4'
       },
     },
   },

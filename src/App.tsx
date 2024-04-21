@@ -1,23 +1,38 @@
 import { useThemeContext } from './context/themeContext';
 import Navbar from './components/Navbar';
+import {Routes,Route} from "react-router-dom";
+import LoginDialog from './pages/login';
+import Layout from './components/Layout';
+import { useDialogContext } from './context/dialogContext';
+import SignUpDialog from './pages/signup';
 
 function App() {
-  const { theme} = useThemeContext();
+  const { theme } = useThemeContext();
+  const { showDialog,showSignUpDialog } = useDialogContext();
 
   return (
-    <div className={`${theme === 'dark' ? 'dark' : ''}`}>
-      <Navbar/>
-      <div className="min-h-screen dark:bg-darkBackground rounded px-4">
-      <h1 className="text-3xl h-screen font-bold underline dark:text-darkError dark:bg-darkBackground duration-100">
-        Ahoj cestovatelé!
+    <div className={`${theme === 'dark' ? 'dark' : ''} relative screen`}>
+      {showDialog  || showSignUpDialog ? (
+        <div className="fixed inset-0 bg-black opacity-50"></div>
+      ) : null}
 
-        <p>lorem1000</p>
-      </h1>
-
-      </div>
+      {showDialog || showSignUpDialog ? (
+          showDialog ?<LoginDialog /> :<SignUpDialog/>
+              
+        ) : (
+        <>
+          <Navbar />
+          <div className="dark:bg-darkBackground px-2 ">
+            <Routes>
+              <Route path="/" element={<Layout />} />
+            </Routes>
+          </div>
+        </>
+      )}
     </div>
   );
 }
+
 
 export default App;
 
