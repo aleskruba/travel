@@ -15,6 +15,7 @@ module.exports = {
         lightPrimary: "#9CA3AF", 
         lightAccent: "#FBBF24",
 
+        navbarTextColor:'#FFFFFF',
         primaryText: '#4B5563', 
         sky600: '#87CEEB', 
       },

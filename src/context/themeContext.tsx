@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useState, useEffect, ReactNode ,useContext} from 'react';
 import { FaRegSun } from "react-icons/fa";
 import { FaMoon } from "react-icons/fa";
 import { MdDevices } from "react-icons/md";
@@ -10,12 +10,13 @@ interface ThemeContextProps {
   theme: Theme;
   setTheme: React.Dispatch<React.SetStateAction<Theme>>;
   options: { icon: React.ReactNode; text: Theme }[];
+  
 }
 
 export const ThemeContext = createContext<ThemeContextProps>({
   theme: 'light',
   setTheme: () => {},
-  options: []
+  options: [],
 });
 
 interface ThemeProviderProps {
@@ -60,15 +61,32 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     }
   }, [theme,element.classList]);
 
-  const handleDeviceThemeChange = () => {
-    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setTheme(prefersDarkMode ? 'dark' : 'light');
-  };
+  useEffect(() => {
+    const handleDeviceThemeChange = () => {
+      const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setTheme(prefersDarkMode ? 'dark' : 'light');
+    };
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', handleDeviceThemeChange);
+
+    return () => {
+      window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', handleDeviceThemeChange);
+    };
+  }, []);
+
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, options }}>
       {children}
-      <button onClick={handleDeviceThemeChange}>Device</button>
     </ThemeContext.Provider>
   );
 };
+
+
+export function useThemeContext() {
+  const context = useContext(ThemeContext);
+  if (!context) {
+      throw new Error("useThemeContext must be used within a ThemeContextProvider");
+  }
+  return context;
+}

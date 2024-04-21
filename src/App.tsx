@@ -1,27 +1,20 @@
-import {useContext } from 'react';
-import { ThemeContext } from './context/themeContext';
+import { useThemeContext } from './context/themeContext';
+import Navbar from './components/Navbar';
 
 function App() {
-  const { theme, setTheme, options } = useContext(ThemeContext);
+  const { theme} = useThemeContext();
 
   return (
-    <div className={`min-h-screen ${theme === 'dark' ? 'dark' : ''}`}>
-      <div className="fixed flex top-5 right-10 duration-100 dark:bg-darkBackground rounded">
-        {options?.map((opt) => (
-          <button
-            key={opt.text}
-            onClick={() => setTheme(opt.text)}
-            className={`flex items-center justify-center w-8 h-8 leading-9 text-2xl rounded-full m-1 hover:text-sky600 ${
-              theme === opt.text && `text-sky600`
-            } `}
-          >
-            {opt.icon}
-          </button>
-        ))}
-      </div>
+    <div className={`${theme === 'dark' ? 'dark' : ''}`}>
+      <Navbar/>
+      <div className="min-h-screen dark:bg-darkBackground rounded px-4">
       <h1 className="text-3xl h-screen font-bold underline dark:text-darkError dark:bg-darkBackground duration-100">
         Ahoj cestovatelé!
+
+        <p>lorem1000</p>
       </h1>
+
+      </div>
     </div>
   );
 }
