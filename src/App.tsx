@@ -5,6 +5,7 @@ import LoginDialog from './pages/login';
 import Layout from './components/Layout';
 import { useDialogContext } from './context/dialogContext';
 import SignUpDialog from './pages/signup';
+import Footer from './components/Footer';
 
 function App() {
   const { theme } = useThemeContext();
@@ -27,6 +28,7 @@ function App() {
               <Route path="/" element={<Layout />} />
             </Routes>
           </div>
+          <Footer/>
         </>
       )}
     </div>

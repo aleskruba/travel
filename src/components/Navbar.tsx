@@ -32,7 +32,7 @@ function Navbar() {
     
 
     <div className="flex items-center">
-    <span className={`text-lightAccent text-2xl poppins-extrabold-italic`} style={{ WebkitTextStroke: '1px violet' }}>Rady na cesty</span>
+    <span className={`text-lightAccent text-2xl poppins-extrabold-italic cursor-pointer`} style={{ WebkitTextStroke: '1px violet' }}>Rady na cesty</span>
 
     </div>
 
@@ -44,10 +44,10 @@ function Navbar() {
     <div className="flex items-center space-x-4">
         <div className="hidden md:block bg-transparent border cursor-pointer hover:bg-lightAccent hover:text-darkBackground border-white px-3 py-1 rounded-lg"
               onClick={handleSignUpClick}
-        >Register</div>
+        >Registrace</div>
         <div className="hidden md:block bg-transparent border cursor-pointer hover:bg-lightAccent hover:text-darkBackground border-white px-3 py-1 rounded-lg"
              onClick={handleLoginClick}
-          >Login</div>
+          >Přihlásit</div>
 
         {options?.map((opt) => (
           <button
@@ -66,16 +66,16 @@ function Navbar() {
     <div className='flex justify-between w-full px-2 py-2 '>
              
                 <div className='flex gap-2 md:gap-6'>
-                <div className="hover:text-lightAccent hover:transition duration-100">TravelTips</div>
-                <div className="hover:text-lightAccent hover:transition duration-100">Spolucesty</div>
+                <div className="hover:text-lightAccent hover:transition duration-100 cursor-pointer">TravelTips</div>
+                <div className="hover:text-lightAccent hover:transition duration-100 cursor-pointer">Spolucesty</div>
                 </div>
                 <div className='flex ml-4 gap-2 md:gap-6'>
                     <div className="hover:text-lightAccent hover:transition duration-100 cursor-pointer"
                          onClick={handleSignUpClick}>
-                          Register</div>
+                          Registrace</div>
                     <div className="hover:text-lightAccent hover:transition duration-100 cursor-pointer"
                           onClick={handleLoginClick}>
-                          Login</div>
+                          Přihlásit</div>
                </div>
        </div>  
     </div>
