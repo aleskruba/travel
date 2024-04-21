@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import { FaRegSun } from "react-icons/fa";
 import { FaMoon } from "react-icons/fa";
+import { MdDevices } from "react-icons/md";
 
 
 type Theme = 'light' | 'dark';
@@ -22,8 +23,10 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const storedTheme = localStorage.getItem('theme') as Theme | null;
-  const [theme, setTheme] = useState<Theme>(storedTheme || 'light');
+  const [theme, setTheme] = useState<Theme>(() => {
+    const storedTheme = localStorage.getItem('theme') as Theme | null;
+    return storedTheme || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  });
 
   const element = document.documentElement;
 
@@ -35,6 +38,10 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     {
       icon: <FaMoon />,
       text: "dark" as Theme
+    },
+    {
+      icon: <MdDevices/>,
+      text: "device" as Theme // Represents the theme based on user's system preference
     }
   ];
 
@@ -51,11 +58,17 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
       default:
         break;
     }
-  }, [theme,element.classList]);  // or disable ESlint
+  }, [theme,element.classList]);
+
+  const handleDeviceThemeChange = () => {
+    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setTheme(prefersDarkMode ? 'dark' : 'light');
+  };
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, options }}>
       {children}
+      <button onClick={handleDeviceThemeChange}>Device</button>
     </ThemeContext.Provider>
   );
 };
