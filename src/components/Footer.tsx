@@ -31,8 +31,8 @@ function Footer() {
           </ul>
         </div>
 
-        
-            <img src="footer.svg" alt="lide" className='hidden md:flex  w-full '/>
+        {/* 
+            <img src="footer.svg" alt="lide" className='hidden md:flex  w-full '/> */}
         
         <div className="w-full  mb-4 md:pl-32">
           <h3 className="text-lg font-bold mb-4 text-darkAccent ">Podmínky</h3>
