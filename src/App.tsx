@@ -6,6 +6,7 @@ import Layout from './components/Layout';
 import { useDialogContext } from './context/dialogContext';
 import SignUpDialog from './pages/signup';
 import Footer from './components/Footer';
+import Home from './components/Home';
 
 function App() {
   const { theme } = useThemeContext();
@@ -23,9 +24,11 @@ function App() {
         ) : (
         <>
           <Navbar />
-          <div className="dark:bg-darkBackground px-2 ">
+          <div className="dark:bg-darkBackground  ">
             <Routes>
-              <Route path="/" element={<Layout />} />
+                <Route path="/" element={<Layout />} >
+                <Route index element={<Home />}/> 
+                </Route>
             </Routes>
           </div>
           <Footer/>

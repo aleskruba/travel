@@ -5,6 +5,7 @@ import App from './App';
 import { BrowserRouter,Routes,Route } from "react-router-dom";
 import { ThemeProvider } from './context/themeContext';
 import { DialogProvider } from './context/dialogContext';
+import { CountryProvider } from './context/countryContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -14,9 +15,11 @@ root.render(
     <React.StrictMode>
       <DialogProvider>  
         <ThemeProvider>
-          <Routes>
-            <Route path="/*" element={<App/>} />
-          </Routes>
+          <CountryProvider>
+            <Routes>
+              <Route path="/*" element={<App/>} />
+            </Routes>
+          </CountryProvider>
       </ThemeProvider>
       </DialogProvider>
     </React.StrictMode>

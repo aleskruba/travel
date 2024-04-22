@@ -14,6 +14,7 @@ module.exports = {
         lightError: "#ef4444",
         lightPrimary: "#9CA3AF", 
         lightAccent: "#FBBF24",
+        lighTextColor: "#FFFFFF",
 
         navbarTextColor:'#FFFFFF',
         layoutTextColor:'#f3f4f6',

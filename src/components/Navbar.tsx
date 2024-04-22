@@ -37,15 +37,15 @@ function Navbar() {
     </div>
 
     <div className="hidden md:flex space-x-6">
-        <div className="hover:text-lightAccent hover:transition duration-100 cursor-pointer">TravelTips</div>
-        <div className="hover:text-lightAccent hover:transition duration-100 cursor-pointer">Spolucesty</div>
+        <div className="text-white hover:text-lightAccent  hover:transition duration-100 cursor-pointer">TravelTips</div>
+        <div className="text-white hover:text-lightAccent hover:transition duration-100 cursor-pointer">Spolucesty</div>
     </div>
 
     <div className="flex items-center space-x-4">
-        <div className="hidden md:block bg-transparent border cursor-pointer hover:bg-lightAccent hover:text-darkBackground border-white px-3 py-1 rounded-lg"
+        <div className="hidden md:block text-white bg-transparent border cursor-pointer hover:bg-lightAccent hover:text-darkBackground border-white px-3 py-1 rounded-lg"
               onClick={handleSignUpClick}
         >Registrace</div>
-        <div className="hidden md:block bg-transparent border cursor-pointer hover:bg-lightAccent hover:text-darkBackground border-white px-3 py-1 rounded-lg"
+        <div className="hidden md:block text-white bg-transparent border cursor-pointer hover:bg-lightAccent hover:text-darkBackground border-white px-3 py-1 rounded-lg"
              onClick={handleLoginClick}
           >Přihlásit</div>
 
@@ -63,7 +63,7 @@ function Navbar() {
     </div>
     <div className={`${visible ? 'md:hidden fixed  bg-darkAccent   bottom-1 border rounded-lg shadow-lg left-1/2 transform -translate-x-1/2 w-[95%] md:w-[50%] ' : 'fixed  bg-darkAccent  bottom-1 border rounded-lg shadow-lg left-1/2 transform -translate-x-1/2 w-[95%] md:w-[50%] '}`}>
         
-    <div className='flex justify-between w-full px-2 py-2 '>
+    <div className='flex justify-between w-full px-2 py-2 text-white'>
              
                 <div className='flex gap-2 md:gap-6'>
                 <div className="hover:text-lightAccent hover:transition duration-100 cursor-pointer">TravelTips</div>
