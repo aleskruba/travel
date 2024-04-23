@@ -32,8 +32,9 @@ function LoginDialog() {
 
     }
   return (
-    <div className=''>
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 overflow-y-auto">
+
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 ">
+        <div className='flex items-center  overflow-y-auto h-screen'>
         <div className="relative bg-white p-2 rounded-lg flex items-center justify-center flex-col w-[350px] min-w-[350px] h-full max-h-[400px] md:w-[450px] md:h-[550px] ">
            <div className='absolute text-2xl top-2 right-2  text-gray-500 hover:text-gray-700 cursor-pointer'><MdOutlineCancel onClick={handleCloseDialog} /></div> 
           <h1 className='mt-4 poppins-extrabold text-3xl'>Příhlášení</h1>
