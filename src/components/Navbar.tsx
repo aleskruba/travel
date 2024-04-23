@@ -29,7 +29,7 @@ function Navbar() {
     }, [prevScrollPos]);
     
   return (
-<nav  className={` ${visible ? 'sticky' : 'none'} top-0 z-10 flex justify-between items-center bg-darkBackground text-navbarTextColor py-4 px-4 md:px-8 poppins-medium`}>
+<nav  className={` ${visible ? 'sticky' : 'none'} top-0 z-10 flex justify-between gap-4 items-center bg-darkBackground text-navbarTextColor py-4 px-4 md:px-8 poppins-medium`}>
     
 
     <Link to="/" className="flex items-center">
@@ -67,14 +67,14 @@ function Navbar() {
     <div className='flex justify-between w-full px-2 py-4 text-white'>
              
                 <div className='flex gap-2 md:gap-6'>
-                <Link to="/traveltips"className="hover:text-lightAccent hover:transition duration-100 cursor-pointer">TravelTips</Link>
-                <div className="hover:text-lightAccent hover:transition duration-100 cursor-pointer">Spolucesty</div>
+                <Link to="/traveltips" className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-2 py-1 rounded-lg">TravelTips</Link>
+                <Link to="/traveltips" className="hover:bg-lightAccent hover:text-darkBackground  hover:transition duration-100 cursor-pointer border border-white px-2 py-1 rounded-lg">Spolucesty</Link>
                 </div>
                 <div className='flex ml-4 gap-2 md:gap-6'>
-                    <div className="hover:text-lightAccent hover:transition duration-100 cursor-pointer"
+                    <div className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-2 py-1 rounded-lg"
                          onClick={handleSignUpClick}>
                           Registrace</div>
-                    <div className="hover:text-lightAccent hover:transition duration-100 cursor-pointer"
+                    <div className="hover:bg-lightAccent hover:text-darkBackground  hover:transition duration-100 cursor-pointer border border-white px-2 py-1 rounded-lg"
                           onClick={handleLoginClick}>
                           Přihlásit</div>
                </div>

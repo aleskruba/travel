@@ -18,9 +18,10 @@ function Footer() {
   ];
 
   return (
-    <footer className="bg-gray-800 text-gray-300 py-8 pb-20">
-      <div className=" px-8 md:pl-16 flex justify-between ">
-        <div className="w-full   mb-4 ">
+    <footer className="bg-gray-800 text-gray-300  pb-20  pt-32">
+      <div className=" px-8  flex flex-around border-t border-white  py-8  ">
+        <div className="w-full flex justify-center  mb-4 ">
+          <div>
           <h3 className="text-lg font-bold mb-4 text-darkAccent ">Odkazy</h3>
           <ul>
             {footerItems.map((item, index) => (
@@ -29,12 +30,14 @@ function Footer() {
               </li>
             ))}
           </ul>
+          </div>
         </div>
 
         {/* 
             <img src="footer.svg" alt="lide" className='hidden md:flex  w-full '/> */}
         
-        <div className="w-full  mb-4 md:pl-32 ">
+        <div className="w-full flex justify-center mb-4  ">
+          <div>
           <h3 className="text-lg font-bold mb-4 text-darkAccent ">Podmínky</h3>
           <ul>
             {footerConditions.map((condition, index) => (
@@ -43,6 +46,7 @@ function Footer() {
               </li>
             ))}
           </ul>
+        </div>
         </div>
         {/* Add more sections as needed */}
       </div>
