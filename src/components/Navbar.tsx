@@ -37,12 +37,12 @@ function Navbar() {
 
     </Link>
 
-    <div className="hidden md:flex space-x-6">
+    <div className="hidden md:flex space-x-2">
         <Link to="/traveltips" className="text-white hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-3 py-1 rounded-lg">TravelTips</Link>
-        <div className="text-white hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-3 py-1 rounded-lg">Spolucesty</div>
+        <Link to="/traveltips" className="text-white hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-3 py-1 rounded-lg">Spolucesty</Link>
     </div>
 
-    <div className="flex items-center space-x-4">
+    <div className="flex items-center space-x-2">
         <div className="hidden md:block text-white bg-transparent border cursor-pointer hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 border-white px-3 py-1 rounded-lg"
               onClick={handleSignUpClick}
         >Registrace</div>
