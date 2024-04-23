@@ -6,13 +6,14 @@ const ComboBox: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1); // Track highlighted index
-  const { setChosenCountry } = useCountryContext();
+  const { setChosenCountry,chosenCountry } = useCountryContext();
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
-    setIsOpen(true); // Open dropdown when typing
+    setIsOpen(true)
+    
     setHighlightedIndex(-1); // Reset highlighted index when input changes
   };
 
@@ -29,9 +30,9 @@ const ComboBox: React.FC = () => {
     }
   };
 
-  const handleInputClick = () => {
+/*   const handleInputClick = () => {
     setIsOpen(!isOpen); // Toggle dropdown when clicking on input
-  };
+  }; */
 
   const maxDisplayedCountries = 15;
 
@@ -80,6 +81,7 @@ const ComboBox: React.FC = () => {
     const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setIsOpen(false);
+        setSearchTerm('')
       }
     };
 
@@ -94,11 +96,12 @@ const ComboBox: React.FC = () => {
     <div className="relative w-full px-2" >
       <input
         type="text"
-        placeholder="ostatní země"
+        placeholder={chosenCountry ? chosenCountry : "ostatní země"}
+        maxLength={8}
         value={searchTerm}
         onChange={handleInputChange}
-        onClick={handleInputClick} // Toggle dropdown when clicking on input
-        className="w-full border rounded px-4 py-2 focus:outline-none text-black focus:border-blue-500 "
+      //  onClick={handleInputClick} // Toggle dropdown when clicking on input
+        className="w-full border rounded px-4 py-2 focus:outline-none text-black font-bold bg-blue-100 focus:bg-white"
       />
       {isOpen && (
         <div
@@ -121,9 +124,9 @@ const ComboBox: React.FC = () => {
               </div>
             ))
           )}
-          {countryNames.length > maxDisplayedCountries && (
+          {countryNames.length > filteredCountries.length && (
             <div className="flex items-center justify-center opacity-50 italic">
-              + dalších {countryNames.length - maxDisplayedCountries} zemí
+              + dalších {countryNames.length - filteredCountries.length} zemí
             </div>
           )}
         </div>
