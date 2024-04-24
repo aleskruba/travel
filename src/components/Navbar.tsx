@@ -64,17 +64,17 @@ function Navbar() {
     </div>
     <div className={`${visible ? 'md:hidden fixed  bg-darkAccent   bottom-1 border rounded-lg shadow-lg left-1/2 transform -translate-x-1/2 w-[95%] md:w-[50%] ' : 'fixed  bg-darkAccent  bottom-1 border rounded-lg shadow-lg left-1/2 transform -translate-x-1/2 w-[95%] md:w-[60%] '}`}>
         
-    <div className='flex justify-between w-full px-2 py-4 text-white'>
+    <div className='flex justify-between w-full px-2 py-4 text-white text-xs'>
              
                 <div className='flex gap-2 md:gap-6'>
-                <Link to="/traveltips" className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-2 py-1 rounded-lg">TravelTips</Link>
-                <Link to="/traveltips" className="hover:bg-lightAccent hover:text-darkBackground  hover:transition duration-100 cursor-pointer border border-white px-2 py-1 rounded-lg">Spolucesty</Link>
+                <Link to="/traveltips" className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg">TravelTips</Link>
+                <Link to="/traveltips" className="hover:bg-lightAccent hover:text-darkBackground  hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg">Spolucesty</Link>
                 </div>
                 <div className='flex ml-4 gap-2 md:gap-6'>
-                    <div className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-2 py-1 rounded-lg"
+                    <div className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg"
                          onClick={handleSignUpClick}>
                           Registrace</div>
-                    <div className="hover:bg-lightAccent hover:text-darkBackground  hover:transition duration-100 cursor-pointer border border-white px-2 py-1 rounded-lg"
+                    <div className="hover:bg-lightAccent hover:text-darkBackground  hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg"
                           onClick={handleLoginClick}>
                           Přihlásit</div>
                </div>
