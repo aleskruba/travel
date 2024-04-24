@@ -1,16 +1,18 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Country from './Country';
 import PopularCountries from './PopularCountries';
 import ComboBox from './Countries';
 import { useCountryContext } from '../context/countryContext';
 import { countriesData } from '../constants';
 import Cards from './traveltips/Cards';
+import Messages from './traveltips/Messages';
 
 
 
 
 function TravelTips() {
     const { chosenCountry,  setChosenCountryData } = useCountryContext();
+    const [selectComp,setSelectComp] = useState(false)
       
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -37,9 +39,19 @@ function TravelTips() {
       </div>
       {/* Content */}
       <div className="flex-1 ">
-        <Country/>
-          <Cards/>
+         <Country/>
+         <div className='flex justify-center py-4 dark:text-white'>
+           <button onClick={()=>{setSelectComp(!selectComp)}}
+                  className="bg-green-500 py-3 px-4 rounded-lg shadow-md transform transition duration-300 hover:scale-105 text-xl text-white"
 
+           >{selectComp ? 'Video blogy - klikni zde' : 'Fórum -  klikni zde'} </button>
+         </div>
+      {selectComp ?
+        <Messages/>
+        :
+        <Cards/>
+          }
+      
       </div>
     </div>
   );
