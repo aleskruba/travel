@@ -25,7 +25,7 @@ function TravelTips() {
 
 
   return (
-    <div className="flex h-screen flex-col md:flex-row ">
+    <div className="flex  flex-col md:flex-row ">
       <div className="w-full md:w-[250px] md:bg-transparent md:border md:border-solid md:border-gray-300 md:rounded text-navbarTextColor   pt-4 flex items-center flex-col">
     <ComboBox/>
     <div className='hidden md:block'>
