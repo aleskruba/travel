@@ -4,6 +4,9 @@ import PopularCountries from './PopularCountries';
 import ComboBox from './Countries';
 import { useCountryContext } from '../context/countryContext';
 import { countriesData } from '../constants';
+import Cards from './traveltips/Cards';
+
+
 
 
 function TravelTips() {
@@ -25,7 +28,7 @@ function TravelTips() {
 
 
   return (
-    <div className="flex  flex-col md:flex-row ">
+    <div className="flex  flex-col md:flex-row pb-16">
       <div className="w-full md:w-[250px] md:bg-transparent md:border md:border-solid md:border-gray-300 md:rounded text-navbarTextColor   pt-4 flex items-center flex-col">
     <ComboBox/>
     <div className='hidden md:block'>
@@ -35,6 +38,8 @@ function TravelTips() {
       {/* Content */}
       <div className="flex-1 ">
         <Country/>
+          <Cards/>
+
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { createContext, useState, ReactNode, useContext, Dispatch, SetStateAction } from 'react';
+import React, { createContext, useState, ReactNode, useContext, Dispatch, SetStateAction, useEffect } from 'react';
 
 type ChosenCountry = string;
 
@@ -19,6 +19,7 @@ interface CountryContextProps {
   setChosenCountry: Dispatch<SetStateAction<ChosenCountry>>;
   chosenCountryData: ChosenCountryData | null; // Adjusted to accept null
   setChosenCountryData: Dispatch<SetStateAction<ChosenCountryData | null>>;
+
 }
 
 export const CountryContext = createContext<CountryContextProps>({
@@ -36,11 +37,15 @@ export const CountryContext = createContext<CountryContextProps>({
     flag:''
   },
   setChosenCountryData: () => {},
+
 });
 
 interface CountryProviderProps {
   children: ReactNode;
 }
+
+
+
 
 export const CountryProvider: React.FC<CountryProviderProps> = ({ children }) => {
   const [chosenCountry, setChosenCountry] = useState<ChosenCountry>('');
@@ -56,6 +61,8 @@ export const CountryProvider: React.FC<CountryProviderProps> = ({ children }) =>
     flag:'',
   } ) ;
 
+
+  
 
   return (
     <CountryContext.Provider value={{ chosenCountry, setChosenCountry, chosenCountryData, setChosenCountryData }}>
