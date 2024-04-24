@@ -17,6 +17,26 @@ function Country() {
           <div> <img src={chosenCountryData?.flag} className='w-[50px] h-auto' alt="" /></div>
         </div>
         <div className='flex flex-col md:flex-row pt-4 '>
+
+        <div className='flex md:flex-1 flex-col justify-center items-center'>
+             <div className='flex justify-between w-full md:w-1/2 px-4'>
+                <div>continent </div>
+                <div>{chosenCountryData?.continent}</div>
+             </div>
+             <div className='flex justify-between w-full md:w-1/2 px-4'>
+                <div>hlavní město </div>
+                <div>{chosenCountryData?.capital}</div>
+             </div>
+             <div className='flex justify-between w-full md:w-1/2 px-4'>
+                <div>časová zóna</div>
+                <div>{chosenCountryData?.timezone}</div>
+            </div>
+            <div className='flex justify-between w-full md:w-1/2 px-4'>
+                <div className=''>Místní čas <span className='text-xs italic'>může se lišit podle pásem</span>  </div>
+                <div>{moment().utcOffset(parseInt(chosenCountryData?.timezone.split('UTC')[1]) * 60).format('HH:mm')}</div>
+            </div>
+          </div>
+          
           <div className='flex md:flex-1 flex-col justify-center items-center '>
             <div className='flex justify-between w-full md:w-1/2 px-4'>
               <div>počet obyvatel</div>
@@ -37,24 +57,7 @@ function Country() {
           </div>
 
 
-          <div className='flex md:flex-1 flex-col justify-center items-center'>
-             <div className='flex justify-between w-full md:w-1/2 px-4'>
-                <div>continent </div>
-                <div>{chosenCountryData?.continent}</div>
-             </div>
-             <div className='flex justify-between w-full md:w-1/2 px-4'>
-                <div>hlavní město </div>
-                <div>{chosenCountryData?.capital}</div>
-             </div>
-             <div className='flex justify-between w-full md:w-1/2 px-4'>
-                <div>časová zóna</div>
-                <div>{chosenCountryData?.timezone}</div>
-            </div>
-            <div className='flex justify-between w-full md:w-1/2 px-4'>
-                <div className=''>Místní čas <span className='text-xs italic'>může se lišit podle pásem</span>  </div>
-                <div>{moment().utcOffset(parseInt(chosenCountryData?.timezone.split('UTC')[1]) * 60).format('HH:mm')}</div>
-            </div>
-          </div>
+      
         </div>
         </div>
        </> :<>

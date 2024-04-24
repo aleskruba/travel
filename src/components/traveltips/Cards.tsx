@@ -11,28 +11,28 @@ type VideoCard = {
   posted: string;
 };
 
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE = 5;
 
 function Cards() {
   const { chosenCountry } = useCountryContext();
   const [currentPage, setCurrentPage] = useState(0);
   const [cards, setCards] = useState<VideoCard[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-
-
+  const [isVideoLoading, setIsVideoLoading] = useState(false);
 
   useEffect(() => {
     if (chosenCountry) {
       setIsLoading(true);
-
+      setIsVideoLoading(true)
       const fetchData = async () => {
         const result = await axios.get('cards.json');
           setCards(result.data.cards);
-          setIsLoading(false);
+          setIsLoading(false)
+                   
       };
 
       fetchData();
-
+      setTimeout(() => {setIsVideoLoading(false)},1500)
     }
   }, [chosenCountry]);
 
@@ -72,26 +72,28 @@ function Cards() {
         ) : (
           // Render actual cards once data is fetched
           currentCards?.map((card, idx) => (
-            <div key={idx} className={`w-[300px] h-[260px] rounded overflow-hidden shadow-lg bg-gray-300 py-1 px-1 `}>
+            <div key={idx} className={` ${isVideoLoading ? 'bg-gray-300 py-1 px-1 animate-pulse blur-sm' : 'rounded overflow-hidden shadow-lg bg-gray-300 py-1 px-1 '} w-[300px] h-[260px] `}>
             
-              <div className="px-6 py-2">
+              <div className={`px-6 py-2`}>
                 <div className="font-bold text-xl mb-2">{card.title.length > 20 ? `${card.title.slice(0, 20)} ...` : card.title}</div>
                 <div className="flex justify-between">
                   <div className="text-gray-700 text-base">nahráno: {card.posted}</div>
                   <div className="text-gray-700 text-base">autor: Pepa</div>
                 </div>
               </div>
-              <div className="w-full aspect-w-16 aspect-h-9">
-                <iframe
-                  width="full"
-                  height="full"
-                  src={card.video}
-                  title={card.title}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-                ></iframe>
+              <div className={`${isVideoLoading ? 'bg-black w-full h-[60%]': 'w-full aspect-w-16 aspect-h-9'}`}>
+                 <div className={`${isVideoLoading ? 'hidden': ''}`}>
+                        <iframe
+                        width="full"
+                        height="full"
+                        src={card.video}
+                        title={card.title}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerPolicy="strict-origin-when-cross-origin"
+                        allowFullScreen
+                        ></iframe>
+                  </div>
               </div>
             </div>
           ))
