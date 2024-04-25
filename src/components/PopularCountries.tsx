@@ -6,6 +6,20 @@ import { useCountryContext } from '../context/countryContext';
 function PopularCountries() {
   const { chosenCountry, setChosenCountry } = useCountryContext();
 
+  const chooseCountryFunction: React.MouseEventHandler<HTMLDivElement> = (event) => {
+    const country = event.currentTarget.textContent || '';
+    setChosenCountry(country);
+
+    try{
+
+
+      
+
+    }catch(err){
+      console.log(err);
+    }
+  };
+  
 
   
   return (
@@ -14,7 +28,7 @@ function PopularCountries() {
         <div 
           key={country} 
           className={`dark:text-white text-black cursor-pointer px-2 py-1 rounded ${chosenCountry === country ? 'bg-green-500  text-lighTextColor' : ''}`} 
-          onClick={() => setChosenCountry(country)} 
+          onClick={chooseCountryFunction} 
         >
           {country}
         </div>

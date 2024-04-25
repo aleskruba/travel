@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import Country from './Country';
-import PopularCountries from './PopularCountries';
-import ComboBox from './Countries';
+import Country from '../components/Country';
+import PopularCountries from '../components/PopularCountries';
+import ComboBox from '../components/Countries';
 import { useCountryContext } from '../context/countryContext';
 import { countriesData } from '../constants';
-import Cards from './traveltips/Cards';
-import Messages from './traveltips/Messages';
+import Cards from '../components/traveltips/Cards';
+import Messages from '../components/traveltips/Messages';
 
 
 
@@ -47,6 +47,7 @@ function TravelTips() {
            >{selectComp ? 'Video blogy - klikni zde' : 'Fórum -  klikni zde'} </button>
          </div>
       {selectComp ?
+      
         <Messages/>
         :
         <Cards/>

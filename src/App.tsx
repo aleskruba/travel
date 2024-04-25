@@ -7,7 +7,7 @@ import { useDialogContext } from './context/dialogContext';
 import SignUpDialog from './pages/signup';
 import Footer from './components/Footer';
 import Home from './components/Home';
-import TravelTips from './components/TravelTips';
+import TravelTips from './pages/TravelTips';
 
 function App() {
   const { theme } = useThemeContext();
@@ -30,6 +30,7 @@ function App() {
                 <Route path="/" element={<Layout />} >
                 <Route index element={<Home />}/> 
                 <Route path="/traveltips" element={<TravelTips />}/> 
+
                 </Route>
             </Routes>
           </div>

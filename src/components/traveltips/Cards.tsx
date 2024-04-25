@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactPaginate from 'react-paginate';
 import { useCountryContext } from '../../context/countryContext';
 import axios from 'axios';
+import Card from './Card';
 
 type VideoCard = {
   id: number;
@@ -10,6 +11,7 @@ type VideoCard = {
   video: string;
   posted: string;
 };
+
 
 const ITEMS_PER_PAGE = 5;
 
@@ -55,8 +57,7 @@ function Cards() {
     <div className={`flex flex-col items-center`}>
       <div className="flex flex-wrap justify-center gap-4">
         {isLoading ? (
-          // Render loading state for each card while data is being fetched
-          Array.from({ length: 10}).map((_, idx) => (
+             Array.from({ length: 10}).map((_, idx) => (
             <div key={idx} className={`w-[300px] h-[260px] rounded overflow-hidden shadow-lg bg-gray-300 py-1 px-1 animate-pulse`}>
               <div className="px-6 py-2">
                 <div className="animate-pulse h-4 bg-gray-400 w-3/4 mb-2"></div>
@@ -70,32 +71,8 @@ function Cards() {
             </div>
           ))
         ) : (
-          // Render actual cards once data is fetched
-          currentCards?.map((card, idx) => (
-            <div key={idx} className={` ${isVideoLoading ? 'bg-gray-300 py-1 px-1 animate-pulse blur-sm' : 'rounded overflow-hidden shadow-lg bg-gray-300 py-1 px-1 '} w-[300px] h-[260px] `}>
-            
-              <div className={`px-6 py-2`}>
-                <div className="font-bold text-xl mb-2">{card.title.length > 20 ? `${card.title.slice(0, 20)} ...` : card.title}</div>
-                <div className="flex justify-between">
-                  <div className="text-gray-700 text-base">nahráno: {card.posted}</div>
-                  <div className="text-gray-700 text-base">autor: Pepa</div>
-                </div>
-              </div>
-              <div className={`${isVideoLoading ? 'bg-black w-full h-[60%]': 'w-full aspect-w-16 aspect-h-9'}`}>
-                 <div className={`${isVideoLoading ? 'hidden': ''}`}>
-                        <iframe
-                        width="full"
-                        height="full"
-                        src={card.video}
-                        title={card.title}
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerPolicy="strict-origin-when-cross-origin"
-                        allowFullScreen
-                        ></iframe>
-                  </div>
-              </div>
-            </div>
+           currentCards?.map((card, idx) => (
+            <Card key={idx} card={card} isVideoLoading={isVideoLoading} />
           ))
         )}
       </div>

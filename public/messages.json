@@ -1,0 +1,84 @@
+{
+  "messages": [
+    {
+      "id": 1,
+      "email": "tom@example.com",
+      "fname": "Tom",
+      "date": "2024-01-25",
+      "img": "man.png",
+      "message": "Something about traveling to Italy, your opinions"
+    },
+    {
+      "id": 2,
+      "email": "alice@example.com",
+      "fname": "Alice",
+      "date": "2024-01-26",
+      "img": "man.png",
+      "message": "What's your favorite Italian dish?"
+    },
+    {
+      "id": 3,
+      "email": "john@example.com",
+      "fname": "John",
+      "date": "2024-01-27",
+      "img": "man.png",
+      "message": "I need recommendations for places to visit in Rome."
+    },
+    {
+      "id": 4,
+      "email": "sarah@example.com",
+      "fname": "Sarah",
+      "date": "2024-01-28",
+      "img": "man.png",
+      "message": "Exploring the art scene in Florence."
+    },
+    {
+      "id": 5,
+      "email": "michael@example.com",
+      "fname": "Michael",
+      "date": "2024-01-29",
+      "img": "man.png",
+      "message": "Share your experiences with Italian cuisine."
+    },
+    {
+      "id": 6,
+      "email": "julia@example.com",
+      "fname": "Julia",
+      "date": "2024-01-30",
+      "img": "man.png",
+      "message": "Planning a trip to Venice, any tips?"
+    },
+    {
+      "id": 7,
+      "email": "david@example.com",
+      "fname": "David",
+      "date": "2024-01-31",
+      "img": "man.png",
+      "message": "Discussing the beauty of Tuscany."
+    },
+    {
+      "id": 8,
+      "email": "emily@example.com",
+      "fname": "Emily",
+      "date": "2024-02-01",
+      "img": "man.png",
+      "message": "What to do in Milan during winter?"
+    },
+    {
+      "id": 9,
+      "email": "chris@example.com",
+      "fname": "Chris",
+      "date": "2024-02-02",
+      "img": "man.png",
+      "message": "Your favorite Italian cities and why?"
+    },
+    {
+      "id": 10,
+      "email": "laura@example.com",
+      "fname": "Laura",
+      "date": "2024-02-03",
+      "img": "man.png",
+      "message": "Exploring the Amalfi Coast, need suggestions."
+    }
+  ]
+}
