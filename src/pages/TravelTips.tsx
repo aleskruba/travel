@@ -41,10 +41,13 @@ function TravelTips() {
       <div className="flex-1 ">
          <Country/>
          <div className='flex justify-center py-4 dark:text-white'>
+         
+          { chosenCountry &&
            <button onClick={()=>{setSelectComp(!selectComp)}}
                   className="bg-green-500 py-3 px-4 rounded-lg shadow-md transform transition duration-300 hover:scale-105 text-xl text-white"
 
-           >{selectComp ? 'Video blogy - klikni zde' : 'Fórum -  klikni zde'} </button>
+           >{selectComp ? 'Video blogy - klikni zde' : 'Fórum -  klikni zde'} 
+           </button> }
          </div>
       {selectComp ?
       

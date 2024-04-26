@@ -1,0 +1,47 @@
+{
+    "replies": [
+      {
+        "id": 1,
+        "date": "2024-01-25",
+        "message": "Reply 1",
+        "message_id": 1,
+        "user_id": 1
+      },
+      {
+        "id": 2,
+        "date": "2024-01-26",
+        "message": "Reply 2",
+        "message_id": 2,
+        "user_id": 2
+      },
+      {
+        "id": 3,
+        "date": "2024-01-27",
+        "message": "Reply 3.",
+        "message_id": 3,
+        "user_id": 3
+      },
+      {
+        "id": 4,
+        "date": "2024-01-28",
+        "message": "Reply 4",
+        "message_id": 4,
+        "user_id": 1
+      },
+      {
+        "id": 5,
+        "date": "2024-01-29",
+        "message": "Reply 5",
+        "message_id": 5,
+        "user_id": 2
+      },
+      {
+        "id": 6,
+        "date": "2024-01-29",
+        "message": "Reply 5",
+        "message_id": 1,
+        "user_id": 4
+      }
+    ]
+  }
+  

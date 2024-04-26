@@ -12,20 +12,33 @@ type MessageProps = {
   date: Date;
   img: string;
   message: string;
+  user_id: number;
 };
+
+interface ReplyProps {
+  id: number;
+  fname: string;
+  date: Date;
+  img: string;
+  message: string; 
+  message_id: number;
+  user_id: number;
+}
 
 const ITEMS_PER_PAGE = 5;
 
 function Messages() {
 
   const [currentPage, setCurrentPage] = useState(0);
+  const [replies, setReplies] = useState<ReplyProps[]>([]);
   const [message, setMessage] = useState<MessageProps>({
     id: 0,
     email: '',
     fname: '',
     date: new Date(),
     img: '',
-    message: ''
+    message: '',
+    user_id: 4
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -35,8 +48,11 @@ function Messages() {
       setIsLoading(true);
  
       const fetchData = async () => {
-        const result = await axios.get('messages.json');
-        setMessages(result.data.messages);
+        const resultMessages = await axios.get('messages.json');
+        const resultReplies = await axios.get('replies.json');
+        setMessages(resultMessages.data.messages);
+        setReplies(resultReplies.data.replies);
+
           setIsLoading(false)
                    
       };
@@ -60,7 +76,8 @@ function Messages() {
       fname: 'ales',
       date: new Date(),
       img: 'man.png',
-      message: message.message
+      message: message.message,
+      user_id:4
     };
   
     setMessages([newMessage, ...messages]); // Prepend the new message
@@ -72,7 +89,8 @@ function Messages() {
       fname: '',
       date: new Date(),
       img: '',
-      message: ''
+      message: '',
+      user_id: 4,
     });
   };
   
@@ -132,7 +150,7 @@ function Messages() {
           currentMessages
             .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) // Reverse sorting order
             .map((message, idx) => (
-              <Message key={idx} message={message} />
+              <Message key={idx} messages={messages} message={message} replies={replies} setMessages={setMessages} setReplies={setReplies} />
             ))
         ) : (
           <>moment prosím</>
