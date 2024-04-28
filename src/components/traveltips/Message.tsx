@@ -57,9 +57,9 @@ const deleteReply = (ID: any) => {
 
 
 return (
-    <div className='flex flex-col bg-gray-100 dark:bg-gray-500 dark:text-gray-100  px-4 py-2  shadow-md '>
-     <div className="flex  items-center gap-4 ">
-      <div className="flex items-center gap-2"> 
+    <div className='flex flex-col  dark:bg-gray-500 dark:text-gray-100  px-4 py-2  shadow-2xl rounded-lg'>
+     <div className="flex flex-col md:flex-row md:items-center gap-4 ">
+      <div className="flex  items-center gap-2"> 
          {message.user_id === 4 &&
                   <div className="text-red-700  cursor-pointer hover:text-red-500" 
                       onClick={()=>deleteMessage(message.id)}
@@ -70,16 +70,16 @@ return (
         <div className="w-14 h-14 overflow-hidden rounded-full">
           <img src={message.img} alt="Profile" className="w-full h-full object-cover" />
         </div>
-        <div className="flex flex-col md:flex-row md:gap-2">
+        <div className="flex flex-row gap-4 md:gap-2">
         <p className="text-gray-600 dark:bg-gray-500 dark:text-gray-100 font-semibold">{message.fname.slice(0, 10)}</p>
         <p className="text-gray-600 dark:bg-gray-500 dark:text-gray-100 w-[80px]">{moment(message.date).format('DD-MM YYYY ')}</p>
 
      
         </div>
       </div>
-      <div className="px-4" >
-        <p className="">{message.message} </p>
-    </div>
+        <div className="px-4" >
+          <p className="">{message.message} </p>
+      </div>
      </div>
      <div className='flex items-center gap-2'>
         
@@ -139,9 +139,9 @@ return (
     
       return (
 
-        <div>
-        <div key={reply.id} className='flex flex-col  mt-2  bg-gray-200 dark:bg-gray-500 dark:text-gray-100'>
-          <div className={`flex items-center gap-6 md:gap-2  cursor-pointer ${reply.user_id === 1 ? 'pl-1': 'pl-6' }`}>
+        <div className='shadow-xl	rounded-lg '>
+        <div key={reply.id} className='flex flex-col  mt-2  border-t border-gray-400 dark:bg-gray-500 dark:text-gray-100'>
+          <div className={`flex items-center gap-6 md:gap-2  cursor-pointer mt-1 ${reply.user_id === 1 ? 'pl-1': 'pl-6' }`}>
             {reply.user_id === 1 &&
               <div className="text-red-700 hover:text-red-500" onClick={() => deleteReply(reply.id)}>
                 <FaRegTrashAlt />
