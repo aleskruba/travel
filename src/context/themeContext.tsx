@@ -39,11 +39,11 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     {
       icon: <FaMoon />,
       text: "dark" as Theme
-    },
+    }/* ,
     {
       icon: <MdDevices/>,
       text: "device" as Theme // Represents the theme based on user's system preference
-    }
+    } */
   ];
 
   useEffect(() => {

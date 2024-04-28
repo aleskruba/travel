@@ -39,7 +39,7 @@ function Navbar() {
 
     <div className="hidden md:flex space-x-2">
         <Link to="/traveltips" className="text-white hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-3 py-1 rounded-lg">TravelTips</Link>
-        <Link to="/traveltips" className="text-white hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-3 py-1 rounded-lg">Spolucesty</Link>
+        <Link to="/spolucesty" className="text-white hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-3 py-1 rounded-lg">Spolucesty</Link>
     </div>
 
     <div className="flex items-center space-x-2">
@@ -61,6 +61,7 @@ function Navbar() {
             {opt.icon}
           </button>
         ))}
+   
     </div>
     <div className={`${visible ? 'md:hidden fixed  bg-darkAccent   bottom-1 border rounded-lg shadow-lg left-1/2 transform -translate-x-1/2 w-[95%] md:w-[50%] ' : 'fixed  bg-darkAccent  bottom-1 border rounded-lg shadow-lg left-1/2 transform -translate-x-1/2 w-[95%] md:w-[60%] '}`}>
         
@@ -68,7 +69,7 @@ function Navbar() {
              
                 <div className='flex gap-2 md:gap-6'>
                 <Link to="/traveltips" className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg">TravelTips</Link>
-                <Link to="/traveltips" className="hover:bg-lightAccent hover:text-darkBackground  hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg">Spolucesty</Link>
+                <Link to="/spolucesty" className="hover:bg-lightAccent hover:text-darkBackground  hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg">Spolucesty</Link>
                 </div>
                 <div className='flex ml-4 gap-2 md:gap-6'>
                     <div className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg"

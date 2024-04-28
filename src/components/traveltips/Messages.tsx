@@ -96,6 +96,7 @@ function Messages() {
   
 
 
+
   const handlePageChange = ({ selected }: any) => {
     setCurrentPage(selected);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -125,6 +126,7 @@ function Messages() {
               className="w-full py-2 px-4 bg-gray-200 rounded-lg text-black focus:outline-none focus:ring focus:border-blue-500 resize-none"
               placeholder="Share your opinion (max 500 characters)"
               maxLength={500} 
+
            />
           </div>
           <div>

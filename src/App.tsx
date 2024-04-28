@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 import Home from './components/Home';
 import TravelTips from './pages/TravelTips';
 import Test from './pages/Test';
+import Spolucesty from './pages/Spolucesty';
 
 function App() {
   const { theme } = useThemeContext();
@@ -31,6 +32,7 @@ function App() {
                 <Route path="/" element={<Layout />} >
                 <Route index element={<Home />}/> 
                 <Route path="/traveltips" element={<TravelTips />}/> 
+                <Route path="/spolucesty" element={<Spolucesty />}/> 
                 <Route path="/test" element={<Test />}/> 
 
                 </Route>

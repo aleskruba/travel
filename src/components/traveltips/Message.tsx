@@ -112,7 +112,7 @@ return (
   }
 
 
-    <h4 className='text-sm font-bold'>{replies.filter(reply => reply.message_id === message.id).length > 1 ? 
+    <h4 className='text-sm font-bold cursor-pointer'>{replies.filter(reply => reply.message_id === message.id).length > 1 ? 
           ` ${replies.filter(reply => reply.message_id === message.id).length } odpovědí `   
             :
             ` ${replies.filter(reply => reply.message_id === message.id).length } odpověď `   } 
