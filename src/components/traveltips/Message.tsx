@@ -3,6 +3,7 @@ import { BiLike,BiDislike  } from "react-icons/bi";
 import moment from 'moment';
 import Reply from './Reply';
 import { FaRegTrashAlt } from "react-icons/fa";
+import { GoTriangleDown ,GoTriangleUp } from "react-icons/go";
 
 
 type MessageProps = {
@@ -38,8 +39,7 @@ const Message: React.FC<Props> = ({messages, message,setMessages,replies,setRepl
 
 
     const [replyDiv, setReplyDiv] = useState<boolean>(false);
-  
-
+    const [hiddenAnswers,setHiddenAnswes] = useState(true);
 
 const deleteMessage = (ID: any) => {
   const updatedMessages = messages.filter(message => message.id !== ID);
@@ -88,29 +88,37 @@ return (
            <div className='cursor-pointer'><BiDislike/></div>  
 
        {!replyDiv &&  
-     <button className='bg-gray-300 text-gray-700 px-4 py-2 rounded-full hover:bg-gray-400 focus:outline-none focus:ring focus:border-gray-500'
-             onClick={()=>setReplyDiv(true)} >
+     <button className='bg-gray-300 text-gray-700 px-4 py-1 text-sm	 rounded-full hover:bg-gray-400 focus:outline-none focus:ring focus:border-gray-500'
+             onClick={()=>{setReplyDiv(true);setHiddenAnswes(false)}} >
         Odpověz
       </button>
       }
     </div>
     {replyDiv &&
-
-      <Reply setReplyDiv={setReplyDiv} 
+        <Reply setReplyDiv={setReplyDiv} 
              setReplies={setReplies}
              replies={replies} 
              message={message}
              />
+
     }
 
 <div className=''>
-<h4 className='text-sm font-bold'>{replies.filter(reply => reply.message_id === message.id).length > 1 ? 
-      ` ${replies.filter(reply => reply.message_id === message.id).length } odpovědí `   
+  <div className='flex gap-4' onClick={()=>setHiddenAnswes(!hiddenAnswers)}>
+      {hiddenAnswers ?
+      <GoTriangleDown />
         :
-        ` ${replies.filter(reply => reply.message_id === message.id).length } odpověď `   } 
-</h4>
+      <GoTriangleUp />
+  }
 
-<div>
+
+    <h4 className='text-sm font-bold'>{replies.filter(reply => reply.message_id === message.id).length > 1 ? 
+          ` ${replies.filter(reply => reply.message_id === message.id).length } odpovědí `   
+            :
+            ` ${replies.filter(reply => reply.message_id === message.id).length } odpověď `   } 
+    </h4>
+    </div>
+<div className={`${hiddenAnswers ? 'hidden' : 'block'}`}>
   {replies.map(reply => {
     if (reply.message_id === message.id) {
 

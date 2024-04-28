@@ -23,7 +23,7 @@ function PopularCountries() {
 
   
   return (
-    <div className='mt-6 flex flex-col justify-start item-start text-base max-w-[450px]'>
+    <div className='mt-6 flex flex-col justify-start item-start text-base s'>
       {popularCountryNames.map(country => (
         <div 
           key={country} 
