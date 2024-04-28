@@ -76,6 +76,8 @@ function Reply({setReplyDiv,setReplies,replies,message}:Props) {
       message_id: null,
       user_id: null
     });
+
+    setReplyDiv(false)
   };
   
 
@@ -86,8 +88,10 @@ function Reply({setReplyDiv,setReplies,replies,message}:Props) {
       name="reply"
       value={reply.message}
       onChange={handleChangeReply}
-      className="w-full py-2 px-4 bg-gray-200 rounded-lg focus:outline-none focus:ring focus:border-blue-500 resize-none"
+      className="w-full min-h-[100px] py-2 px-4 bg-gray-200 dark:text-black rounded-lg focus:outline-none focus:ring focus:border-blue-500 resize-none"
+      style={{ maxWidth: '100%', overflowWrap: 'break-word' }}
       placeholder="Share your opinion (max 500 characters)"
+      maxLength={500} 
     />
     <div className="flex justify-center space-x-4">
       <button className="bg-blue-500 w-[80px] text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-700"

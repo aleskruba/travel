@@ -107,7 +107,7 @@ function Messages() {
   const currentMessages = messages?.slice(startIndex, endIndex);
 
   return (
-    <div className="flex flex-col  px-2 md:px-4 ">
+    <div className="flex flex-col  px-2 md:px-4 w-full">
 
 
       <form onSubmit={onSubmit}>
@@ -124,7 +124,8 @@ function Messages() {
               onChange={handleChange}
               className="w-full py-2 px-4 bg-gray-200 rounded-lg text-black focus:outline-none focus:ring focus:border-blue-500 resize-none"
               placeholder="Share your opinion (max 500 characters)"
-            />
+              maxLength={500} 
+           />
           </div>
           <div>
             <button type="submit" className="py-2 px-4 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring focus:border-green-700">Odešli</button>
@@ -138,7 +139,8 @@ function Messages() {
             onChange={handleChange}
             className="w-full py-2 px-4 bg-gray-200 text-black focus:outline-none focus:ring focus:border-blue-500 resize-none"
             placeholder="Share your opinion (max 500 characters)"
-          />
+            maxLength={500} 
+       />
         </div>
       </form>
 
