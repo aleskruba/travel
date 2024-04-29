@@ -105,18 +105,24 @@ return (
 
 <div className=''>
   <div className='flex gap-4' onClick={()=>setHiddenAnswes(!hiddenAnswers)}>
+    {replies.filter(reply => reply.message_id === message.id).length > 0 && <>
       {hiddenAnswers ?
       <GoTriangleDown />
         :
       <GoTriangleUp />
   }
+  </>}
 
-
-    <h4 className='text-sm font-bold cursor-pointer'>{replies.filter(reply => reply.message_id === message.id).length > 1 ? 
-          ` ${replies.filter(reply => reply.message_id === message.id).length } odpovědí `   
-            :
-            ` ${replies.filter(reply => reply.message_id === message.id).length } odpověď `   } 
-    </h4>
+<h4 className='text-sm font-bold cursor-pointer'>
+  {replies.filter(reply => reply.message_id === message.id).length > 1 ? 
+    `${replies.filter(reply => reply.message_id === message.id).length} odpovědí`   
+    :
+    replies.filter(reply => reply.message_id === message.id).length > 0 ?
+      `${replies.filter(reply => reply.message_id === message.id).length} odpověď`
+      :
+      ''
+  }
+</h4>
     </div>
 <div className={`${hiddenAnswers ? 'hidden' : 'block'}`}>
   {replies.map(reply => {
@@ -147,7 +153,7 @@ return (
     
       return (
 
-        <div className='shadow-xl	rounded-lg '>
+        <div className='shadow-xl	rounded-lg ' key={reply.id}>
         <div key={reply.id} className='flex flex-col  mt-2  border-t border-gray-400 dark:bg-gray-500 dark:text-gray-100'>
           <div className={`flex items-center gap-6 md:gap-2  cursor-pointer mt-1 ${reply.user_id === 1 ? 'pl-1': 'pl-6' }`}>
             {reply.user_id === 1 &&

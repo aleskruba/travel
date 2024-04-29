@@ -440,3 +440,25 @@ const footerItems = [
     
   ]
   
+
+  export const typeOfTour = [
+    'Pohoda u moře',
+    'Přírodní tour',
+    'Túry po horách',
+    'Večírky a party',
+    'Kulturní tour',
+    'Dobrodružné tour',
+    'Vinařské tour',
+    'Gastro tour',
+    'Fotografické tour',
+    'Wellness pobyty',
+    'Edukativní tour',
+    'Sportovní tour',
+    'Dobrovolnické tour'
+  ];
+  
+  console.log(typeOfTour);
+  
+  
+  console.log(typeOfTour);
+  

@@ -6,7 +6,7 @@ import CreateTour from '../components/spolucesty/CreateTour'
 function Spolucesty() {
   return (
     <div className='px-4 h-full'>
-    <CreateTour/>  
+{/*     <CreateTour/>   */}
     <Tours/>      
 
     </div>

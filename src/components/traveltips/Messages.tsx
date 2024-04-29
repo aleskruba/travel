@@ -69,6 +69,12 @@ function Messages() {
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+ 
+    if (!message.message.length) {
+      return;
+    }
+
   
     const newMessage = {
       id: messages.length + 1, // Generate a unique ID

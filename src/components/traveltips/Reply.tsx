@@ -52,6 +52,10 @@ function Reply({setReplyDiv,setReplies,replies,message}:Props) {
       
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!reply.message.length) {
+      return;
+    }
   
     const newReply = {
 
