@@ -76,27 +76,30 @@ function SearchComponent({ filterTours, selectedCountry, selectedTourType, selec
             <Select
                 options={countryNamesObjects}
                 className="basic-single w-full"
-                classNamePrefix="vyber zemi"
+                classNamePrefix="select "
                 onChange={handleCountryChange}
                 isClearable={true}
                 value={selectedCountry}
+                placeholder="vyber zemi"
             />
             <Select
                 options={typeOfTourObjects}
                 className="basic-single w-full"
-                classNamePrefix="vyber typ výletu"
+                classNamePrefix="select"
                 onChange={handleTourTypeChange}
                 isClearable={true}
                 value={selectedTourType}
+                placeholder="vyber typ cesty"
             />
             <Select
                 options={futureDates}
                 className="basic-single w-full"
-                classNamePrefix="vyber termín"
+                classNamePrefix="select"
                 onChange={handleDateChange}
                 value={selectedDate}
                 isClearable={true}
                 onKeyDown={handleKeyPress}
+                placeholder="vyber termin"
             />
             <div className='flex space-x-3'>
                 <div className='text-lg w-[110px] px-3 py-1 bg-green-500 text-white flex hover:bg-green-400 cursor-pointer items-center justify-center rounded'
