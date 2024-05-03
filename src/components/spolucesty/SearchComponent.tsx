@@ -1,0 +1,115 @@
+import React from 'react';
+import Select from 'react-select';
+import { countryNamesObjects } from '../../constants';
+import { typeOfTourObjects } from '../../constants';
+import { useSearchParams } from 'react-router-dom';
+
+interface SearchComponentProps {
+    filterTours: (country: string | null, tourType: string | null, date: string | Date | null) => void;
+    selectedCountry: { value: string; label: string } | null;
+    selectedTourType: { value: string; label: string } | null;
+    selectedDate: { value: string; label: string } | null;
+    setSelectedCountry: (selectedCountry: { value: string; label: string } | null) => void;
+    setSelectedTourType: (selectedTourType: { value: string; label: string } | null) => void;
+    setSelectedDate: (selectedDate: { value: string; label: string } | null) => void;
+}
+
+function SearchComponent({ filterTours, selectedCountry, selectedTourType, selectedDate, setSelectedCountry, setSelectedTourType, setSelectedDate }: SearchComponentProps) {
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const futureDates = [];
+    const currentDate = new Date();
+    const monthNames = [
+        "leden", "únor", "březen", "duben", "květen", "červen",
+        "červenec", "srpen", "září", "říjen", "listopad", "prosinec"
+    ];
+
+    for (let i = 0; i < 15; i++) {
+        const futureDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + i, 1);
+        const formattedDate = `${futureDate.getFullYear()}-${('0' + (futureDate.getMonth() + 1)).slice(-2)}-01`;
+        const label = `${monthNames[futureDate.getMonth()]} ${futureDate.getFullYear()}`;
+        futureDates.push({ value: formattedDate, label });
+    }
+
+    const handleCountryChange = (selectedOption: any) => {
+        setSelectedCountry(selectedOption);
+        console.log("Selected Country:", selectedOption);
+    };
+
+    const handleTourTypeChange = (selectedOption: any) => {
+        setSelectedTourType(selectedOption);
+        console.log("Selected Tour Type:", selectedOption);
+    };
+
+    const handleDateChange = (selectedOption: any) => {
+        setSelectedDate(selectedOption);
+        console.log("Selected Date:", selectedOption);
+    };
+
+    const handleSubmit = () => {
+        const params = new URLSearchParams(searchParams);
+        if (selectedCountry) params.set('country', selectedCountry.value);
+        if (selectedTourType) params.set('type', selectedTourType.value);
+        if (selectedDate) params.set('date', selectedDate.value);
+
+        setSearchParams(params.toString());
+        filterTours(selectedCountry ? selectedCountry.value : null, selectedTourType ? selectedTourType.value : null, selectedDate ? selectedDate.value : null);
+    };
+
+    const handleCancelFilters = () => {
+        setSelectedCountry(null);
+        setSelectedTourType(null);
+        setSelectedDate(null);
+        filterTours(null, null, null);
+
+        setSearchParams({});
+    };
+
+    const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            handleSubmit();
+        }
+    };
+
+    return (
+        <div className='flex flex-col items-center justify-center md:flex-row w-full px-2 gap-2 md:px-4 '>
+            <Select
+                options={countryNamesObjects}
+                className="basic-single w-full"
+                classNamePrefix="select"
+                onChange={handleCountryChange}
+                isClearable={true}
+                value={selectedCountry}
+            />
+            <Select
+                options={typeOfTourObjects}
+                className="basic-single w-full"
+                classNamePrefix="select"
+                onChange={handleTourTypeChange}
+                isClearable={true}
+                value={selectedTourType}
+            />
+            <Select
+                options={futureDates}
+                className="basic-single w-full"
+                classNamePrefix="select"
+                onChange={handleDateChange}
+                value={selectedDate}
+                isClearable={true}
+                onKeyDown={handleKeyPress}
+            />
+            <div className='flex space-x-3'>
+                <div className='text-lg w-[110px] px-3 py-1 bg-green-500 text-white flex hover:bg-green-400 cursor-pointer items-center justify-center rounded'
+                    onClick={handleSubmit}>
+                    Hledat
+                </div>
+                <div className='text-lg w-[110px] px-3 py-1 bg-gray-700 text-white flex hover:bg-gray-600 cursor-pointer items-center justify-center rounded'
+                    onClick={handleCancelFilters}>
+                    Zrušit filtry
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export default SearchComponent;

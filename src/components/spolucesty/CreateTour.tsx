@@ -4,6 +4,10 @@ import 'react-datepicker/dist/react-datepicker.css';
 import DOMPurify from 'dompurify';
 import { typeOfTour } from '../../constants';
 import { countryNames } from '../../constants';
+import axios from 'axios';
+import { useTourContext } from '../../context/tourContext';
+import { useNavigate } from "react-router-dom";
+
 
 interface Tour {
   id: number;
@@ -21,6 +25,8 @@ interface Tour {
 }
 
 function CreateTour() {
+  const {tours, setTours} = useTourContext()
+
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [chosenCountry, setChosenCountry] = useState('');
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -45,7 +51,7 @@ function CreateTour() {
     user_id: 4
   });
 
-  const [tours, setTours] = useState<Tour[]>([]);
+  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -115,6 +121,18 @@ function CreateTour() {
       user_id: tour.user_id
     };
 
+    const fetchData = async () => {
+      try {
+        const resultTours = await axios.post('tours.json', newTour);
+        // Assuming 'tours.json' is the correct endpoint to post the data
+        console.log(resultTours.data); // Logging the response data if needed
+      } catch (e) {
+        console.error(e);
+      }
+    };
+  
+    fetchData();
+
     setTours([newTour, ...tours]); // Prepend the new tour to the existing list of tours
 
     // Reset the tour input
@@ -137,9 +155,11 @@ function CreateTour() {
     setErrors('');
     setChosenCountry('');
     setSearchTerm('');
+
+   // navigate("/spolucesty");
   };
 
-
+useEffect(() => {console.log(tours)},[tours])
 
   const handleSelectCountry = (country: string) => {
 
@@ -231,14 +251,14 @@ function CreateTour() {
         <p className="mb-4">Po přihlášení klikněte na tlačítko "Vytvořit novou nabídku spolucesty". Vyplňte formulář s následujícími informacemi:</p>
         <ul className="list-disc ml-8 mb-4">
           <li><strong>Destinace:</strong> Kam se chystáte? Uveďte místo, které plánujete navštívit.</li>
-          <li><strong>Datum:</strong> Kdy plánujete odjet? Uveďte příbližný termín.</li>
+          <li><strong>Příbližný termín</strong> Kdy plánujete odjet? Uveďte příbližný termín.</li>
           <li><strong>Typ cesty:</strong> Jaký druh cesty plánujete? Moře, hory, výlety, atd. Zde můžete specifikovat typ vaší dobrodružné plánované cesty.</li>
           <li><strong>Koho hledáte:</strong> Jakého spolucestujícího hledáte? Zadejte požadavky na pohlaví, věk, zájmy, atd.</li>
           <li><strong>Informace o sobě:</strong> Napište krátký popis o sobě. Zahrňte vaše zájmy, preference a vše, co si myslíte, že by měli ostatní uživatelé vědět.</li>
         </ul>
       </div>
       
-      <div>Vytvoř spolucestu 
+      <div>
         <div className="container mx-auto px-4 py-8">
           <h1 className="text-3xl font-bold text-center mb-8">Vytvoř spolucestu</h1>
           <div>
@@ -341,9 +361,9 @@ function CreateTour() {
             <label htmlFor={`journey-type-${index}`} className="relative flex cursor-pointer">
               <div className="w-6 h-6 border border-gray-300 rounded-md flex items-center justify-center bg-white mr-2">
                 {selectedTypes.includes(type) && (
-                  <svg className="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                  </svg>
+                      <svg className="w-4 h-4 text-red-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="5" d="M5 13l4 4L19 7" />
+                    </svg>
                 )}
               </div>
               {type}
@@ -366,9 +386,9 @@ function CreateTour() {
         <label htmlFor={`journey-type-${index}`} className="relative flex cursor-pointer">
           <div className="w-6 h-6 border border-gray-300 rounded-md flex items-center justify-center bg-white mr-2">
             {selectedTypes.includes(type) && (
-              <svg className="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-              </svg>
+                  <svg className="w-4 h-4 text-red-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="5" d="M5 13l4 4L19 7" />
+                </svg>
             )}
           </div>
           {type}
@@ -382,7 +402,7 @@ function CreateTour() {
               <div className="mb-4">
                 <label className="block text-sm font-bold mb-2" htmlFor="looking-for">Koho hledáte:</label>
                 <textarea
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:bg-gray-700 dark:text-gray-200 leading-tight focus:outline-none focus:shadow-outline"
                   id="looking-for"
                   rows={5}
                   placeholder="Jakého spolucestujícího hledáte? Zadejte požadavky na pohlaví, věk, zájmy, atd. Omezte se na 500 znaků."
@@ -390,12 +410,13 @@ function CreateTour() {
                   name="fellowtraveler"
                   value={tour.fellowtraveler}
                   onChange={handleChange}
+                  style={{ resize: "none" }} 
                 ></textarea>
               </div>
               <div className="mb-4">
                 <label className="block text-sm font-bold mb-2" htmlFor="about-you">Informace o sobě:</label>
                 <textarea
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:bg-gray-700 dark:text-gray-200  leading-tight focus:outline-none focus:shadow-outline"
                   id="about-you"
                   rows={5}
                   placeholder="Napište krátký popis o sobě. Zahrňte vaše zájmy, preference a vše, co si myslíte, že by měli ostatní uživatelé vědět. Omezte se na 500 znaků."
@@ -403,6 +424,7 @@ function CreateTour() {
                   name="aboutme"
                   value={tour.aboutme}
                   onChange={handleChange}
+                  style={{ resize: "none" }} 
                 ></textarea>
               </div>
               <div className='text-lightError pb-4 text-xl '>{errors ? errors : ''}</div>

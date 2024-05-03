@@ -6,6 +6,7 @@ import { BrowserRouter,Routes,Route } from "react-router-dom";
 import { ThemeProvider } from './context/themeContext';
 import { DialogProvider } from './context/dialogContext';
 import { CountryProvider } from './context/countryContext';
+import { TourProvider } from './context/tourContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -13,15 +14,17 @@ const root = ReactDOM.createRoot(
 root.render(
   <BrowserRouter >
     <React.StrictMode>
-      <DialogProvider>  
-        <ThemeProvider>
-          <CountryProvider>
-            <Routes>
-              <Route path="/*" element={<App/>} />
-            </Routes>
-          </CountryProvider>
-      </ThemeProvider>
-      </DialogProvider>
+      <TourProvider>
+        <DialogProvider>  
+          <ThemeProvider>
+            <CountryProvider>
+              <Routes>
+                <Route path="/*" element={<App/>} />
+              </Routes>
+            </CountryProvider>
+        </ThemeProvider>
+        </DialogProvider>
+      </TourProvider>
     </React.StrictMode>
    </BrowserRouter>
 );

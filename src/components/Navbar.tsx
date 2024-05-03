@@ -11,6 +11,7 @@ function Navbar() {
     const [prevScrollPos, setPrevScrollPos] = useState(0);
     const [visible, setVisible] = useState(true);
 
+    const [loggedIn,setLoggedIn] = useState(true)
 
     useEffect(() => {
         const handleScroll = () => {
@@ -43,26 +44,31 @@ function Navbar() {
     </div>
 
     <div className="flex items-center space-x-2">
-        <div className="hidden md:block text-white bg-transparent border cursor-pointer hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 border-white px-3 py-1 rounded-lg"
-              onClick={handleSignUpClick}
-        >Registrace</div>
-        <div className="hidden md:block text-white bg-transparent border cursor-pointer hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 border-white px-3 py-1 rounded-lg"
-             onClick={handleLoginClick}
-          >Přihlásit</div>
+  {!loggedIn ? (
+    <>
+      <div className="hidden md:block text-white bg-transparent border cursor-pointer hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 border-white px-3 py-1 rounded-lg" onClick={handleSignUpClick}>Registrace</div>
+      <div className="hidden md:block text-white bg-transparent border cursor-pointer hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 border-white px-3 py-1 rounded-lg" onClick={handleLoginClick}>Přihlásit</div>
+    </>
+  ) : (
+    <>
+      <Link to={'/profile'} className="hidden md:block text-white bg-transparent border cursor-pointer hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 border-white px-3 py-1 rounded-lg" >Profil</Link>
+      <div className="hidden md:block text-white bg-transparent border cursor-pointer hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 border-white px-3 py-1 rounded-lg"   onClick={()=>setLoggedIn(false)}>Odhlásit</div>
+    </>
+  )}
 
-        {options?.map((opt) => (
-          <button
-            key={opt.text}
-            onClick={() => setTheme(opt.text)}
-            className={`flex items-center justify-center  h-8   rounded-full  hover:text-sky600 ${
-              theme === opt.text && `text-sky600`
-            } `}
-          >
-            {opt.icon}
-          </button>
-        ))}
-   
-    </div>
+  {options?.map((opt) => (
+    <button
+      key={opt.text}
+      onClick={() => setTheme(opt.text)}
+      className={`flex items-center justify-center h-8 rounded-full hover:text-sky600 ${theme === opt.text && `text-sky600`}`}
+    >
+      {opt.icon}
+    </button>
+  ))}
+</div>
+
+
+
     <div className={`${visible ? 'md:hidden fixed  bg-darkAccent   bottom-1 border rounded-lg shadow-lg left-1/2 transform -translate-x-1/2 w-[95%] md:w-[50%] ' : 'fixed  bg-darkAccent  bottom-1 border rounded-lg shadow-lg left-1/2 transform -translate-x-1/2 w-[95%] md:w-[60%] '}`}>
         
     <div className='flex justify-between w-full px-2 py-4 text-white text-xs'>
@@ -71,7 +77,10 @@ function Navbar() {
                 <Link to="/traveltips" className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg">TravelTips</Link>
                 <Link to="/spolucesty" className="hover:bg-lightAccent hover:text-darkBackground  hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg">Spolucesty</Link>
                 </div>
-                <div className='flex ml-4 gap-2 md:gap-6'>
+
+                {!loggedIn ?
+
+                 <div className='flex ml-4 gap-2 md:gap-6'>
                     <div className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg"
                          onClick={handleSignUpClick}>
                           Registrace</div>
@@ -79,6 +88,16 @@ function Navbar() {
                           onClick={handleLoginClick}>
                           Přihlásit</div>
                </div>
+               : 
+               
+               <div className='flex ml-4 gap-2 md:gap-6'>
+               <Link to={'/profile'} className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg">
+                  Profil </Link>
+               <div className="hover:bg-lightAccent hover:text-darkBackground  hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg"
+                     onClick={()=>setLoggedIn(false)}>
+                     Odhlásit</div>
+          </div>
+               } 
        </div>  
     </div>
 

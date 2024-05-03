@@ -9,7 +9,11 @@ import Footer from './components/Footer';
 import Home from './components/Home';
 import TravelTips from './pages/TravelTips';
 import Test from './pages/Test';
-import Spolucesty from './pages/Spolucesty';
+import Tours from './pages/Tours';
+import CreateTour from './components/spolucesty/CreateTour';
+import Profile from './pages/profile';
+import TourDetail from './pages/TourDetail';
+import YourTours from './pages/YourTours';
 
 function App() {
   const { theme } = useThemeContext();
@@ -32,7 +36,13 @@ function App() {
                 <Route path="/" element={<Layout />} >
                 <Route index element={<Home />}/> 
                 <Route path="/traveltips" element={<TravelTips />}/> 
-                <Route path="/spolucesty" element={<Spolucesty />}/> 
+                <Route path="/spolucesty" element={<Tours />}/> 
+                <Route path="/spolucesty/:id" element={<TourDetail />} />
+                <Route path="/novacesta" element={<CreateTour />}/>
+                <Route path="/profile" element={<Profile />}/> 
+                <Route path="/tvojespolucesty" element={<YourTours />}/> 
+
+
                 <Route path="/test" element={<Test />}/> 
 
                 </Route>
