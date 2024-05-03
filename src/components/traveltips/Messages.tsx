@@ -130,7 +130,7 @@ function Messages() {
               value={message.message}
               onChange={handleChange}
               className="w-full py-2 px-4 bg-gray-200 rounded-lg text-black focus:outline-none focus:ring focus:border-blue-500 resize-none"
-              placeholder="Share your opinion (max 500 characters)"
+              placeholder="Sdlej svůj názor (max 500 znaků)"
               maxLength={500} 
 
            />
@@ -146,7 +146,7 @@ function Messages() {
             value={message.message}
             onChange={handleChange}
             className="w-full py-2 px-4 bg-gray-200 text-black focus:outline-none focus:ring focus:border-blue-500 resize-none"
-            placeholder="Share your opinion (max 500 characters)"
+            placeholder="Sdlej svůj názor (max 500 znaků)"
             maxLength={500} 
        />
         </div>

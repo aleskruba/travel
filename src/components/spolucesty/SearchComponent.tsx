@@ -76,7 +76,7 @@ function SearchComponent({ filterTours, selectedCountry, selectedTourType, selec
             <Select
                 options={countryNamesObjects}
                 className="basic-single w-full"
-                classNamePrefix="select"
+                classNamePrefix="vyber zemi"
                 onChange={handleCountryChange}
                 isClearable={true}
                 value={selectedCountry}
@@ -84,7 +84,7 @@ function SearchComponent({ filterTours, selectedCountry, selectedTourType, selec
             <Select
                 options={typeOfTourObjects}
                 className="basic-single w-full"
-                classNamePrefix="select"
+                classNamePrefix="vyber typ výletu"
                 onChange={handleTourTypeChange}
                 isClearable={true}
                 value={selectedTourType}
@@ -92,7 +92,7 @@ function SearchComponent({ filterTours, selectedCountry, selectedTourType, selec
             <Select
                 options={futureDates}
                 className="basic-single w-full"
-                classNamePrefix="select"
+                classNamePrefix="vyber termín"
                 onChange={handleDateChange}
                 value={selectedDate}
                 isClearable={true}

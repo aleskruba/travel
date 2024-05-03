@@ -49,7 +49,7 @@ function TravelTips() {
            >{selectComp ? 'Video blogy - klikni zde' : 'Fórum -  klikni zde'} 
            </button> }
          </div>
-      {selectComp ?
+      {selectComp && chosenCountry ?
       
         <Messages/>
         :

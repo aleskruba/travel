@@ -94,7 +94,7 @@ function Reply({setReplyDiv,setReplies,replies,message}:Props) {
       onChange={handleChangeReply}
       className="w-full min-h-[100px] py-2 px-4 bg-gray-200 dark:text-black rounded-lg focus:outline-none focus:ring focus:border-blue-500 resize-none"
       style={{ maxWidth: '100%', overflowWrap: 'break-word' }}
-      placeholder="Share your opinion (max 500 characters)"
+      placeholder="Sdlej svůj názor (max 500 znaků)"
       maxLength={500} 
     />
     <div className="flex justify-center space-x-4">
