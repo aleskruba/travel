@@ -9,7 +9,7 @@
         "date": "2024-01-25",
         "tourdate":"2024-04-29",
         "tourdateEnd":"2024-08-29",
-        "type": "Vinařské tour",
+        "type": ["Vinařské tour"],
         "destination": "Rakousko",
         "fellowtraveler": "Hledám kamaráda na výleto do Rakouska , ochuntávka vína do ",
         "aboutme": "Jsem pohodový člověk, kterého baví cestovat"
@@ -22,7 +22,7 @@
         "date": "2024-02-15",
         "tourdate":"2024-04-29",
         "tourdateEnd":"2024-09-29",
-        "type": "Túry v horách",
+        "type": ["Túry v horách"],
         "destination": "Švýcarsko",
         "fellowtraveler": "Hledám parťáka na horskou túru ve Švýcarsku",
         "aboutme": "Miluji přírodu a adrenalinové sporty"
@@ -36,7 +36,7 @@
         "date": "2024-03-10",
         "tourdate":"2024-08-29",
         "tourdateEnd":"2024-10-29",
-        "type": "Kulturní tour",
+        "type": ["Kulturní tour"],
         "destination": "Itálie",
         "fellowtraveler": "Hledám společnost na prohlídku historických památek v Itálii",
         "aboutme": "Mám rád umění a historii"
@@ -50,7 +50,7 @@
         "date": "2024-04-05",
         "tourdate":"2024-06-29",
         "tourdateEnd":"2024-10-29",
-        "type": "Fotografické tour",
+        "type": ["Fotografické tour"],
         "destination": "Island",
         "fellowtraveler": "Hledám fotopartnera na focení krás Islandu",
         "aboutme": "Jsem nadšená amatérská fotografka"
@@ -64,7 +64,7 @@
         "date": "2024-05-20",
         "tourdate":"2024-05-29",
         "tourdateEnd":"2024-08-29",
-        "type": "Dobrodružné tour",
+        "type": ["Dobrodružné tour"],
         "destination": "Nový Zéland",
         "fellowtraveler": "Hledám dobrodružného parťáka na roadtrip po Novém Zélandu",
         "aboutme": "Mám rád extrémní sporty a objevování nových míst"
@@ -78,7 +78,7 @@
         "date": "2024-06-15",
         "tourdate":"2024-05-29",
         "tourdateEnd":"2024-06-29",
-        "type": "Wellness pobyty",
+        "type": ["Wellness pobyty","Dobrodružné tour"],
         "destination": "Thajsko",
         "fellowtraveler": "Hledám společnost na relaxační dovolenou v Thajsku",
         "aboutme": "Mám ráda jógu a thajskou kuchyni"
@@ -92,7 +92,7 @@
         "date": "2024-07-10",
         "tourdate":"2024-05-29",
         "tourdateEnd":"2024-06-29",
-        "type": "Sportovní tour",
+        "type": ["Sportovní tour"],
         "destination": "Španělsko",
         "fellowtraveler": "Hledám parťáka na golfový zájezd do Španělska",
         "aboutme": "Miluji golf a slunečné pláže"
@@ -106,7 +106,7 @@
         "date": "2024-08-25",
         "tourdate":"2024-06-29",
         "tourdateEnd":"2024-07-29",
-        "type": "Gastro tour",
+        "type": ["Gastro tour"],
         "destination": "Francie",
         "fellowtraveler": "Hledám parťáka na gurmánský zájezd po Francii",
         "aboutme": "Miluji francouzskou kuchyni a vína"
@@ -120,7 +120,7 @@
         "date": "2024-09-10",
         "tourdate":"2024-06-29",
         "tourdateEnd":"2024-07-29",
-        "type": "Přírodní tour",
+        "type": ["Přírodní tour"],
         "destination": "Kanada",
         "fellowtraveler": "Hledám parťáka na pozorování divoké zvěře v Kanadě",
         "aboutme": "Mám rád outdoorové aktivity a cestování"
@@ -134,7 +134,7 @@
         "date": "2024-09-10",
         "tourdate":"2024-07-29",
         "tourdateEnd":"2024-08-29",
-        "type": "Přírodní tour",
+        "type": ["Přírodní tour"],
         "destination": "Kanada",
         "fellowtraveler": "Hledám parťáka na pozorování divoké zvěře v Kanadě",
         "aboutme": "Mám rád outdoorové aktivity a cestování"

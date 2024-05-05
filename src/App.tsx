@@ -14,6 +14,7 @@ import CreateTour from './components/spolucesty/CreateTour';
 import Profile from './pages/profile';
 import TourDetail from './pages/TourDetail';
 import YourTours from './pages/YourTours';
+import YourTourDetail from './components/spolucesty/YourTourDetail';
 
 function App() {
   const { theme } = useThemeContext();
@@ -41,6 +42,7 @@ function App() {
                 <Route path="/novacesta" element={<CreateTour />}/>
                 <Route path="/profile" element={<Profile />}/> 
                 <Route path="/tvojespolucesty" element={<YourTours />}/> 
+                <Route path="/tvojespolucesty/:id" element={<YourTourDetail />}/> 
 
 
                 <Route path="/test" element={<Test />}/> 

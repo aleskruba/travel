@@ -123,7 +123,7 @@ function CreateTour() {
 
     const fetchData = async () => {
       try {
-        const resultTours = await axios.post('tours.json', newTour);
+        const resultTours = await axios.post('/tours.json', newTour);
         // Assuming 'tours.json' is the correct endpoint to post the data
         console.log(resultTours.data); // Logging the response data if needed
       } catch (e) {
@@ -435,6 +435,8 @@ useEffect(() => {console.log(tours)},[tours])
                 Odeslat
               </button>
             </form>
+
+            
           </div>
         </div>
       </div>

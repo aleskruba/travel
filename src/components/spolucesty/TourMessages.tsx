@@ -2,6 +2,7 @@ import React, { useState,useEffect ,FormEvent } from 'react';
 import ReactPaginate from 'react-paginate';
 import DOMPurify from 'dompurify';
 import axios from 'axios';
+import TourMessage from './TourMessage';
 
 
 
@@ -30,7 +31,7 @@ const ITEMS_PER_PAGE = 5;
 function TourMessages() {
 
   const [currentPage, setCurrentPage] = useState(0);
-  const [tourReplies, settourReplies] = useState<ReplyProps[]>([]);
+  const [tourReplies, setTourReplies] = useState<ReplyProps[]>([]);
   const [tourMessage, setTourMessage] = useState<MessageProps>({
     id: 0,
     email: '',
@@ -44,23 +45,34 @@ function TourMessages() {
   const [isLoading, setIsLoading] = useState(false);
   const [tourMessages, setTourMessages] = useState<MessageProps[]>([]);
  
-/*   useEffect(() => {
+   useEffect(() => {
  
       setIsLoading(true);
- 
       const fetchData = async () => {
-        const resultMessages = await axios.get('/messages.json');
-        const resulttourReplies = await axios.get('/tourReplies.json');
-        setTourMessages(resultMessages.data.messages);
-        settourReplies(resulttourReplies.data.tourReplies);
+        try {
+          const resultTourMessages = await axios.get('/messages.json');
+          setTourMessages(resultTourMessages.data.messages);
+/*           const resultTourReplies = await axios.get('/replies.json');
 
-          setIsLoading(false)
-                   
-      };
+         
+    
+            setTourReplies(resultTourReplies.data.tourReplies); */
+
+      /*       console.log(resultTourMessages.data.messages)
+            
+            console.log(resultTourReplies.data.tourReplies) */
+            
+      setIsLoading(false);
+        } catch (error) {
+            // Handle errors
+            console.error('Error fetching data:', error);
+        }
+    };
+    
 
       fetchData();
   
-  }, []); */
+  }, []); 
   
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const sanitizedMessage = DOMPurify.sanitize(event.target.value);
@@ -122,7 +134,7 @@ function TourMessages() {
         <div className="flex justify-between items-center dark:text-lighTextColor gap-4 bg-gray-100 px-2 py-2 md:rounded-lg shadow-md mt-2">
           <div className="flex items-center gap-2"> 
             <div className="w-14 h-14 overflow-hidden rounded-full">
-              <img src="man.png" alt="Profile" className="w-full h-full object-cover" />
+              <img src="/man.png" alt="Profile" className="w-full h-full object-cover" />
             </div>
            </div>
           <div className="flex-1 hidden md:flex">
@@ -156,17 +168,17 @@ function TourMessages() {
 
       <div className='flex flex-col mt-4 gap-1'>
       <div className='flex flex-col mt-4 gap-1'>
-{/*       {
+      {
         !isLoading ? (
           currentMessages
             .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) // Reverse sorting order
-            .map((message, idx) => (
-              <Message key={idx} tourMessages={tourMessages} message={message} tourReplies={tourReplies} setMessages={setMessages} settourReplies={settourReplies} />
+            .map((tourMessage, idx) => (
+              <TourMessage key={idx} tourMessages={tourMessages} tourMessage={tourMessage} tourReplies={tourReplies} setTourMessages={setTourMessages} setTourReplies={setTourReplies} />
             ))
         ) : (
           <>moment prosím</>
         )
-      } */}
+      } 
 
       </div>
 
