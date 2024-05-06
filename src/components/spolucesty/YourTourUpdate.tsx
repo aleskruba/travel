@@ -6,22 +6,9 @@ import { typeOfTour } from '../../constants';
 import { countryNames } from '../../constants';
 import axios from 'axios';
 import { useTourContext } from '../../context/tourContext';
+import { TourProps } from '../../types';
 
 
-interface Tour {
-    id: number;
-    fname: string;
-    email:string;
-    img:string;
-    date: Date;
-    tourdate: Date;
-    tourdateEnd: Date;
-    destination: string;
-    type: string[];
-    fellowtraveler: string;
-    aboutme: string;
-    user_id: number;
-  }
 
 type Props = {
     setUpdateToggle: (value: boolean) => void;
@@ -34,18 +21,18 @@ type Props = {
 
 
     const {tours, setTours} = useTourContext()
-    const yourTour: Tour = tours[5];
-
+    const yourTour: TourProps = tours[6];
+    console.log(yourTour)
     const dropdownRef = useRef<HTMLDivElement>(null);
-    const [chosenCountry, setChosenCountry] = useState('');
+  //  const [chosenCountry, setChosenCountry] = useState('');
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
-    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-    const [selectedDateEnd, setSelectedDateEnd] = useState<Date | null>(null);
+   // const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+   // const [selectedDateEnd, setSelectedDateEnd] = useState<Date | null>(null);
     const [errors, setErrors] = useState('');
     //const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-    const [tour, setTour] = useState<Tour>({
+    const [tour, setTour] = useState<TourProps>({
       id: 0,
       fname: '',
       email:'',
@@ -63,7 +50,7 @@ type Props = {
 
   
    
-    const [updateTour, setUpdateTour] = useState<Tour>({
+    const [updateTour, setUpdateTour] = useState<TourProps>({
       id: yourTour.id,
       fname: yourTour.fname,
       email:yourTour.email,
@@ -79,7 +66,17 @@ type Props = {
     });
 
     const [selectedTypes, setSelectedTypes] = useState<string[]>(yourTour.type);
+    const [selectedDate, setSelectedDate] = useState<Date | null>(yourTour.tourdate);
+    const [selectedDateEnd, setSelectedDateEnd] = useState<Date | null>(yourTour.tourdateEnd);
+    const [chosenCountry, setChosenCountry] = useState(yourTour.destination);
 
+    useEffect(() => {
+      setUpdateTour(prevState => ({
+        ...prevState,
+        type: selectedTypes
+      }));
+    }, [selectedTypes]);
+    
     
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -124,8 +121,9 @@ type Props = {
         event.preventDefault();
         let isValid = true;
         const newErrors: { [key: string]: string } = {};
+        console.log()
     
-        if (!tour.destination || selectedTypes.length === 0 || !tour.fellowtraveler || !tour.aboutme || !selectedDate) {
+        if (!updateTour.destination || selectedTypes.length === 0 || !updateTour.fellowtraveler || !updateTour.aboutme || !selectedDate) {
           newErrors['all'] = 'Všechna pole musí být vyplněna';
           isValid = false;
         }
@@ -134,7 +132,7 @@ type Props = {
           setErrors(newErrors['all']);
           return;
         }
-        const newTour: Tour = {
+        const newTour: TourProps = {
           id: updateTour.id, // Generate a unique ID
           fname: updateTour.fname,
           email:updateTour.email,
@@ -148,8 +146,10 @@ type Props = {
           aboutme: updateTour.aboutme,
           user_id: updateTour.user_id
         };
+
+
     
-        const fetchData = async () => {
+  /*       const fetchData = async () => {
           try {
             const resultTours = await axios.post('/tours.json', newTour);
             // Assuming 'tours.json' is the correct endpoint to post the data
@@ -158,9 +158,33 @@ type Props = {
           }
         };
       
-        fetchData();
+        fetchData(); */
     
-        setTours([newTour, ...tours]); // Prepend the new tour to the existing list of tours
+        const updatedTours = tours.map(tour => {
+          // Check if the current tour's id matches the id of the tour you want to update
+          if (tour.id === updateTour.id) {
+            // If it matches, update the properties with the new values
+            return {
+              ...tour, // Keep the existing properties
+              fname: updateTour.fname,
+              email: updateTour.email,
+              img: updateTour.img,
+              date: updateTour.date,
+              tourdate: updateTour.tourdate,
+              tourdateEnd: updateTour.tourdateEnd,
+              destination: updateTour.destination,
+              type: updateTour.type,
+              fellowtraveler: updateTour.fellowtraveler,
+              aboutme: updateTour.aboutme,
+              user_id: updateTour.user_id
+            };
+          }
+          // If it doesn't match, return the tour as is
+          return tour;
+        });
+        
+        // Update the state with the updatedTours array
+        setTours(updatedTours); // Prepend the new tour to the existing list of tours
     
         // Reset the tour input
         setUpdateTour({
@@ -186,6 +210,8 @@ type Props = {
        // navigate("/spolucesty");
       };
     
+useEffect(() => {console.log(tours) },[tours])
+
 
       const handleSelectCountry = (country: string) => {
     
@@ -275,7 +301,7 @@ type Props = {
 <div className="relative w-full px-2">
   <input
     type="text"
-    placeholder={updateTour.destination ? updateTour.destination : "vyber zemi"}
+    placeholder={chosenCountry ? chosenCountry  : "vyber zemi"}
     maxLength={8}
     value={searchTerm}
     onChange={handleInputChange}
@@ -325,7 +351,7 @@ type Props = {
               <div className='flex gap-4 items-center mt-4'>
               <label className="block text-sm font-bold " htmlFor="date">Začátek cesty:</label>
               <DatePicker
-                selected={updateTour.tourdate}
+                selected={selectedDate}
                 onChange={handleDateChange}
             
                 dateFormat="MM/yyyy"
@@ -338,7 +364,7 @@ type Props = {
                    <label className="block text-sm font-bold " htmlFor="dateend">do:</label>
               <DatePicker
 
-                selected={updateTour.tourdateEnd}
+                selected={selectedDateEnd}
                 onChange={handleDateEndChange}
                 dateFormat="MM/yyyy"
                 minDate={selectedDate}

@@ -1,22 +1,8 @@
 import React from 'react'
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import { TourProps } from '../../types';
 
-
-interface TourProps {
-  id: number;
-  fname: string;
-  email:string;
-  img:string;
-  date: Date;
-  tourdate: Date;
-  tourdateEnd: Date;
-  destination: string;
-  type: string[];
-  fellowtraveler: string;
-  aboutme: string;
-  user_id: number;
-}
 
 type Props = {
 
@@ -28,7 +14,7 @@ const YourTour: React.FC<Props> = ({yourTour }) => {
 
 
   return ( 
-    <Link to={`/tvojespolucesty/${yourTour.id}`} className={`mt-4 rounded overflow-hidden shadow-lg bg-gray-200 dark:bg-gray-600 dark:text-gray-200 py-1 px-1 '} w-[300px] h-[270px] px-4 cursor-pointer `}>
+    <Link to={`/tvojespolucesty/${yourTour.id}`} className={` rounded overflow-hidden shadow-lg bg-gray-200 dark:bg-gray-600 dark:text-gray-200 py-1 px-1 '} w-[300px] h-[270px] px-4 cursor-pointer `}>
      
       <div className='flex items-center space-x-6'>
           <div className='w-16 h-16'>

@@ -1,23 +1,8 @@
 import React,{useState,FormEvent} from 'react'
 import DOMPurify from 'dompurify';
+import { MessageProps } from '../../types';
+import { ReplyProps } from '../../types';
 
-type MessageProps = {
-    id: number;
-    email: string;
-    fname: string;
-    date: Date;
-    img: string;
-    message: string;
-  };
-
-interface ReplyProps {
-    id: number;
-    fname: string;
-    date: Date;
-    img: string;
-    message: string; 
-    message_id:number,
-    user_id: number }
 
   interface Props {
     setReplyDiv: React.Dispatch<boolean>; 

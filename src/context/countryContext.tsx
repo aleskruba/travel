@@ -1,18 +1,8 @@
 import React, { createContext, useState, ReactNode, useContext, Dispatch, SetStateAction, useEffect } from 'react';
+import { ChosenCountryData } from '../types';
+
 
 type ChosenCountry = string;
-
-type ChosenCountryData = {
-  name: string;
-  population: string;
-  currency: string;
-  language: string;
-  capital: string;
-  area: string;
-  timezone: string;
-  continent: string;
-  flag:string;
-};
 
 interface CountryContextProps {
   chosenCountry: ChosenCountry;

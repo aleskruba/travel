@@ -3,28 +3,10 @@ import ReactPaginate from 'react-paginate';
 import DOMPurify from 'dompurify';
 import axios from 'axios';
 import TourMessage from './TourMessage';
+import { MessageProps } from '../../types';
+import { ReplyProps } from '../../types';
 
 
-
-type MessageProps = {
-  id: number;
-  email: string;
-  fname: string;
-  date: Date;
-  img: string;
-  message: string;
-  user_id: number;
-};
-
-interface ReplyProps {
-  id: number;
-  fname: string;
-  date: Date;
-  img: string;
-  message: string; 
-  message_id: number;
-  user_id: number;
-}
 
 const ITEMS_PER_PAGE = 5;
 

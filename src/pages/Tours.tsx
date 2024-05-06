@@ -4,21 +4,7 @@ import axios from 'axios';
 import { Link,useSearchParams  } from 'react-router-dom';
 import SearchComponent from '../components/spolucesty/SearchComponent';
 import { useTourContext } from '../context/tourContext';
-
-interface TourProps {
-  id: number;
-  fname: string;
-  email: string;
-  img: string;
-  date: Date ;
-  tourdate: Date ;
-  tourdateEnd: Date;
-  destination: string;
-  type: string[];
-  fellowtraveler: string;
-  aboutme: string;
-  user_id: number;
-}
+import { TourProps } from '../types';
 
 function Tours() {
   const {tours, setTours} = useTourContext()

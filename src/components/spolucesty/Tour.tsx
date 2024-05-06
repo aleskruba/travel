@@ -1,22 +1,7 @@
 import React from 'react'
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-
-
-interface TourProps {
-  id: number;
-  fname: string;
-  email:string;
-  img:string;
-  date: Date;
-  tourdate: Date;
-  tourdateEnd: Date;
-  destination: string;
-  type: string[];
-  fellowtraveler: string;
-  aboutme: string;
-  user_id: number;
-}
+import { TourProps } from '../../types';
 
 type Props = {
 

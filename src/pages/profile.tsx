@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+interface UserProps {
+  username?: string;
+  firstName?: string;
+  lastName?: string;
+  email: string;
+  password: string;
+  image?: string;
+}
+
+
+
 function Profile() {
   const [updateProfile, setUpdateProfile] = useState(false);
   const [updatePassword, setUpdatePassword] = useState(false);

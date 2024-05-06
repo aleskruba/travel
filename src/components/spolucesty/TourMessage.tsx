@@ -5,35 +5,17 @@ import moment from 'moment';
 import { FaRegTrashAlt } from "react-icons/fa";
 import { GoTriangleDown ,GoTriangleUp } from "react-icons/go";
 import TourReply from './TourReply';
+import { MessageProps } from '../../types';
+import { ReplyProps } from '../../types';
 
-
-type TourMessageProps = {
-  id: number;
-  email: string;
-  fname: string;
-  date: Date;
-  img: string;
-  message: string;
-  user_id: number;
-};
-
-interface TourReplyProps {
-  id: number;
-  fname: string;
-  date: Date;
-  img: string;
-  message: string; 
-  message_id: number,
-  user_id: number;
-}
 
 
 type Props = {
-    tourMessages:TourMessageProps[];
-  setTourMessages:React.Dispatch<React.SetStateAction<TourMessageProps[]>>;
-  tourMessage: TourMessageProps;
-  setTourReplies: React.Dispatch<React.SetStateAction<TourReplyProps[]>>
-  tourReplies:  TourReplyProps[]
+    tourMessages:MessageProps[];
+  setTourMessages:React.Dispatch<React.SetStateAction<MessageProps[]>>;
+  tourMessage: MessageProps;
+  setTourReplies: React.Dispatch<React.SetStateAction<ReplyProps[]>>
+  tourReplies:  ReplyProps[]
 };
 
 const TourMessage: React.FC<Props> = ({tourMessages, tourMessage,setTourMessages,tourReplies,setTourReplies }) => {

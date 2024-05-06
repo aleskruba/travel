@@ -1,23 +1,9 @@
 import React,{useState,FormEvent} from 'react'
 import DOMPurify from 'dompurify';
+import { MessageProps } from '../../types';
+import { ReplyProps } from '../../types';
 
-type MessageProps = {
-    id: number;
-    email: string;
-    fname: string;
-    date: Date;
-    img: string;
-    message: string;
-  };
 
-interface ReplyProps {
-    id: number;
-    fname: string;
-    date: Date;
-    img: string;
-    message: string; 
-    message_id:number,
-    user_id: number }
 
   interface Props {
     setReplyDiv: React.Dispatch<boolean>; 
@@ -65,7 +51,7 @@ function Reply({setReplyDiv,setReplies,replies,message}:Props) {
       img: 'man.png',
       message: reply.message,
       message_id: message.id,
-      user_id: 1
+         user_id: 1
     };
   
     setReplies([newReply, ...replies]); // Prepend the new message
@@ -78,7 +64,7 @@ function Reply({setReplyDiv,setReplies,replies,message}:Props) {
       img: '',
       message: '',
       message_id: null,
-      user_id: null
+        user_id: null
     });
 
     setReplyDiv(false)

@@ -1,12 +1,5 @@
 import React from 'react';
-
-type VideoCard = {
-    id: number;
-    country: string;
-    title: string;
-    video: string;
-    posted: string;
-  };
+import { VideoCard } from '../../types';
   
   type Props = {
     card: VideoCard;

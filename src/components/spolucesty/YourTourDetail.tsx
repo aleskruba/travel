@@ -2,23 +2,7 @@ import React,{useState} from 'react'
 import { useTourContext } from '../../context/tourContext';
 import moment from 'moment';
 import YourTourUpdate from './YourTourUpdate';
-import { useNavigate } from "react-router-dom";
-
-interface TourProps {
-  id: number;
-  fname: string;
-  email: string;
-  img: string;
-  date: Date;
-  tourdate: Date;
-  tourdateEnd: Date;
-  destination: string;
-  type: string[];
-  fellowtraveler: string;
-  aboutme: string;
-  user_id: number;
-}
-
+import { useNavigate } from 'react-router-dom';
   
 function YourTourDetail() {
 
@@ -47,7 +31,7 @@ function YourTourDetail() {
     <div className='dark:text-white flex flex-col items-center '>
         
         
-    <h2 className='text-3xl font-semibold mb-4'>Tour Detail</h2>
+
     {!isLoading ? (
 
         <>

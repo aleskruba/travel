@@ -4,21 +4,10 @@ import axios from 'axios';
 import moment from 'moment';
 import 'moment/locale/cs';
 import TourMessages from '../components/spolucesty/TourMessages';
+import { TourProps } from '../types';
+import { useNavigate } from 'react-router-dom';
+import { BsArrowReturnLeft } from "react-icons/bs";
 
-interface TourProps {
-  id: number;
-  fname: string;
-  email: string;
-  img: string;
-  date: Date;
-  tourdate: Date;
-  tourdateEnd: Date;
-  destination: string;
-  type: string[];
-  fellowtraveler: string;
-  aboutme: string;
-  user_id: number;
-}
 
 function TourDetail() {
   let { id } = useParams<string>(); // id is of type string | undefined
@@ -26,7 +15,7 @@ function TourDetail() {
   if (id !== undefined) {
     intId = parseInt(id); // parseInt expects a string
   }
-
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
   const [tours, setTours] = useState<TourProps[]>([]);
@@ -68,9 +57,13 @@ function TourDetail() {
 
 
   return (
+  
     <div className='dark:text-white flex flex-col items-center'>
   
-      <h2 className='text-3xl font-semibold mb-4'>Tour Detail</h2>
+ 
+       <div onClick={() => navigate(-1) } className='flex items-center text-2xl font-semibold italic justify-center cursor-pointer hover:dark:text-gray-300 hover:text-gray-500'> <BsArrowReturnLeft />
+ <span className='ml-4'>ZPĚT</span></div>
+
       {!isLoading ? (
       <div className=' flex flex-col items-center'>
       <div className='bg-gray-100 dark:bg-gray-800 rounded-lg p-6 shadow-lg'>

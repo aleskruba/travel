@@ -28,8 +28,13 @@ function LoginDialog() {
       password: '',
     };
 
-    const onSubmit = async (values:any) => {
+    function handleSubmit(values:any, { resetForm}:any) {
 
+      console.log(
+        values
+      )
+      resetForm();
+  
     }
   return (
 
@@ -56,7 +61,7 @@ function LoginDialog() {
             </>
             :
           <>
-     <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
+     <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
       <Form className="flex flex-col space-y-4 items-center w-[350px] ">
         <Field name="email" type="email" id="email" placeholder="Email" autoComplete="off" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" />
         <ErrorMessage name="email" component="div" className="text-red-500" />

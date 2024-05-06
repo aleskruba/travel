@@ -51,7 +51,7 @@ function Navbar() {
     </>
   ) : (
     <>
-      <Link to={'/profile'} className="hidden md:block text-white bg-transparent border cursor-pointer hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 border-white px-3 py-1 rounded-lg" >Profil</Link>
+      <Link to={'/profile'} className="hidden md:block min-w-[100px] text-center text-white bg-transparent border cursor-pointer hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 border-white px-3 py-1 rounded-lg" >Profil</Link>
       <div className="hidden md:block text-white bg-transparent border cursor-pointer hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 border-white px-3 py-1 rounded-lg"   onClick={()=>setLoggedIn(false)}>Odhlásit</div>
     </>
   )}
@@ -91,7 +91,7 @@ function Navbar() {
                : 
                
                <div className='flex ml-4 gap-2 md:gap-6'>
-               <Link to={'/profile'} className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg">
+               <Link to={'/profile'} className="hover:bg-lightAccent min-w-[60px] text-center hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg">
                   Profil </Link>
                <div className="hover:bg-lightAccent hover:text-darkBackground  hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg"
                      onClick={()=>setLoggedIn(false)}>

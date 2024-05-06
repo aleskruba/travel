@@ -3,15 +3,7 @@ import ReactPaginate from 'react-paginate';
 import { useCountryContext } from '../../context/countryContext';
 import axios from 'axios';
 import Card from './Card';
-
-type VideoCard = {
-  id: number;
-  country: string;
-  title: string;
-  video: string;
-  posted: string;
-};
-
+import { VideoCard } from '../../types';
 
 const ITEMS_PER_PAGE = 5;
 

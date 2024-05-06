@@ -1,22 +1,7 @@
 import React, { createContext, useState, ReactNode, useContext } from 'react';
+import { TourProps } from '../types';
 
 
-
-interface TourProps {
-    id: number;
-    fname: string;
-    email: string;
-    img: string;
-    date: Date ;
-    tourdate: Date ;
-    tourdateEnd: Date;
-    destination: string;
-    type: string[];
-    fellowtraveler: string;
-    aboutme: string;
-    user_id: number;
-  }
-  
 
 interface TourContextProps {
     tours: TourProps[];

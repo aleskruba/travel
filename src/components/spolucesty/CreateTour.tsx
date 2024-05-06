@@ -7,22 +7,8 @@ import { countryNames } from '../../constants';
 import axios from 'axios';
 import { useTourContext } from '../../context/tourContext';
 import { useNavigate } from "react-router-dom";
+import { TourProps } from '../../types';
 
-
-interface Tour {
-  id: number;
-  fname: string;
-  email:string;
-  img:string;
-  date: Date;
-  tourdate: Date;
-  tourdateEnd: Date;
-  destination: string;
-  type: string[];
-  fellowtraveler: string;
-  aboutme: string;
-  user_id: number;
-}
 
 function CreateTour() {
   const {tours, setTours} = useTourContext()
@@ -36,7 +22,7 @@ function CreateTour() {
   const [selectedDateEnd, setSelectedDateEnd] = useState<Date | null>(null);
   const [errors, setErrors] = useState('');
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [tour, setTour] = useState<Tour>({
+  const [tour, setTour] = useState<TourProps>({
     id: 0,
     fname: '',
     email:'',
@@ -106,7 +92,7 @@ function CreateTour() {
       setErrors(newErrors['all']);
       return;
     }
-    const newTour: Tour = {
+    const newTour: TourProps = {
       id: tours.length + 1, // Generate a unique ID
       fname: tour.fname,
       email:tour.email,

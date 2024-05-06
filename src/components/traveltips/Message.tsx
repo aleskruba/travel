@@ -4,27 +4,10 @@ import moment from 'moment';
 import Reply from './Reply';
 import { FaRegTrashAlt } from "react-icons/fa";
 import { GoTriangleDown ,GoTriangleUp } from "react-icons/go";
+import { MessageProps } from '../../types';
+import { ReplyProps } from '../../types';
 
 
-type MessageProps = {
-  id: number;
-  email: string;
-  fname: string;
-  date: Date;
-  img: string;
-  message: string;
-  user_id: number;
-};
-
-interface ReplyProps {
-  id: number;
-  fname: string;
-  date: Date;
-  img: string;
-  message: string; 
-  message_id: number,
-  user_id: number;
-}
 
 
 type Props = {
