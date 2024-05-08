@@ -1,12 +1,15 @@
 import React from 'react'
+import { useAuthContext } from '../context/authContext';
 
 function Home() {
+  const { user} = useAuthContext();
+
   return (
     <div className="flex h-full flex-col md:flex-row dark:text-lighTextColor px-2 py:2 md:px-6 md:py-6 ">
 
     <div className="flex  flex-col md:flex-row">
       <div className="flex-1 text-xl">
-      <p>Vítejte na našem webu!</p>
+      <p>Vítejte na našem webu <span className='dark:text-red-300 text-red-800 font-bold'>{user?.firstName ? user.firstName : user?.email}</span>! </p>
       <br />
       <p> Jsme tu pro vás, abychom vám poskytli užitečné informace a inspiraci pro vaše cestovní plány. Naše stránky jsou zdrojem poznatků o turisticky zajímavých státech po celém světě, které vám pomohou naplánovat nezapomenutelnou dovolenou.</p>
       <br />

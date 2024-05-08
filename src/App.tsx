@@ -15,6 +15,7 @@ import Profile from './pages/profile';
 import TourDetail from './pages/TourDetail';
 import YourTours from './pages/YourTours';
 import YourTourDetail from './components/spolucesty/YourTourDetail';
+import NotFound404 from './pages/NotFound404';
 
 function App() {
   const { theme } = useThemeContext();
@@ -46,7 +47,7 @@ function App() {
 
 
                 <Route path="/test" element={<Test />}/> 
-
+                <Route path='*' element={<NotFound404 />} />
                 </Route>
             </Routes>
           </div>

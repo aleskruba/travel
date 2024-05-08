@@ -1,12 +1,16 @@
 export interface UserProps {
-    username?: string;
-    firstName?: string;
-    lastName?: string;
-    email: string;
-    password: string;
-    image?: string;
-  }
-  
+  username?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  email: string | null;
+  password: string | null;
+  image?: string | null;
+  registrationDate: Date | null;
+  googleId?: string | null;
+  googleEmail?: string | null;
+  googleName?: string | null;
+  googleProfilePicture?: string | null;
+}
 
 export type MessageProps = {
     id: number;

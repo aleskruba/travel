@@ -1,18 +1,52 @@
 import { useEffect, useState } from 'react';
 import { useThemeContext } from '../context/themeContext';
 import { useDialogContext } from '../context/dialogContext';
+import { useAuthContext } from '../context/authContext';
 import { Link } from 'react-router-dom';
-
+import BASE_URL from '../config/config';
+import axios from 'axios';
+import { Flip, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Navbar() {
     const { theme, setTheme, options } = useThemeContext();
     const { handleLoginClick ,handleSignUpClick} = useDialogContext();
+    const { user,setUser} = useAuthContext();
 
     const [prevScrollPos, setPrevScrollPos] = useState(0);
     const [visible, setVisible] = useState(true);
 
-    const [loggedIn,setLoggedIn] = useState(true)
 
+    const logOutFunction = () => { 
+      const fetchUserData = async () => {
+
+        try {
+          const url = `${BASE_URL}/logout`;
+          const response = await axios.get(url, { withCredentials: true });
+          if (response.status === 201) {
+            toast.success(response.data.message,  {
+              position: "top-left",
+              autoClose: 1500,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              transition: Flip,
+              });
+  
+          setUser(null)
+            }
+        
+        } catch (err) {
+          console.log('Error fetching user data:', err);
+      };
+    
+    }
+      fetchUserData();
+
+    }
     useEffect(() => {
         const handleScroll = () => {
           const currentScrollPos = window.scrollY;
@@ -29,6 +63,7 @@ function Navbar() {
         };
     }, [prevScrollPos]);
     
+
   return (
 <nav  className={` ${visible ? 'sticky' : 'none'} top-0 z-10 flex justify-between gap-4 items-center bg-darkBackground text-navbarTextColor py-4 px-4 md:px-8 poppins-medium`}>
     
@@ -44,15 +79,20 @@ function Navbar() {
     </div>
 
     <div className="flex items-center space-x-2">
-  {!loggedIn ? (
+  {!user ? (
     <>
       <div className="hidden md:block text-white bg-transparent border cursor-pointer hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 border-white px-3 py-1 rounded-lg" onClick={handleSignUpClick}>Registrace</div>
       <div className="hidden md:block text-white bg-transparent border cursor-pointer hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 border-white px-3 py-1 rounded-lg" onClick={handleLoginClick}>Přihlásit</div>
     </>
   ) : (
     <>
-      <Link to={'/profile'} className="hidden md:block min-w-[100px] text-center text-white bg-transparent border cursor-pointer hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 border-white px-3 py-1 rounded-lg" >Profil</Link>
-      <div className="hidden md:block text-white bg-transparent border cursor-pointer hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 border-white px-3 py-1 rounded-lg"   onClick={()=>setLoggedIn(false)}>Odhlásit</div>
+      <Link to={'/profile'} className="hidden md:flex md:justify-between md:text-base  min-w-[100px] text-center text-white bg-transparent border cursor-pointer hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 border-white px-3 py-1 rounded-lg" >Profil
+      <div className='w-6 h-6'>
+              {user.image && 
+                  <img src={user.image} alt="profile" className='w-full h-full rounded-full' />
+              }
+                  </div></Link>
+      <div className="hidden md:block text-white bg-transparent border cursor-pointer hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 border-white px-3 py-1 rounded-lg"   onClick={logOutFunction}>Odhlásit</div>
     </>
   )}
 
@@ -78,7 +118,7 @@ function Navbar() {
                 <Link to="/spolucesty" className="hover:bg-lightAccent hover:text-darkBackground  hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg">Spolucesty</Link>
                 </div>
 
-                {!loggedIn ?
+                {!user ?
 
                  <div className='flex ml-4 gap-2 md:gap-6'>
                     <div className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg"
@@ -93,8 +133,10 @@ function Navbar() {
                <div className='flex ml-4 gap-2 md:gap-6'>
                <Link to={'/profile'} className="hover:bg-lightAccent min-w-[60px] text-center hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg">
                   Profil </Link>
+               
+         
                <div className="hover:bg-lightAccent hover:text-darkBackground  hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg"
-                     onClick={()=>setLoggedIn(false)}>
+                     onClick={logOutFunction}>
                      Odhlásit</div>
           </div>
                } 
