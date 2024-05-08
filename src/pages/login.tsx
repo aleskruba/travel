@@ -144,7 +144,7 @@ function LoginDialog() {
             },
            }
         )
-        console.log(data.data)
+   
 
         const config = {
           headers: {

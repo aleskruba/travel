@@ -175,7 +175,7 @@ const login = useGoogleLogin({
           theme: "colored",
           transition: Flip,
           });
-          console.log(response.data.user)
+      
         setUser(response.data.user);
         navigate('/');
         handleCloseDialog()
