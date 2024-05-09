@@ -1,4 +1,5 @@
 export interface UserProps {
+  id:number | null;
   username?: string | null;
   firstName?: string | null;
   lastName?: string | null;
@@ -19,7 +20,7 @@ export type MessageProps = {
     date: Date;
     img: string;
     message: string;
-    user_id: number;
+    user_id: number ;
   
   };
   

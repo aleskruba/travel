@@ -5,12 +5,13 @@ import axios from 'axios';
 import Message from './Message';
 import { MessageProps } from '../../types';
 import { ReplyProps } from '../../types';
+import { useAuthContext } from '../../context/authContext';
 
 
 const ITEMS_PER_PAGE = 5;
 
 function Messages() {
-
+  const { user} = useAuthContext();
   const [currentPage, setCurrentPage] = useState(0);
   const [replies, setReplies] = useState<ReplyProps[]>([]);
   const [message, setMessage] = useState<MessageProps>({
@@ -20,7 +21,7 @@ function Messages() {
     date: new Date(),
     img: '',
     message: '',
-    user_id: 4
+    user_id: user?.id ?? 0
   });
   
 
@@ -60,13 +61,13 @@ function Messages() {
 
   
     const newMessage = {
-      id: messages.length + 1, // Generate a unique ID
-      email: 'new@example.com',
-      fname: 'ales',
+      id: messages.length + 1, 
+      email: user?.email || '', 
+      fname: user?.firstName || '',
       date: new Date(),
-      img: 'man.png',
+      img: user?.image || '',
       message: message.message,
-      user_id:4
+      user_id: user?.id || 0 
     };
   
     setMessages([newMessage, ...messages]); // Prepend the new message
@@ -104,7 +105,7 @@ function Messages() {
         <div className="flex justify-between items-center dark:text-lighTextColor gap-4 bg-gray-100 px-2 py-2 md:rounded-lg shadow-md mt-2">
           <div className="flex items-center gap-2"> 
             <div className="w-14 h-14 overflow-hidden rounded-full">
-              <img src="man.png" alt="Profile" className="w-full h-full object-cover" />
+              <img src={user?.image ?? ''} alt="Profile" className="w-full h-full object-cover" />
             </div>
            </div>
           <div className="flex-1 hidden md:flex">

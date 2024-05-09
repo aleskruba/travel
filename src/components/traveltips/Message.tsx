@@ -6,7 +6,7 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { GoTriangleDown ,GoTriangleUp } from "react-icons/go";
 import { MessageProps } from '../../types';
 import { ReplyProps } from '../../types';
-
+import { useAuthContext } from '../../context/authContext';
 
 
 
@@ -20,7 +20,7 @@ type Props = {
 
 const Message: React.FC<Props> = ({messages, message,setMessages,replies,setReplies }) => {
 
-
+  const { user} = useAuthContext();
     const [replyDiv, setReplyDiv] = useState<boolean>(false);
     const [hiddenAnswers,setHiddenAnswes] = useState(true);
 
@@ -43,7 +43,7 @@ return (
     <div className='flex flex-col  dark:bg-gray-500 dark:text-gray-100  px-4 py-2  shadow-2xl rounded-lg'>
      <div className="flex flex-col md:flex-row md:items-center gap-4 ">
       <div className="flex  items-center gap-2"> 
-         {message.user_id === 4 &&
+         {message.user_id === user?.id &&
                   <div className="text-red-700  cursor-pointer hover:text-red-500" 
                       onClick={()=>deleteMessage(message.id)}
                       >
@@ -64,11 +64,17 @@ return (
           <p className="">{message.message} </p>
       </div>
      </div>
+    
+
+{user?.id !== message.user_id &&
+    <div>
+
      <div className='flex items-center gap-2'>
         
          <div className='cursor-pointer'><BiLike/></div>  
               <div>126</div>
            <div className='cursor-pointer'><BiDislike/></div>  
+
 
        {!replyDiv &&  
      <button className='bg-gray-300 text-gray-700 px-4 py-1 text-sm	 rounded-full hover:bg-gray-400 focus:outline-none focus:ring focus:border-gray-500'
@@ -85,6 +91,7 @@ return (
              />
 
     }
+</div>}
 
 <div className=''>
   <div className='flex gap-4' onClick={()=>setHiddenAnswes(!hiddenAnswers)}>
