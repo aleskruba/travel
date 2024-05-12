@@ -1,11 +1,11 @@
 import { useThemeContext } from './context/themeContext';
 import Navbar from './components/Navbar';
 import {Routes,Route} from "react-router-dom";
-import LoginDialog from './pages/Login';
+import LoginDialog from './pages/login';
 import Layout from './components/Layout';
 import { useDialogContext } from './context/dialogContext';
 import { useAuthContext } from './context/authContext';
-import SignUpDialog from './pages/Signup';
+import SignUpDialog from './pages/signup';
 import Footer from './components/Footer';
 import Home from './components/Home';
 import TravelTips from './pages/TravelTips';
