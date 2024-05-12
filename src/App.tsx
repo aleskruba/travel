@@ -12,7 +12,7 @@ import TravelTips from './pages/TravelTips';
 import Test from './pages/Test';
 import Tours from './pages/Tours';
 import CreateTour from './components/spolucesty/CreateTour';
-import Profile from './pages/Profile';
+import Profile from './pages/profile';
 import TourDetail from './pages/TourDetail';
 import YourTours from './pages/YourTours';
 import YourTourDetail from './components/spolucesty/YourTourDetail';
