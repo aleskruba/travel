@@ -51,8 +51,13 @@ return (
                   </div>
                   }
         <div className="w-14 h-14 overflow-hidden rounded-full">
-          <img src={message.img} alt="Profile" className="w-full h-full object-cover" />
-        </div>
+        <img
+          src={user?.id === message.user_id ? user?.image ?? 'profile.png' : 'profile.png'}
+          alt="Profile"
+          className="w-full h-full object-cover"
+        />
+      </div>
+
         <div className="flex flex-row gap-4 md:gap-2">
         <p className="text-gray-600 dark:bg-gray-500 dark:text-gray-100 font-semibold">{message.fname.slice(0, 10)}</p>
         <p className="text-gray-600 dark:bg-gray-500 dark:text-gray-100 w-[80px]">{moment(message.date).format('DD-MM YYYY ')}</p>

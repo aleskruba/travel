@@ -6,13 +6,21 @@ import axios from 'axios';
 interface AuthContextProps {
   user: UserProps | null;
   setUser: Dispatch<SetStateAction<UserProps | null>>;
+  updateUser: UserProps | null;
+  setUpdateUser: Dispatch<SetStateAction<UserProps | null>>;
   isLoading: boolean;
+  setBackendServerError: Dispatch<SetStateAction<boolean>>;
+  backendServerError:boolean
 }
 
 export const AuthContext = createContext<AuthContextProps>({
   user: null,
   setUser: () => {},
+  updateUser: null,
+  setUpdateUser: () => {},
   isLoading: true, // Initially, set isLoading to true
+  setBackendServerError: () => {},
+  backendServerError:false
 });
 
 interface AuthProviderProps {
@@ -22,16 +30,40 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserProps | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true); // Loading state
+  const [updateUser, setUpdateUser] = useState<UserProps | null>(null);
+  const [backendServerError,setBackendServerError] = useState(false)
+
+  useEffect(() => {
+    const checkServerStatus = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/`);
+        if (!response.ok) {
+          throw new Error('Server error');
+        }
+        setBackendServerError(false);
+      } catch (error) {
+        setBackendServerError(true);
+      }
+    };
+
+    const intervalId = setInterval(checkServerStatus, 5000); // Check server status every 5 seconds
+
+    return () => clearInterval(intervalId); // Cleanup the interval when the component unmounts
+  }, []);
+  
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        setBackendServerError(false);
         const url = `${BASE_URL}/checkuser`;
         const response = await axios.get(url, { withCredentials: true });
         const responseData = response.data;
         setUser(responseData.user);
+        setUpdateUser(responseData.user)
       } catch (err) {
         console.log('Error fetching user data:', err);
+        
       } finally {
         setIsLoading(false); // Set isLoading to false after fetching data, regardless of success or error
       }
@@ -41,7 +73,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, isLoading }}>
+    <AuthContext.Provider value={{ user, setUser, isLoading,updateUser, setUpdateUser,backendServerError,setBackendServerError }}>
       {children}
     </AuthContext.Provider>
   );

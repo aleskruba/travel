@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 function Navbar() {
     const { theme, setTheme, options } = useThemeContext();
     const { handleLoginClick ,handleSignUpClick} = useDialogContext();
-    const { user,setUser} = useAuthContext();
+    const { user,setUser,setUpdateUser} = useAuthContext();
 
     const [prevScrollPos, setPrevScrollPos] = useState(0);
     const [visible, setVisible] = useState(true);
@@ -35,7 +35,7 @@ function Navbar() {
               theme: "colored",
               transition: Flip,
               });
-  
+              setUpdateUser(null)
           setUser(null)
             }
         
@@ -88,9 +88,9 @@ function Navbar() {
     <>
       <Link to={'/profile'} className="hidden md:flex md:justify-between md:text-base  min-w-[100px] text-center text-white bg-transparent border cursor-pointer hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 border-white px-3 py-1 rounded-lg" >Profil
       <div className='w-6 h-6'>
-              {user.image && 
-                  <img src={user.image} alt="profile" className='w-full h-full rounded-full' />
-              }
+              
+                  <img src={user.image ? user.image : 'profile.png'} alt="profile" className='w-full h-full rounded-full object-cover' />
+              
                   </div></Link>
       <div className="hidden md:block text-white bg-transparent border cursor-pointer hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 border-white px-3 py-1 rounded-lg"   onClick={logOutFunction}>Odhlásit</div>
     </>

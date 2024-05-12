@@ -11,12 +11,12 @@ import {  Flip, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 //import { GoogleLogin } from '@react-oauth/google';
 import { useGoogleLogin } from '@react-oauth/google';
-import { jwtDecode } from "jwt-decode";
+
 
 
 function LoginDialog() {
     const { handleCloseDialog,handleSignUpClick } = useDialogContext();
-    const { setUser} = useAuthContext();
+    const { setUser,setUpdateUser} = useAuthContext();
     const navigate = useNavigate()
 
     type Email = boolean;
@@ -53,6 +53,7 @@ function LoginDialog() {
       };
       const response = await axios.post(`${BASE_URL}/login`, values,config);
 
+      console.log(response)
       if (response.status === 201) {
         toast.success(response.data.message,  {
           position: "top-left",
@@ -66,6 +67,7 @@ function LoginDialog() {
           transition: Flip,
           });
         setUser(response.data.user);
+        setUpdateUser(response.data.user);
         navigate('/');
         handleCloseDialog()
       }
@@ -231,6 +233,12 @@ function LoginDialog() {
               >Zaregistrovat se
               </span>  
             </h5>
+            <h5>Zapomenuté heslo : <span className='text-gray-600 underline cursor-pointer'
+                onClick={() => {
+      
+                }}
+              >Klikni zde
+              </span>  </h5>
             </>
             :
           <>

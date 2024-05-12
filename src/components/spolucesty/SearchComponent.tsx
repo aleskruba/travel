@@ -75,7 +75,7 @@ function SearchComponent({ filterTours, selectedCountry, selectedTourType, selec
         <div className='flex flex-col items-center justify-center md:flex-row w-full px-2 gap-2 md:px-4 '>
             <Select
                 options={countryNamesObjects}
-                className="basic-single w-full"
+                className="basic-single w-full md:w-[200px] flex-shrink-0"
                 classNamePrefix="select "
                 onChange={handleCountryChange}
                 isClearable={true}
@@ -84,7 +84,7 @@ function SearchComponent({ filterTours, selectedCountry, selectedTourType, selec
             />
             <Select
                 options={typeOfTourObjects}
-                className="basic-single w-full"
+                className="basic-single w-full md:w-[200px] flex-shrink-0"
                 classNamePrefix="select"
                 onChange={handleTourTypeChange}
                 isClearable={true}
@@ -93,7 +93,7 @@ function SearchComponent({ filterTours, selectedCountry, selectedTourType, selec
             />
             <Select
                 options={futureDates}
-                className="basic-single w-full"
+                className="basic-single w-full md:w-[200px] flex-shrink-0"
                 classNamePrefix="select"
                 onChange={handleDateChange}
                 value={selectedDate}

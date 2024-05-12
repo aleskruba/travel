@@ -10,7 +10,6 @@ import BASE_URL from '../config/config';
 import { Flip, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 //import { GoogleLogin } from '@react-oauth/google';
-import { jwtDecode } from "jwt-decode";
 import { useGoogleLogin } from '@react-oauth/google';
 
 function SignUpDialog() {
@@ -270,7 +269,9 @@ const login = useGoogleLogin({
 }
 
 export default SignUpDialog;
-function resetForm(arg0: { values: { email: string; password: string; confirmPassword: string; }; }) {
+
+
+/* function resetForm(arg0: { values: { email: string; password: string; confirmPassword: string; }; }) {
   throw new Error('Function not implemented.');
-}
+} */
 

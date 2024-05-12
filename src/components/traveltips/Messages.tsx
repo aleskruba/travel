@@ -105,7 +105,7 @@ function Messages() {
         <div className="flex justify-between items-center dark:text-lighTextColor gap-4 bg-gray-100 px-2 py-2 md:rounded-lg shadow-md mt-2">
           <div className="flex items-center gap-2"> 
             <div className="w-14 h-14 overflow-hidden rounded-full">
-              <img src={user?.image ?? ''} alt="Profile" className="w-full h-full object-cover" />
+              <img src={user?.image ?? 'profile.png'} alt="Profile" className="w-full h-full object-cover" />
             </div>
            </div>
           <div className="flex-1 hidden md:flex">
