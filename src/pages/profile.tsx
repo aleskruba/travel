@@ -285,15 +285,34 @@ function Profile() {
   value={updateUser?.lastName ?? ''}
   maxLength={20}
 />
-<input
-  type="email"
-  placeholder="Email"
-  name={updateUser?.googleEmail ? '' : 'email'}
-  className={`w-full border rounded-md p-2 ${updateUser?.googleEmail ? 'bg-gray-400 pointer-events-none' : ''}`}
-  onChange={onChangeEdit}
-  value={updateUser?.email ?? ''}
-  maxLength={35}
-/>
+<div style={{ position: 'relative' }}>
+  <input
+    type="email"
+    placeholder="Email"
+    name={updateUser?.googleEmail ? '' : 'email'}
+    className={`w-full border rounded-md p-2 ${updateUser?.googleEmail ? 'bg-gradient-to-r from-red-700 via-yellow-600 to-blue-200 text-white pointer-events-none' : ''}`}
+    onChange={onChangeEdit}
+    value={updateUser?.email ?? ''}
+    maxLength={35}
+    style={{ paddingRight: '40px' }} // Adjust padding to accommodate the image
+  />
+  {updateUser?.googleEmail && (
+    <img
+      src="google.png"
+      alt="Google Logo"
+      style={{
+        
+        position: 'absolute',
+        right: '10px',
+        top: '50%',
+        transform: 'translateY(-50%)',
+        width: '25px',
+        height: '25px',
+      }}
+    />
+  )}
+</div>
+
 {user?.googleEmail ? <span className='text-xs text-violet-700'>pokud jsi přihlášený s Googlem nemůžeš měnit email</span> :''}
 {backendError && <div className="text-red-800">{backendError} </div>}
             <input
