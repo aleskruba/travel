@@ -86,7 +86,7 @@ function ResetPassword() {
           transition: Flip,
         });
 
-        console.log("RESET", response);
+   
         setBackendError("");
         navigate("/");
         setUser(response.data.user);

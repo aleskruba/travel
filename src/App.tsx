@@ -41,7 +41,7 @@ function App() {
         <>
           <Navbar />
           <div className="dark:bg-darkBackground  ">
-            {backendServerError && <h1 className='text-red-500 text-6xl font-bold'>ZAPNI SI SERVER VOLE</h1>}
+            {backendServerError && <h1 className='text-red-500 text-6xl font-bold'>SPADL SERVER</h1>}
             <Routes>
                 <Route path="/" element={<Layout />} >
                 <Route index element={<Home />}/> 

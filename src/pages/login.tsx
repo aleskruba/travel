@@ -47,8 +47,7 @@ function LoginDialog() {
 
        const response = await axios.post(`${BASE_URL}/login`, values, config);
 
-      console.log(response)
-      if (response.status === 201) {
+         if (response.status === 201) {
         toast.success(response.data.message,  {
           position: "top-left",
           autoClose: 1500,
