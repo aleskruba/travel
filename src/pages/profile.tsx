@@ -219,8 +219,8 @@ function Profile() {
         tvoje spolucesty
     </Link>
 
-    <div className="bg-gray-100 p-6 rounded-lg shadow-md w-96 ">
-    <div className="col-span-full">
+    <div className="bg-gray-100 dark:bg-gray-500 dark:text-gray-100 p-6 rounded-lg shadow-md w-96 ">
+    <div className="col-span-full darK:bg-">
           <label htmlFor="photo" className="text-lg font-semibold mb-2">Foto</label>
           <div className="mt-2 flex items-center gap-x-3 w-full justify-center">
               <img src={user?.image ? user?.image : 'profile.png'} alt="Profile" className="h-16 w-16 rounded-full object-cover text-gray-300" />
@@ -232,7 +232,7 @@ function Profile() {
               className="hidden"
               onChange={handleImageChange}
             />
-            <span className=" bg-gray-200 hover:bg-gray-300 py-2 px-4 rounded-md cursor-pointer">
+            <span className=" bg-gray-200 dark:text-black hover:bg-gray-300 py-2 px-4 rounded-md cursor-pointer">
               Vyber novou fotku
             </span>
           </span>
@@ -246,7 +246,7 @@ function Profile() {
 
     </div>
      {!updatePassword &&  
-      <div className="bg-gray-100 p-6 rounded-lg shadow-md w-96">
+      <div className="bg-gray-100 dark:bg-gray-500 dark:text-gray-100  p-6 rounded-lg shadow-md w-96">
           {noChange && <div className="text-red-800 text-center">{noChange} </div>}
         {!updateProfile ? (
           <div>
@@ -257,12 +257,12 @@ function Profile() {
             <div>Email: {user?.email}</div>
           </div>
         ) : (
-          <form className="space-y-4" onSubmit={onSubmitEdit}>
+          <form className="space-y-4 dark:bg-gray-500 dark:text-gray-100 " onSubmit={onSubmitEdit}>
            <input
   type="text"
   placeholder="Username"
   name='username'
-  className="w-full border rounded-md p-2"
+  className="w-full border rounded-md p-2 text-black"
   onChange={onChangeEdit}
   value={updateUser?.username ?? ''}
   maxLength={20}
@@ -271,7 +271,7 @@ function Profile() {
   type="text"
   placeholder="Jméno"
   name='firstName'
-  className="w-full border rounded-md p-2"
+  className="w-full border rounded-md p-2 text-black"
   onChange={onChangeEdit}
   value={updateUser?.firstName ?? ''}
   maxLength={20}
@@ -280,7 +280,7 @@ function Profile() {
   type="text"
   placeholder="Příjmení"
   name='lastName'
-  className="w-full border rounded-md p-2"
+  className="w-full border rounded-md p-2 text-black"
   onChange={onChangeEdit}
   value={updateUser?.lastName ?? ''}
   maxLength={20}
@@ -290,7 +290,7 @@ function Profile() {
     type="email"
     placeholder="Email"
     name={updateUser?.googleEmail ? '' : 'email'}
-    className={`w-full border rounded-md p-2 ${updateUser?.googleEmail ? 'bg-gradient-to-r from-red-700 via-yellow-600 to-blue-200 text-white pointer-events-none' : ''}`}
+    className={`w-full border rounded-md p-2 text-black ${updateUser?.googleEmail ? 'bg-gradient-to-r from-red-700 via-yellow-600 to-blue-200 text-white pointer-events-none' : ''}`}
     onChange={onChangeEdit}
     value={updateUser?.email ?? ''}
     maxLength={35}
@@ -342,7 +342,7 @@ function Profile() {
         }
 
         {!updateProfile &&
-      <div className="bg-gray-100 p-6 rounded-lg shadow-md w-96">
+      <div className="bg-gray-100 dark:bg-gray-500 dark:text-gray-100  p-6 rounded-lg shadow-md w-96">
 
 
         {!updatePassword ? (
@@ -356,7 +356,7 @@ function Profile() {
         type="password"
         name='password'
         placeholder="nové heslo"
-        className="w-full border rounded-md p-2"
+        className="w-full border rounded-md p-2 text-black"
         onChange={onChangePassword}
         value={newPassword?.password ?? ''}
         maxLength={20}
@@ -367,7 +367,7 @@ function Profile() {
             type="password"
             name='confirmPassword'
             placeholder="opakuj heslo"
-            className="w-full border rounded-md p-2"
+            className="w-full border rounded-md p-2 text-black"
             onChange={onChangePassword}
             value={newPassword?.confirmPassword ?? ''}
             maxLength={20}
