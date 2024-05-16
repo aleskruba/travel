@@ -18,7 +18,7 @@ export const AuthContext = createContext<AuthContextProps>({
   setUser: () => {},
   updateUser: null,
   setUpdateUser: () => {},
-  isLoading: true, // Initially, set isLoading to true
+  isLoading: true, 
   setBackendServerError: () => {},
   backendServerError:false
 });
@@ -65,7 +65,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         console.log('Error fetching user data:', err);
         
       } finally {
-        setIsLoading(false); // Set isLoading to false after fetching data, regardless of success or error
+        setIsLoading(false); 
       }
     };
 

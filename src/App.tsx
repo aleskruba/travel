@@ -17,11 +17,12 @@ import TourDetail from './pages/TourDetail';
 import YourTours from './pages/YourTours';
 import YourTourDetail from './components/spolucesty/YourTourDetail';
 import NotFound404 from './pages/NotFound404';
-import { useState } from 'react';
+import ForgottenPasswordDialog from './pages/ForgottenPassword';
+import ResetPassword from './pages/ResetPassword';
 
 function App() {
   const { theme } = useThemeContext();
-  const { showDialog,showSignUpDialog } = useDialogContext();
+  const { showDialog,showSignUpDialog ,showForgottenPasswordDialog} = useDialogContext();
   const { backendServerError } = useAuthContext();
 
   return (
@@ -30,8 +31,11 @@ function App() {
         <div className="fixed inset-0 bg-black opacity-50"></div>
       ) : null}
 
-      {showDialog || showSignUpDialog ? (
-          showDialog ?<LoginDialog /> :<SignUpDialog/>
+      {showDialog || showSignUpDialog || showForgottenPasswordDialog? (
+
+        showForgottenPasswordDialog ? <ForgottenPasswordDialog/> :
+        
+        showDialog ?<LoginDialog /> :<SignUpDialog/>
               
         ) : (
         <>
@@ -48,6 +52,7 @@ function App() {
                 <Route path="/profile" element={<Profile />}/> 
                 <Route path="/tvojespolucesty" element={<YourTours />}/> 
                 <Route path="/tvojespolucesty/:id" element={<YourTourDetail />}/> 
+                <Route path="/resetpassword" element={<ResetPassword />}/> 
 
 
                 <Route path="/test" element={<Test />}/> 
@@ -59,6 +64,7 @@ function App() {
         </>
       )}
     </div>
+
   );
 }
 

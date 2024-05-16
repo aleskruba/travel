@@ -8,7 +8,6 @@ import { TourProps } from '../types';
 
 function Tours() {
   const {tours, setTours} = useTourContext()
-
   const [filteredTours, setFilteredTours] = useState<TourProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState<{ value: string; label: string } | null>(null);

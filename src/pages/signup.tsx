@@ -6,7 +6,7 @@ import { Formik ,Form, Field, ErrorMessage} from 'formik';
 import * as Yup from 'yup'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import BASE_URL from '../config/config';
+import BASE_URL, { config } from '../config/config';
 import { Flip, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 //import { GoogleLogin } from '@react-oauth/google';
@@ -52,13 +52,7 @@ function SignUpDialog() {
   async function handleSubmit(values: any, { resetForm }: any) {
     try {
 
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true, // Set the withCredentials option to true
-      };
-      const response = await axios.post(`${BASE_URL}/signup`, values,config);
+       const response = await axios.post(`${BASE_URL}/signup`, values,config);
 
       if (response.status === 201) {
         toast.success(response.data.message,  {
@@ -134,7 +128,7 @@ function SignUpDialog() {
 }; */
 
 
-const login = useGoogleLogin({
+const signUp = useGoogleLogin({
   onSuccess: async (res) =>{
     try {
       const data = await axios.get(
@@ -145,14 +139,6 @@ const login = useGoogleLogin({
           },
          }
       )
-      console.log(data.data)
-
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true, // Set the withCredentials option to true
-      };
 
       const values = {
         email: data.data.email,
@@ -216,7 +202,7 @@ const login = useGoogleLogin({
           <div className='mt-4 w-[80%]  bg-gray-200 flex items-center justify-center rounded-lg cursor-pointer'>
             <button 
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2  rounded"
-                onClick={() => login()}
+                onClick={() => signUp()}
                 style={{ width: '100%' }}
               >
                 Zaregistrovat s Google 🚀

@@ -3,36 +3,36 @@ import { Link } from 'react-router-dom';
 import { useAuthContext } from '../context/authContext';
 import { UserProps } from '../types';
 import axios from 'axios';
-import BASE_URL from '../config/config';
+import BASE_URL, { config } from '../config/config';
 import { Flip, toast } from 'react-toastify';
 import DOMPurify from 'dompurify';
 import Resizer from "react-image-file-resizer";
+
 interface NewPassword {
   password: string;
   confirmPassword: string;
 }
 
 function Profile() {
+
   const [updateProfile, setUpdateProfile] = useState(false);
   const [updatePassword, setUpdatePassword] = useState(false);
   const { user,setUser,updateUser, setUpdateUser} = useAuthContext();
   const [backendError, setBackendError] = useState('');
-
-
+  const [backendImageError, setBackendImageError] = useState('');
+  const [noChange, setNoChange] = useState('');
+  const [newPassword, setNewPassword] = useState<NewPassword>({ password: '', confirmPassword: '' });
+  
   useEffect(() => {
   setUpdateUser(user)
 },[])
-  
-  const [newPassword, setNewPassword] = useState<NewPassword>({ password: '', confirmPassword: '' });
 
-  
- 
 
   const onChangeEdit = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const sanitizedValue = DOMPurify.sanitize(value);
     setUpdateUser((prevUser: UserProps | null) => {
-      if (!prevUser) return null; // Handle the case where prevUser is null or undefined
+      if (!prevUser) return null; 
       return {
         ...prevUser,
         [name]: sanitizedValue
@@ -44,18 +44,38 @@ function Profile() {
   const onSubmitEdit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   
+    if (updateUser?.username === user?.username && updateUser?.firstName === user?.firstName &&
+        updateUser?.lastName === user?.lastName && updateUser?.email === user?.email) {
+      
+          setUpdateProfile(false);
+          setNoChange('Neprovedena žádná změna ')
+          setTimeout(() => {setNoChange('')},1000);
+          return;
+    }
+  
     if (updateUser) {
+      if(updateUser.username && (updateUser.username.trim().length < 4 || updateUser.username.trim().length > 15)) {
+        setBackendError('Username musí mít 4 až 15 znaků F')
+        return;
+      } 
+      if(updateUser.firstName && (updateUser.firstName.trim().length < 4 || updateUser.firstName.trim().length > 15)) {
+        setBackendError('Jméno musí mít 4 až 15 znaků F')
+        return;
+      } 
+      if(updateUser.lastName && (updateUser.lastName.trim().length < 4 || updateUser.lastName.trim().length > 15)) {
+        setBackendError('Příjmení musí mít 4 až 15 znaků F')
+      }
+      if(updateUser.lastName && (updateUser.lastName.trim().length < 4 || updateUser.lastName.trim().length > 15)) {
+        setBackendError('Email  musí mít 4 až 50 znaků F')
+      }
+      
+      
       setUser({ ...user, ...updateUser });
   
       try {
-        const config = {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true, // Set the withCredentials option to true
-        };
+
         const response = await axios.put(`${BASE_URL}/updateprofile`, updateUser, config);
-        console.log(response)
+   
         if (response.status === 201) {
           toast.success(response.data.message, {
             position: "top-left",
@@ -97,12 +117,7 @@ function Profile() {
     } 
 
     try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true, // Set the withCredentials option to true
-      };
+
       const response = await axios.put(`${BASE_URL}/updatepassword`, newPassword, config);
       console.log(response)
       if (response.status === 201) {
@@ -162,13 +177,7 @@ function Profile() {
     
     }
     
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      withCredentials: true, // Set the withCredentials option to true
-    };
-  
+ 
     if (selectedFile) {
       // Check file size
       const maxSize = 150 * 1024; // Convert KB to bytes
@@ -191,19 +200,20 @@ function Profile() {
           const response = await axios.put(`${BASE_URL}/uploadprofileimage`, { image: resizedFile }, config);
           user && setUser({...user,image:response.data.imageUrl})
         } else {
-          setBackendError('Error resizing the image.')
+          setBackendImageError('Error resizing the image.')
           console.error('Error resizing the image.');
         }
       } catch (error) {
         console.error('Error resizing the image:', error);
-        setBackendError('Error resizing the image.')
+        setBackendImageError('Error resizing the image.')
       }
     }
   };
 
 
   return (
-    <div className="flex  items-center h-screen flex-col pt-8 gap-6">
+     <div className="flex  items-center h-screen flex-col pt-8 gap-6">
+
 
     <Link to={`/tvojespolucesty`} className="p-6 rounded-lg shadow-md w-96 flex justify-center items-center font-extrabold bg-blue-500 text-white cursor-pointer">
         tvoje spolucesty
@@ -223,7 +233,7 @@ function Profile() {
               onChange={handleImageChange}
             />
             <span className=" bg-gray-200 hover:bg-gray-300 py-2 px-4 rounded-md cursor-pointer">
-              Choose a new photo
+              Vyber novou fotku
             </span>
           </span>
         </label>
@@ -231,12 +241,13 @@ function Profile() {
 
           </div>
 
-          {backendError && <div className="text-red-800">{backendError} </div>}
+          {backendImageError && <div className="text-red-800">{backendImageError} </div>}
         </div>
 
     </div>
      {!updatePassword &&  
       <div className="bg-gray-100 p-6 rounded-lg shadow-md w-96">
+          {noChange && <div className="text-red-800 text-center">{noChange} </div>}
         {!updateProfile ? (
           <div>
             <div className="text-lg font-semibold mb-2">Tvůj profil</div>
@@ -258,7 +269,7 @@ function Profile() {
 />
 <input
   type="text"
-  placeholder="First Name"
+  placeholder="Jméno"
   name='firstName'
   className="w-full border rounded-md p-2"
   onChange={onChangeEdit}
@@ -267,7 +278,7 @@ function Profile() {
 />
 <input
   type="text"
-  placeholder="Last Name"
+  placeholder="Příjmení"
   name='lastName'
   className="w-full border rounded-md p-2"
   onChange={onChangeEdit}
@@ -275,15 +286,15 @@ function Profile() {
   maxLength={20}
 />
 <input
-  type="text"
+  type="email"
   placeholder="Email"
-  name='email'
-  className="w-full border rounded-md p-2"
+  name={updateUser?.googleEmail ? '' : 'email'}
+  className={`w-full border rounded-md p-2 ${updateUser?.googleEmail ? 'bg-gray-400 pointer-events-none' : ''}`}
   onChange={onChangeEdit}
   value={updateUser?.email ?? ''}
   maxLength={35}
 />
-
+{user?.googleEmail ? <span className='text-xs text-violet-700'>pokud jsi přihlášený s Googlem nemůžeš měnit email</span> :''}
 {backendError && <div className="text-red-800">{backendError} </div>}
             <input
               type="submit"
@@ -298,7 +309,7 @@ function Profile() {
             onClick={() => {setUpdateProfile(true);setBackendError('')}}
             className="mt-4 w-full bg-blue-500 text-white rounded-md p-2 hover:bg-blue-600 cursor-pointer"
           >
-            Akutualizovat Profil
+            Aktualizovat Profil
           </button>
         ) : (
           <button
@@ -373,6 +384,7 @@ function Profile() {
         </div>
         }
     </div>
+
   );
 }
 

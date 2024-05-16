@@ -7,15 +7,15 @@ import BASE_URL from '../config/config';
 import axios from 'axios';
 import { Flip, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 function Navbar() {
     const { theme, setTheme, options } = useThemeContext();
     const { handleLoginClick ,handleSignUpClick} = useDialogContext();
     const { user,setUser,setUpdateUser} = useAuthContext();
-
     const [prevScrollPos, setPrevScrollPos] = useState(0);
     const [visible, setVisible] = useState(true);
-
+    const navigate = useNavigate()
 
     const logOutFunction = () => { 
       const fetchUserData = async () => {
@@ -37,6 +37,7 @@ function Navbar() {
               });
               setUpdateUser(null)
           setUser(null)
+          navigate('/')
             }
         
         } catch (err) {

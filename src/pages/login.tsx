@@ -5,7 +5,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import BASE_URL from '../config/config';
+import BASE_URL, { config } from '../config/config';
 import { useNavigate } from 'react-router-dom';
 import {  Flip, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,7 +15,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 
 
 function LoginDialog() {
-    const { handleCloseDialog,handleSignUpClick } = useDialogContext();
+    const { handleCloseDialog,handleSignUpClick,handleForgottenPasswordClick } = useDialogContext();
     const { setUser,setUpdateUser} = useAuthContext();
     const navigate = useNavigate()
 
@@ -45,13 +45,7 @@ function LoginDialog() {
 
      try {
 
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true, // Set the withCredentials option to true
-      };
-      const response = await axios.post(`${BASE_URL}/login`, values,config);
+       const response = await axios.post(`${BASE_URL}/login`, values, config);
 
       console.log(response)
       if (response.status === 201) {
@@ -148,13 +142,6 @@ function LoginDialog() {
         )
    
 
-        const config = {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true, // Set the withCredentials option to true
-        };
-
         const values = {
           email: data.data.email,
           name: data.data.given_name,
@@ -235,7 +222,8 @@ function LoginDialog() {
             </h5>
             <h5>Zapomenuté heslo : <span className='text-gray-600 underline cursor-pointer'
                 onClick={() => {
-      
+                  handleCloseDialog();
+                  handleForgottenPasswordClick();
                 }}
               >Klikni zde
               </span>  </h5>
