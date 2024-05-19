@@ -122,7 +122,7 @@ function Navbar() {
                 <Link to="/traveltips" className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg relative">TravelTips                </Link>
                 <Link to="/spolucesty" className="hover:bg-lightAccent hover:text-darkBackground  hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg">Spolucesty</Link>
                
-               <Link to="/" className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-4 py-1 rounded-lg text-base" >
+               <Link to="/" className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-2 py-1 rounded-lg text-base" >
                 <IoHomeOutline /> 
                 
                 </Link>
@@ -131,7 +131,7 @@ function Navbar() {
 
                 {!user ?
 
-                 <div className='flex  gap-2 md:gap-6'>
+                 <div className='flex  ml-1 gap-2 md:gap-6'>
                     <div className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg"
                          onClick={handleSignUpClick}>
                           Registrace</div>
@@ -141,7 +141,7 @@ function Navbar() {
                </div>
                : 
                
-               <div className='flex ml-4 gap-2 md:gap-6'>
+               <div className='flex ml-1 gap-2 md:gap-6'>
                <Link to={'/profile'} className="hover:bg-lightAccent min-w-[60px] text-center hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg">
                   Profil </Link>
                
