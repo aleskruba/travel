@@ -116,7 +116,7 @@ function Navbar() {
         
     <div className='flex justify-between w-full px-2 py-4 text-white text-xs'>
              
-                <div className='flex gap-2 md:gap-6'>
+                <div className='flex gap-1 md:gap-6'>
                 
              
                 <Link to="/traveltips" className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg relative">TravelTips                </Link>

@@ -244,13 +244,13 @@ return (
             />
             </div>
             <div className="flex gap-1 ">
-            <p className={` ${reply.user_id ===  user?.id ? 'text-red-500 dark:text-red-300' : 'text-gray-600 ' }  font-bold dark:bg-gray-500 dark:text-gray-100`}>{reply.firstName ? reply.firstName.slice(0, 10) : '' }</p>
+            <p className={` ${reply.user_id ==  user?.id ? 'text-red-500 dark:text-red-300' : 'text-gray-600 dark:text-gray-100' }  font-bold bg-gray-500 `}>{reply.firstName ? reply.firstName.slice(0, 10) : '' }</p>
             <p className="text-gray-600  dark:bg-gray-500 dark:text-gray-100 italic">   {displayText}</p>
             </div>
           </div>
          
           <div className="md:pl-14 " >
-            <p className={` ${reply.user_id ===  user?.id ? 'text-red-500 dark:text-red-300' : 'text-gray-600 ' }`}>{reply.message}</p>
+            <p className={` ${reply.user_id ===  user?.id ? 'text-red-500 dark:text-red-300' : 'text-gray-600 dark:text-gray-100' }`}>{reply.message}</p>
          </div>
   
       </div>
