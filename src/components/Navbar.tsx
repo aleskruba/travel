@@ -8,6 +8,8 @@ import axios from 'axios';
 import { Flip, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import { IoHomeOutline } from "react-icons/io5";
+
 
 function Navbar() {
     const { theme, setTheme, options } = useThemeContext();
@@ -115,8 +117,16 @@ function Navbar() {
     <div className='flex justify-between w-full px-2 py-4 text-white text-xs'>
              
                 <div className='flex gap-2 md:gap-6'>
-                <Link to="/traveltips" className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg">TravelTips</Link>
+                
+             
+                <Link to="/traveltips" className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg relative">TravelTips                </Link>
                 <Link to="/spolucesty" className="hover:bg-lightAccent hover:text-darkBackground  hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg">Spolucesty</Link>
+               
+               <Link to="/" className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-4 py-1 rounded-lg text-base" >
+                <IoHomeOutline /> 
+                
+                </Link>
+
                 </div>
 
                 {!user ?

@@ -24,7 +24,7 @@ const footerItems = [
     'Čína',
     'Itálie',
     'Mexiko',
-    'Spojené království',
+    'Velká Británie',
     'Turecko',
     'Německo',
     'Thajsko',

@@ -7,14 +7,19 @@ import { countriesData } from "../constants";
 import Cards from "../components/traveltips/Cards";
 import Messages from "../components/traveltips/Messages";
 
+
+
 function TravelTips() {
   const { chosenCountry, setChosenCountryData } = useCountryContext();
-  const [selectComp, setSelectComp] = useState(false);
+  const [selectComp, setSelectComp] = useState(true);
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
     if (chosenCountry) {
+  
+
       const selectedCountryData = countriesData.find(
         (country) => country.name === chosenCountry
       );

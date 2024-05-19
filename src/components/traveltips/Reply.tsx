@@ -2,8 +2,9 @@ import React,{useState,FormEvent} from 'react'
 import DOMPurify from 'dompurify';
 import { MessageProps } from '../../types';
 import { ReplyProps } from '../../types';
-
-
+import { useAuthContext } from '../../context/authContext';
+import axios from 'axios';
+import BASE_URL, { config } from '../../config/config';
 
   interface Props {
     setReplyDiv: React.Dispatch<boolean>; 
@@ -11,20 +12,21 @@ import { ReplyProps } from '../../types';
     replies:  ReplyProps[]
     message:MessageProps
 }
+type PartialReplyProps = Partial<ReplyProps>;
 
 function Reply({setReplyDiv,setReplies,replies,message}:Props) {
-
-    const [reply, setReply] = useState({
+  const { user} = useAuthContext();
+/*     const [reply, setReply] = useState({
         id: 0,
         fname: '',
         date: new Date(),
-        img: '',
+        image: '',
         message: '',
         message_id: null,
         user_id: null
 
-      });
-
+      }); */
+      const [reply, setReply] = useState<PartialReplyProps>({});
    
       const handleChangeReply = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         const sanitizedMessage = DOMPurify.sanitize(event.target.value);
@@ -36,35 +38,37 @@ function Reply({setReplyDiv,setReplies,replies,message}:Props) {
       
 
       
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!reply.message.length) {
+
+    
+    if (reply.message !== undefined && !reply.message.length) {
       return;
     }
   
     const newReply = {
 
-      id: replies.length + 1, // Generate a unique ID
-      fname: 'ales',
+      id: replies.length + 1, 
+      firstName: user?.firstName || '', 
       date: new Date(),
-      img: 'man.png',
-      message: reply.message,
-      message_id: message.id,
-         user_id: 1
+      image: user?.image || '', 
+      message: reply.message || '', 
+      message_id: message.id || 0, 
+      user_id: user?.id || 0, 
     };
   
-    setReplies([newReply, ...replies]); // Prepend the new message
-  
-    // Reset the message input
+    setReplies([newReply, ...replies]); 
+    const response = await axios.post(`${BASE_URL}/createreply`, newReply,config);
+    console.log(response);
     setReply({
       id: 0,
-      fname: '',
+      firstName: '',
       date: new Date(),
-      img: '',
+      image: '',
       message: '',
       message_id: null,
-        user_id: null
+      user_id: null
     });
 
     setReplyDiv(false)

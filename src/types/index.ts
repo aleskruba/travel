@@ -16,22 +16,35 @@ export interface UserProps {
 export type MessageProps = {
     id: number;
     email: string;
-    fname: string;
+    firstName: string;
     date: Date;
-    img: string;
+    image: string;
+    message: string | undefined;
+    country:string;
+    user_id: number | null;
+  
+  };
+
+  export type TourMessageProps = {
+    id: number;
+    email: string;
+    firstName: string;
+    date: Date;
+    image: string;
     message: string;
-    user_id: number ;
+
+    user_id: number  ;
   
   };
   
   export interface ReplyProps {
     id: number;
-    fname: string;
+    firstName: string;
     date: Date;
-    img: string;
-    message: string; 
-    message_id: number,
-    user_id: number;
+    image: string;
+    message: string | undefined;
+    message_id: number | null;
+    user_id: number | null;
   }
 
   

@@ -1,23 +1,24 @@
 import React,{useState,FormEvent} from 'react'
 import DOMPurify from 'dompurify';
-import { MessageProps } from '../../types';
+import { TourMessageProps } from '../../types';
 import { ReplyProps } from '../../types';
-
+import axios from 'axios';
+import BASE_URL, { config } from '../../config/config';
 
   interface Props {
     setReplyDiv: React.Dispatch<boolean>; 
     setTourReplies: React.Dispatch<React.SetStateAction<ReplyProps[]>>
     tourReplies:  ReplyProps[]
-    tourMessage:MessageProps
+    tourMessage:TourMessageProps
 }
 
 function TourReply({setReplyDiv,setTourReplies,tourReplies,tourMessage}:Props) {
 
     const [reply, setReply] = useState({
         id: 0,
-        fname: '',
+        firstName: '',
         date: new Date(),
-        img: '',
+        image: '',
         message: '',
         message_id: null,
         user_id: null
@@ -35,7 +36,7 @@ function TourReply({setReplyDiv,setTourReplies,tourReplies,tourMessage}:Props) {
       
 
       
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!reply.message.length) {
@@ -45,22 +46,22 @@ function TourReply({setReplyDiv,setTourReplies,tourReplies,tourMessage}:Props) {
     const newReply = {
 
       id: tourReplies.length + 1, // Generate a unique ID
-      fname: 'ales',
+      firstName: 'ales',
       date: new Date(),
-      img: 'man.png',
+      image: 'man.png',
       message: reply.message,
       message_id: tourMessage.id,
       user_id: 1
     };
   
     setTourReplies([newReply, ...tourReplies]); // Prepend the new message
-  
+   
     // Reset the message input
     setReply({
       id: 0,
-      fname: '',
+      firstName: '',
       date: new Date(),
-      img: '',
+      image: '',
       message: '',
       message_id: null,
       user_id: null

@@ -17,7 +17,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <BrowserRouter >
-    <React.StrictMode>
+
     <GoogleOAuthProvider clientId="85802491961-b7t13blg4rkgqbira2i00fni49cg8rmm.apps.googleusercontent.com">
       <AuthProvider>
         <TourProvider>
@@ -35,6 +35,6 @@ root.render(
         </TourProvider>
       </AuthProvider>
       </GoogleOAuthProvider>
-    </React.StrictMode>
+
    </BrowserRouter>
 );

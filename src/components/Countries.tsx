@@ -1,13 +1,27 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { countryNames } from '../constants';
 import { useCountryContext } from '../context/countryContext';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const ComboBox: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1); // Track highlighted index
   const { setChosenCountry,chosenCountry } = useCountryContext();
+  const navigate = useNavigate();
+  let { id } = useParams<string>(); 
+  
 
+
+  useEffect(() => {
+    if (id && countryNames.includes(id)) {
+
+      handleSelectCountry(id);
+      navigate(`/traveltips/${id}`);
+    }
+  }, [id, countryNames, navigate]);
+  
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,10 +32,11 @@ const ComboBox: React.FC = () => {
   };
 
   const handleSelectCountry = (country: string) => {
-    console.log(country);
+
     setChosenCountry(country);
     setIsOpen(false);
     setSearchTerm('');
+    navigate(`/${country}`);
   };
 
   const handleDropdownClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -65,6 +80,7 @@ const ComboBox: React.FC = () => {
           );
         } else if (e.key === "Enter" && highlightedIndex !== -1) {
           handleSelectCountry(filteredCountries[highlightedIndex]);
+          navigate(`/traveltips/${filteredCountries[highlightedIndex]}`);
         }
       }
     };
@@ -92,11 +108,16 @@ const ComboBox: React.FC = () => {
     };
   }, []);
 
+
+  useEffect(()=>{
+    navigate(`/traveltips/${chosenCountry}`)
+  },[chosenCountry])
+  
   return (
     <div className="relative w-full px-2" >
       <input
         type="text"
-        placeholder={chosenCountry ? chosenCountry : "ostatní země"}
+        placeholder={chosenCountry ? chosenCountry : "vyber stát .... "}
         maxLength={8}
         value={searchTerm}
         onChange={handleInputChange}
@@ -115,7 +136,7 @@ const ComboBox: React.FC = () => {
             filteredCountries.map((country, index) => (
               <div
                 key={index}
-                onClick={() => handleSelectCountry(country)} // Pass country directly to handleSelectCountry
+                onClick={() => {handleSelectCountry(country);    navigate(`/traveltips/${chosenCountry}`) }  } // Pass country directly to handleSelectCountry
                 className={`px-4 py-2 hover:bg-gray-300 cursor-pointer ${
                   index === highlightedIndex ? "bg-gray-300" : ""
                 }`}

@@ -7,6 +7,10 @@ import BASE_URL, { config } from '../config/config';
 import { Flip, toast } from 'react-toastify';
 import DOMPurify from 'dompurify';
 import Resizer from "react-image-file-resizer";
+import { FaEye ,FaEyeSlash } from "react-icons/fa";
+
+
+
 
 interface NewPassword {
   password: string;
@@ -16,18 +20,25 @@ interface NewPassword {
 function Profile() {
 
   const [updateProfile, setUpdateProfile] = useState(false);
+
   const [updatePassword, setUpdatePassword] = useState(false);
   const { user,setUser,updateUser, setUpdateUser} = useAuthContext();
   const [backendError, setBackendError] = useState('');
   const [backendImageError, setBackendImageError] = useState('');
   const [noChange, setNoChange] = useState('');
   const [newPassword, setNewPassword] = useState<NewPassword>({ password: '', confirmPassword: '' });
-  
+  const [showPassword,setShowPassword] = useState(false);
+
   useEffect(() => {
-  setUpdateUser(user)
-},[])
+      setUpdateUser(user)
 
+},[user])
 
+  const showPasswordToggle = () => {
+    setShowPassword(prev => !prev)
+  }
+
+  
   const onChangeEdit = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const sanitizedValue = DOMPurify.sanitize(value);
@@ -69,8 +80,11 @@ function Profile() {
         setBackendError('Email  musí mít 4 až 50 znaků F')
       }
       
+      console.log({...user});
+      console.log({...updateUser})
       
       setUser({ ...user, ...updateUser });
+
   
       try {
 
@@ -171,8 +185,10 @@ function Profile() {
             ...prevUser!,
             image: event.target?.result as string
           }));
-   
+          
       };
+
+      
       reader.readAsDataURL(selectedFile);
     
     }
@@ -212,7 +228,7 @@ function Profile() {
 
 
   return (
-     <div className="flex  items-center h-screen flex-col pt-8 gap-6">
+     <div className="flex  items-center h-full pb-4 flex-col pt-8 gap-6">
 
 
     <Link to={`/tvojespolucesty`} className="p-6 rounded-lg shadow-md w-96 flex justify-center items-center font-extrabold bg-blue-500 text-white cursor-pointer">
@@ -350,10 +366,10 @@ function Profile() {
             <div className="text-lg font-semibold mb-2">Heslo</div>
           </div>
         ) : (
-          <form className="space-y-4" onSubmit={onSubmitPassword}>
+          <form className="space-y-4 relative" onSubmit={onSubmitPassword}>
                       <input type="text" name="username" style={{ display: 'none' }} aria-hidden="true" autoComplete="username" />
         <input
-        type="password"
+        type={showPassword ? "text" : "password"}
         name='password'
         placeholder="nové heslo"
         className="w-full border rounded-md p-2 text-black"
@@ -363,17 +379,37 @@ function Profile() {
         autoComplete="new-password"
           />
 
+          <div className="absolute top-3 text-xl right-1  flex items-center pr-3"
+                  onClick={()=>showPasswordToggle()}>
+                {showPassword ?
+                <FaEye />
+                :
+                <FaEyeSlash />
+
+                }
+              </div>
+ 
+
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             name='confirmPassword'
             placeholder="opakuj heslo"
-            className="w-full border rounded-md p-2 text-black"
+            className="w-full border rounded-md p-2 text-black "
             onChange={onChangePassword}
             value={newPassword?.confirmPassword ?? ''}
             maxLength={20}
             autoComplete="new-password"
           />
+          <div className="absolute top-[72px] text-xl right-1  flex items-center pr-3"
+                  onClick={()=>showPasswordToggle()}>
+                {showPassword ?
+                <FaEye />
+                :
+                <FaEyeSlash />
 
+                }
+              </div>
+ 
 
             {backendError && <div className="text-red-800">{backendError} </div>}
                <input

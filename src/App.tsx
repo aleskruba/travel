@@ -19,6 +19,9 @@ import YourTourDetail from './components/spolucesty/YourTourDetail';
 import NotFound404 from './pages/NotFound404';
 import ForgottenPasswordDialog from './pages/ForgottenPassword';
 import ResetPassword from './pages/ResetPassword';
+import ProtectedRoutes from './components/ProtectedRoutes';
+
+
 
 function App() {
   const { theme } = useThemeContext();
@@ -46,14 +49,21 @@ function App() {
                 <Route path="/" element={<Layout />} >
                 <Route index element={<Home />}/> 
                 <Route path="/traveltips" element={<TravelTips />}/> 
+                <Route path="/traveltips/:id" element={<TravelTips />}/> 
                 <Route path="/spolucesty" element={<Tours />}/> 
                 <Route path="/spolucesty/:id" element={<TourDetail />} />
+             
+                <Route path="/resetpassword" element={<ResetPassword />}/> 
+
+    
+            <Route element={<ProtectedRoutes />}>
                 <Route path="/novacesta" element={<CreateTour />}/>
                 <Route path="/profile" element={<Profile />}/> 
                 <Route path="/tvojespolucesty" element={<YourTours />}/> 
                 <Route path="/tvojespolucesty/:id" element={<YourTourDetail />}/> 
-                <Route path="/resetpassword" element={<ResetPassword />}/> 
-
+            </Route>
+             
+               
 
                 <Route path="/test" element={<Test />}/> 
                 <Route path='*' element={<NotFound404 />} />

@@ -6,154 +6,203 @@ import Message from './Message';
 import { MessageProps } from '../../types';
 import { ReplyProps } from '../../types';
 import { useAuthContext } from '../../context/authContext';
-
+import { useDialogContext } from '../../context/dialogContext';
+import { useCountryContext } from '../../context/countryContext';
+import BASE_URL, { config } from '../../config/config';
+import CreateMessage from './CreateMessage';
 
 const ITEMS_PER_PAGE = 5;
+type PartialMessageProps = Partial<MessageProps>;
 
 function Messages() {
+
   const { user} = useAuthContext();
+  const { handleLoginClick} = useDialogContext();
+
   const [currentPage, setCurrentPage] = useState(0);
   const [replies, setReplies] = useState<ReplyProps[]>([]);
-  const [message, setMessage] = useState<MessageProps>({
-    id: 0,
-    email: '',
-    fname: '',
-    date: new Date(),
-    img: '',
-    message: '',
-    user_id: user?.id ?? 0
-  });
-  
-
-  const [isLoading, setIsLoading] = useState(false);
+  const {chosenCountry } = useCountryContext();
+  const [message, setMessage] = useState<PartialMessageProps>({});
+  const [backendError, setBackendError] = useState('');
   const [messages, setMessages] = useState<MessageProps[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [allowedToDelete, setAllowedToDelete] = useState(true)
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  
+  
+
+
   useEffect(() => {
- 
+    if (!isLoading) {
       setIsLoading(true);
- 
+  
       const fetchData = async () => {
-        const resultMessages = await axios.get('messages.json');
-        const resultReplies = await axios.get('replies.json');
-        setMessages(resultMessages.data.messages);
-        setReplies(resultReplies.data.replies);
-
-          setIsLoading(false)
-                   
+        try {
+          const resultMessages = await axios.get(`${BASE_URL}/getmessages/${chosenCountry}`);
+          const resultReplies = await axios.get(`${BASE_URL}/getreplies/${chosenCountry}`);
+          setReplies(resultReplies.data );
+          console.log('resultReplies',resultReplies.data )
+          setMessages(resultMessages.data);
+          setIsLoading(false);
+          console.log('data fetched');
+        } catch (error) {
+          console.error('Error fetching data:', error);
+          setIsLoading(false);
+        }
       };
-
+  
       fetchData();
-  
-  }, []);
-  
+    }
+  }, [chosenCountry,backendError]);
+
+useEffect(() => { 
+  console.log(messages)
+},[messages])
+
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const sanitizedMessage = DOMPurify.sanitize(event.target.value);
     setMessage({...message,[event.target.name]:sanitizedMessage});
   };
 
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
- 
-    if (!message.message.length) {
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+     event.preventDefault();
+     setAllowedToDelete(false)
+     setIsSubmitted(true)
+     if (message.message != undefined && !message.message.length ) {
       return;
     }
 
-  
+    if (message.message != undefined && message?.message?.length > 400) {
+      setBackendError('Příliš dlouhý text , max 400 znaků ')
+      setTimeout(() =>  setBackendError(''),1500);
+      return;
+    }
+
+    
+  try {
     const newMessage = {
       id: messages.length + 1, 
       email: user?.email || '', 
-      fname: user?.firstName || '',
+      country:chosenCountry,
+      firstName: user?.firstName || '',
       date: new Date(),
-      img: user?.image || '',
-      message: message.message,
+      image: user?.image || '',
+      message: message?.message,
       user_id: user?.id || 0 
     };
   
-    setMessages([newMessage, ...messages]); // Prepend the new message
-  
-    // Reset the message input
+    setMessages([newMessage, ...messages]); 
+   
+    const response = await axios.post(`${BASE_URL}/createmessage`, newMessage, config);
+    
+     if (response.status === 201){
+
+      console.log(response.data.message)   // id from database
+
+      const updatedMessage = { ...newMessage, id: response.data.message };
+      setMessages([updatedMessage, ...messages]);
+
+      setAllowedToDelete(true)
+      setIsSubmitted(false)
+      setMessage({
+          id: 0,
+          email: '',
+          country:'',
+          firstName: '',
+          date: new Date(),
+          image: '',
+          message: '',
+          user_id: null,
+    });
+  }
+  if (response.status === 401 || response.status === 403){
+    setBackendError(response.data.error);
     setMessage({
       id: 0,
       email: '',
-      fname: '',
+      country:'',
+      firstName: '',
       date: new Date(),
-      img: '',
+      image: '',
       message: '',
-      user_id: 4,
-    });
-  };
+      user_id: null,
+});
+    setTimeout(() =>  setBackendError(''),1500);
+  }
+  }
+  catch (err:any) {
+    console.error(err)
+    setMessage({
+      id: 0,
+      email: '',
+      country:'',
+      firstName: '',
+      date: new Date(),
+      image: '',
+      message: '',
+      user_id: null,
+});
+    setBackendError(err.response.data.error)
+    setTimeout(() =>  setBackendError(''),1500);
+
+  }
   
-
-
-
+};
+  
   const handlePageChange = ({ selected }: any) => {
     setCurrentPage(selected);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const startIndex = currentPage * ITEMS_PER_PAGE;
-  const endIndex = (currentPage + 1) * ITEMS_PER_PAGE;
+    const startIndex = currentPage * ITEMS_PER_PAGE;
+    const endIndex = (currentPage + 1) * ITEMS_PER_PAGE;
 
-  const currentMessages = messages?.slice(startIndex, endIndex);
+    const currentMessages = messages?.slice(startIndex, endIndex);
 
   return (
     <div className="flex flex-col  px-2 md:px-4 w-full">
+      {user ?
+      <CreateMessage 
+          onSubmit={onSubmit} 
+          handleChange={handleChange} 
+          user={user} 
+          message={message} 
+          backendError={backendError}
+   
+          />
+        : 
+        <div className="p-4 bg-blue-100 text-blue-800 border border-blue-300 rounded-md shadow-lg">
+        Jenom přihlášení uživatelé mohou sdílet své názory, 
+        <span onClick={() => handleLoginClick()} className="cursor-pointer text-blue-500 hover:underline">Přihlaš se zde</span>
+      </div>
+      }
 
-
-      <form onSubmit={onSubmit}>
-        <div className="flex justify-between items-center dark:text-lighTextColor gap-4 bg-gray-100 px-2 py-2 md:rounded-lg shadow-md mt-2">
-          <div className="flex items-center gap-2"> 
-            <div className="w-14 h-14 overflow-hidden rounded-full">
-              <img src={user?.image ?? 'profile.png'} alt="Profile" className="w-full h-full object-cover" />
-            </div>
-           </div>
-          <div className="flex-1 hidden md:flex">
-            <textarea
-              name="message"
-              value={message.message}
-              onChange={handleChange}
-              className="w-full py-2 px-4 bg-gray-200 rounded-lg text-black focus:outline-none focus:ring focus:border-blue-500 resize-none"
-              placeholder="Sdlej svůj názor (max 500 znaků)"
-              maxLength={500} 
-
-           />
-          </div>
-          <div>
-            <button type="submit" className="py-2 px-4 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring focus:border-green-700">Odešli</button>
-          </div>
-        </div>
-
-        <div className="md:hidden">
-          <textarea
-            name="message"
-            value={message.message}
-            onChange={handleChange}
-            className="w-full py-2 px-4 bg-gray-200 text-black focus:outline-none focus:ring focus:border-blue-500 resize-none"
-            placeholder="Sdlej svůj názor (max 500 znaků)"
-            maxLength={500} 
-       />
-        </div>
-      </form>
-
-
-      <div className='flex flex-col mt-4 gap-1'>
       <div className='flex flex-col mt-4 gap-1'>
       {
         !isLoading ? (
           currentMessages
             .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) // Reverse sorting order
             .map((message, idx) => (
-              <Message key={idx} messages={messages} message={message} replies={replies} setMessages={setMessages} setReplies={setReplies} />
+              <Message key={idx} 
+                       messages={messages} 
+                       message={message} 
+                       replies={replies} 
+                       setMessages={setMessages} 
+                       setReplies={setReplies} 
+                       allowedToDelete={allowedToDelete}
+                       setAllowedToDelete={setAllowedToDelete}
+                       isLoading={isLoading}
+                       isSubmitted={isSubmitted}
+                       />
             ))
         ) : (
-          <>moment prosím</>
+          <div className='text-black dark:text-white'>moment prosím ...</div>
         )
       }
 
       </div>
 
-      </div>
 
       { messages.length &&
       <ReactPaginate

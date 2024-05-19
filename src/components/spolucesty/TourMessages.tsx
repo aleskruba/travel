@@ -3,7 +3,7 @@ import ReactPaginate from 'react-paginate';
 import DOMPurify from 'dompurify';
 import axios from 'axios';
 import TourMessage from './TourMessage';
-import { MessageProps } from '../../types';
+import { TourMessageProps } from '../../types';
 import { ReplyProps } from '../../types';
 
 
@@ -14,18 +14,18 @@ function TourMessages() {
 
   const [currentPage, setCurrentPage] = useState(0);
   const [tourReplies, setTourReplies] = useState<ReplyProps[]>([]);
-  const [tourMessage, setTourMessage] = useState<MessageProps>({
+  const [tourMessage, setTourMessage] = useState<TourMessageProps>({
     id: 0,
     email: '',
-    fname: '',
+    firstName: '',
     date: new Date(),
-    img: '',
+    image: '',
     message: '',
     user_id: 4
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  const [tourMessages, setTourMessages] = useState<MessageProps[]>([]);
+  const [tourMessages, setTourMessages] = useState<TourMessageProps[]>([]);
  
    useEffect(() => {
  
@@ -74,9 +74,9 @@ function TourMessages() {
     const newMessage = {
       id: tourMessages.length + 1, // Generate a unique ID
       email: 'new@example.com',
-      fname: 'ales',
+      firstName: 'ales',
       date: new Date(),
-      img: '/man.png',
+      image: '/man.png',
       message: tourMessage.message,
       user_id:4
     };
@@ -87,9 +87,9 @@ function TourMessages() {
     setTourMessage({
       id: 0,
       email: '',
-      fname: '',
+      firstName: '',
       date: new Date(),
-      img: '',
+      image: '',
       message: '',
       user_id: 4,
     });

@@ -5,15 +5,15 @@ import moment from 'moment';
 import { FaRegTrashAlt } from "react-icons/fa";
 import { GoTriangleDown ,GoTriangleUp } from "react-icons/go";
 import TourReply from './TourReply';
-import { MessageProps } from '../../types';
+import { TourMessageProps } from '../../types';
 import { ReplyProps } from '../../types';
 
 
 
 type Props = {
-    tourMessages:MessageProps[];
-  setTourMessages:React.Dispatch<React.SetStateAction<MessageProps[]>>;
-  tourMessage: MessageProps;
+    tourMessages:TourMessageProps[];
+  setTourMessages:React.Dispatch<React.SetStateAction<TourMessageProps[]>>;
+  tourMessage: TourMessageProps;
   setTourReplies: React.Dispatch<React.SetStateAction<ReplyProps[]>>
   tourReplies:  ReplyProps[]
 };
@@ -54,7 +54,7 @@ return (
           <img src='/man.png' alt="Profile" className="w-full h-full object-cover" />
         </div>
         <div className="flex flex-row gap-4 md:gap-2">
-        <p className="text-gray-600 dark:bg-gray-500 dark:text-gray-100 font-semibold">{tourMessage.fname.slice(0, 10)}</p>
+        <p className="text-gray-600 dark:bg-gray-500 dark:text-gray-100 font-semibold">{tourMessage.firstName.slice(0, 10)}</p>
         <p className="text-gray-600 dark:bg-gray-500 dark:text-gray-100 w-[80px]">{moment(tourMessage.date).format('DD-MM YYYY ')}</p>
 
      
@@ -148,7 +148,7 @@ return (
               <img src='lide.svg' alt="Profile" className="w-full h-full object-cover" />
             </div>
             <div className="flex gap-1 ">
-            <p className="text-gray-600 font-bold dark:bg-gray-500 dark:text-gray-100">{reply.fname ? reply.fname.slice(0, 10) : 'Jan' }</p>
+            <p className="text-gray-600 font-bold dark:bg-gray-500 dark:text-gray-100">{reply.firstName ? reply.firstName.slice(0, 10) : 'Jan' }</p>
             <p className="text-gray-600  dark:bg-gray-500 dark:text-gray-100 italic">   {displayText}</p>
             </div>
           </div>

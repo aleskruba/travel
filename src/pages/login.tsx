@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDialogContext } from '../context/dialogContext';
 import { useAuthContext } from '../context/authContext';
 import { MdOutlineCancel } from "react-icons/md";
@@ -6,24 +6,33 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import BASE_URL, { config } from '../config/config';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation  } from 'react-router-dom';
 import {  Flip, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 //import { GoogleLogin } from '@react-oauth/google';
 import { useGoogleLogin } from '@react-oauth/google';
+import { FaEye ,FaEyeSlash } from "react-icons/fa";
 
-
-
+type Email = boolean;
 function LoginDialog() {
     const { handleCloseDialog,handleSignUpClick,handleForgottenPasswordClick } = useDialogContext();
     const { setUser,setUpdateUser} = useAuthContext();
-    const navigate = useNavigate()
-
-    type Email = boolean;
-
+    const navigate = useNavigate();
+    const [showPassword,setShowPassword] = useState(false);
     const [emailForm, setEmailForm] = useState<Email>(false);
     const [backendError, setBackendError] = useState('');
     const [backendErrorGoogle, setBackendErrorGoogle] = useState('');
+
+    let location = useLocation();
+
+    const showPasswordToggle = () => {
+      setShowPassword(prev => !prev)
+    }
+  
+
+    useEffect(() => {
+      console.log(location.pathname);
+    }, []);
 
     const validationSchema = Yup.object({
       email: Yup.string()
@@ -61,7 +70,7 @@ function LoginDialog() {
           });
         setUser(response.data.user);
         setUpdateUser(response.data.user);
-        navigate('/');
+        navigate(location.pathname);
         handleCloseDialog()
       }
     } catch (error: any) { 
@@ -162,7 +171,7 @@ function LoginDialog() {
             transition: Flip,
             });
           setUser(response.data.user);
-          navigate('/');
+          navigate(location.pathname);
           handleCloseDialog()
         }
 
@@ -230,11 +239,20 @@ function LoginDialog() {
             :
           <>
      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-      <Form className="flex flex-col space-y-4 items-center w-[350px] ">
+      <Form className="flex flex-col space-y-4 items-center w-[350px] relative">
         <Field name="email" type="email" id="email" placeholder="Email" autoComplete="off" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" />
         <ErrorMessage name="email" component="div" className="text-red-500" />
 
-        <Field name="password" type="password" id="password" placeholder="Heslo" autoComplete="off" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" />
+        <Field name="password" type={showPassword ? "text" : "password"} id="password" placeholder="Heslo" autoComplete="off" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" />
+        <div className="absolute top-14 text-xl right-1  flex items-center pr-3"
+          onClick={()=>showPasswordToggle()}>
+        {showPassword ?
+        <FaEye />
+        :
+        <FaEyeSlash />
+
+        }
+      </div>
         <ErrorMessage name="password" component="div" className="text-red-500" />
 
         {backendError && <div className="text-red-500">{backendError}</div>}
@@ -247,7 +265,7 @@ function LoginDialog() {
           </>}
           {backendError && <div className="text-red-500">{backendError}</div>}
           {backendErrorGoogle && <div className="text-red-500">{backendErrorGoogle}</div>}
-          <img className='flex mt-4 h-auto  min-h-[60px] w-full' src="lide.svg" alt="lide" />
+          <img className='flex mt-4 h-auto  min-h-[60px] w-full' src="/lide.svg" alt="lide" />
         </div>
 
     </div>

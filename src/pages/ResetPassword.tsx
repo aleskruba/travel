@@ -5,6 +5,7 @@ import BASE_URL, { config } from "../config/config";
 import { Flip, toast } from "react-toastify";
 import DOMPurify from "dompurify";
 import { useNavigate } from "react-router-dom";
+import { FaEye ,FaEyeSlash } from "react-icons/fa";
 
 interface NewPassword {
   password: string;
@@ -19,6 +20,13 @@ function ResetPassword() {
     confirmPassword: "",
   });
   const [tokenChecked, setTokenChecked] = useState(false);
+  const [showPassword,setShowPassword] = useState(false);
+
+  const showPasswordToggle = () => {
+    setShowPassword(prev => !prev)
+  }
+
+  
 
   const value = { test: "test" };
   useEffect(() => {
@@ -41,7 +49,7 @@ function ResetPassword() {
 
     checkToken();
   }, [navigate]);
-
+ 
   if (!tokenChecked) {
     return <div>Loading...</div>; // Optionally, you can show a loading indicator
   }
@@ -100,9 +108,9 @@ function ResetPassword() {
     <div className="flex  items-center flex-col pt-32 pb-32 gap-6">
       <div className="text-lg font-semibold mb-2">Zadej nové heslo</div>
 
-      <form className="space-y-4" onSubmit={onSubmitPassword}>
+      <form className="space-y-4 relative" onSubmit={onSubmitPassword}>
         <input
-          type="password"
+     type={showPassword ? "text" : "password"}
           name="password"
           placeholder="nové heslo"
           className="w-full border rounded-md p-2"
@@ -111,9 +119,17 @@ function ResetPassword() {
           maxLength={20}
           autoComplete="new-password"
         />
+       <div className="absolute top-0 text-xl right-1  flex items-center pr-3"
+                  onClick={()=>showPasswordToggle()}>
+                {showPassword ?
+                <FaEye />
+                :
+                <FaEyeSlash />
 
+                }
+              </div>
         <input
-          type="password"
+     type={showPassword ? "text" : "password"}
           name="confirmPassword"
           placeholder="opakuj heslo"
           className="w-full border rounded-md p-2"
@@ -122,7 +138,15 @@ function ResetPassword() {
           maxLength={20}
           autoComplete="new-password"
         />
+    <div className="absolute top-[55px] text-xl right-1  flex items-center pr-3"
+                  onClick={()=>showPasswordToggle()}>
+                {showPassword ?
+                <FaEye />
+                :
+                <FaEyeSlash />
 
+                }
+              </div>
         {backendError && <div className="text-red-800">{backendError} </div>}
         <input
           type="submit"
