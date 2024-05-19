@@ -32,7 +32,7 @@ const Message: React.FC<Props> = ({messages, message,setMessages,replies,setRepl
     const [deleted, setDeleted] = useState(false);
     const controls = useAnimation();
 
-
+console.log(message);
 
     const shakeAnimation = {
       shake: {
@@ -105,7 +105,7 @@ const deleteReply = (ID: any) => {
 };
 
 
-
+const imageUrl = message?.image ? message?.image : '/profile.png';
 
 return (
   <motion.div
@@ -132,7 +132,7 @@ return (
                   }
         <div className="w-14 h-14 overflow-hidden rounded-full">
         <img
-          src={message.image ?? 'profile.png' }
+          src={imageUrl}
           alt="Profile"
           className="w-full h-full object-cover"
         />
@@ -238,7 +238,7 @@ return (
             }
             <div className="w-12 h-12 overflow-hidden rounded-full">
             <img
-              src={reply.image ?? 'profile.png' }
+              src={reply.image ? reply.image : 'profile.png' }
               alt="Profile"
               className="w-full h-full object-cover"
             />

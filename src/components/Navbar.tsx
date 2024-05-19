@@ -131,7 +131,7 @@ function Navbar() {
 
                 {!user ?
 
-                 <div className='flex ml-4 gap-2 md:gap-6'>
+                 <div className='flex ml-1 gap-2 md:gap-6'>
                     <div className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg"
                          onClick={handleSignUpClick}>
                           Registrace</div>
