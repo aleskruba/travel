@@ -1,4 +1,4 @@
-import React,{useState,FormEvent} from 'react'
+import React,{useState,FormEvent, useEffect} from 'react'
 import DOMPurify from 'dompurify';
 import { MessageProps } from '../../types';
 import { ReplyProps } from '../../types';
@@ -11,21 +11,14 @@ import BASE_URL, { config } from '../../config/config';
     setReplies: React.Dispatch<React.SetStateAction<ReplyProps[]>>
     replies:  ReplyProps[]
     message:MessageProps
+    setAllowedToDelete: React.Dispatch<React.SetStateAction<boolean>>
+    setIsSubmitted: React.Dispatch<React.SetStateAction<boolean>>
 }
 type PartialReplyProps = Partial<ReplyProps>;
 
-function Reply({setReplyDiv,setReplies,replies,message}:Props) {
+function Reply({setReplyDiv,setReplies,replies,message,setAllowedToDelete,setIsSubmitted}:Props) {
   const { user} = useAuthContext();
-/*     const [reply, setReply] = useState({
-        id: 0,
-        fname: '',
-        date: new Date(),
-        image: '',
-        message: '',
-        message_id: null,
-        user_id: null
 
-      }); */
       const [reply, setReply] = useState<PartialReplyProps>({});
    
       const handleChangeReply = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -38,43 +31,54 @@ function Reply({setReplyDiv,setReplies,replies,message}:Props) {
       
 
       
-  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-
-    
-    if (reply.message !== undefined && !reply.message.length) {
-      return;
-    }
-  
-    const newReply = {
-
-      id: replies.length + 1, 
-      firstName: user?.firstName || '', 
-      date: new Date(),
-      image: user?.image || '', 
-      message: reply.message || '', 
-      message_id: message.id || 0, 
-      user_id: user?.id || 0, 
-    };
-  
-    setReplies([newReply, ...replies]); 
-    const response = await axios.post(`${BASE_URL}/createreply`, newReply,config);
-    console.log(response);
-    setReply({
-      id: 0,
-      firstName: '',
-      date: new Date(),
-      image: '',
-      message: '',
-      message_id: null,
-      user_id: null
-    });
-
-    setReplyDiv(false)
-  };
-  
-
+      const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+      
+        try {
+          if (!reply.message || !reply.message.trim()) { // Check if reply.message is falsy or empty after trimming whitespace
+            setAllowedToDelete(true);
+            setIsSubmitted(false);
+            return;
+          }
+      
+          const newReply = {
+            id: 0,
+            firstName: user?.firstName || '',
+            date: new Date(),
+            image: user?.image || '',
+            message: reply.message || '',
+            message_id: message.id || 0,
+            user_id: user?.id || 0,
+          };
+      
+          setReplies([newReply, ...replies]);
+      
+          const response = await axios.post(`${BASE_URL}/createreply`, newReply, config);
+      
+          if (response.status === 201) {
+            console.log(response);
+            const updatedReply = { ...newReply, id: response.data.message };
+            setReplies([updatedReply, ...replies]);
+      
+            setReply({
+              id: 0,
+              firstName: '',
+              date: new Date(),
+              image: '',
+              message: '',
+              message_id: null,
+              user_id: null,
+            });
+      
+            setReplyDiv(false);
+          }
+        } catch (error) {
+          console.error('Error submitting reply:', error);
+          // Handle error, e.g., show a toast message to the user
+        }
+      };
+      
+  useEffect(()=>console.log(replies),[replies])
   return (
     <form onSubmit={onSubmit}>
     <div className="flex flex-col items-center space-y-4 mt-4">

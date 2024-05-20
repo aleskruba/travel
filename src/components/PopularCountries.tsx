@@ -24,7 +24,7 @@ function PopularCountries() {
   
   return (
     <div className='mt-6 flex flex-col justify-start item-start text-base s'>
-      {popularCountryNames.map(country => (
+      {popularCountryNames.sort((a, b) => a.localeCompare(b)).map(country => (
         <div 
           key={country} 
           className={`dark:text-white text-black cursor-pointer px-2 py-1 rounded ${chosenCountry === country ? 'bg-green-500  text-lighTextColor' : ''}`} 

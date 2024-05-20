@@ -10,8 +10,9 @@ import { useDialogContext } from '../../context/dialogContext';
 import { useCountryContext } from '../../context/countryContext';
 import BASE_URL, { config } from '../../config/config';
 import CreateMessage from './CreateMessage';
+import moment from 'moment';
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 15;
 type PartialMessageProps = Partial<MessageProps>;
 
 function Messages() {
@@ -55,9 +56,6 @@ function Messages() {
     }
   }, [chosenCountry,backendError]);
 
-useEffect(() => { 
-  console.log(messages)
-},[messages])
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const sanitizedMessage = DOMPurify.sanitize(event.target.value);
@@ -70,11 +68,15 @@ useEffect(() => {
      setAllowedToDelete(false)
      setIsSubmitted(true)
      if (message.message != undefined && !message.message.length ) {
+      setAllowedToDelete(true)
+      setIsSubmitted(false)
       return;
     }
 
     if (message.message != undefined && message?.message?.length > 400) {
       setBackendError('Příliš dlouhý text , max 400 znaků ')
+      setAllowedToDelete(true)
+      setIsSubmitted(false)
       setTimeout(() =>  setBackendError(''),1500);
       return;
     }
@@ -182,7 +184,7 @@ useEffect(() => {
       {
         !isLoading ? (
           currentMessages
-            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) // Reverse sorting order
+          .sort((a, b) => b.id - a.id)
             .map((message, idx) => (
               <Message key={idx} 
                        messages={messages} 
@@ -194,6 +196,7 @@ useEffect(() => {
                        setAllowedToDelete={setAllowedToDelete}
                        isLoading={isLoading}
                        isSubmitted={isSubmitted}
+                       setIsSubmitted={setIsSubmitted}
                        />
             ))
         ) : (

@@ -10,7 +10,7 @@ import { useAuthContext } from '../../context/authContext';
 import axios from 'axios';
 import BASE_URL from '../../config/config';
 import { motion, useAnimation } from 'framer-motion';
-
+import ConfirmationModal from '../ConfirmationModal';
 
 type Props = {
   messages:MessageProps[];
@@ -22,17 +22,20 @@ type Props = {
   allowedToDelete:boolean
   setAllowedToDelete: React.Dispatch<React.SetStateAction<boolean>>
   isSubmitted:boolean
+  setIsSubmitted: React.Dispatch<React.SetStateAction<boolean>>
 };
 
-const Message: React.FC<Props> = ({messages, message,setMessages,replies,setReplies,allowedToDelete ,isLoading,setAllowedToDelete,isSubmitted}) => {
+const Message: React.FC<Props> = ({messages, message,setMessages,replies,setReplies,allowedToDelete ,isLoading,setIsSubmitted,setAllowedToDelete,isSubmitted}) => {
 
   const { user} = useAuthContext();
     const [replyDiv, setReplyDiv] = useState<boolean>(false);
     const [hiddenAnswers,setHiddenAnswes] = useState(true);
     const [deleted, setDeleted] = useState(false);
     const controls = useAnimation();
-
-console.log(message);
+    const[deletedReply,setDeletedReply] = useState<number | null>(null);
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const [selectedReplyId, setSelectedReplyId] = useState<number | null>(null);
+    const [selectedMessageId, setSelectedMessageId] = useState<number | null>(null);
 
     const shakeAnimation = {
       shake: {
@@ -61,14 +64,22 @@ console.log(message);
         });
       }
     }, [deleted, controls]);
-    
-const deleteMessage = async (ID: any) => {
 
+
+const handleDeleteMessageClick = (ID: number) => {
+      setSelectedMessageId(ID);
+      setShowModal(true);
+      };
+    
+const deleteMessage = async () => {
+
+  if (selectedMessageId !== null)  {
       setAllowedToDelete(false)
+      setShowModal(false);
       setDeleted(true)
            
      
-          const updatedMessages = messages.filter(message => message.id !== ID);    
+          const updatedMessages = messages.filter(message => message.id !== selectedMessageId);    
   
           console.log(updatedMessages)
  
@@ -82,7 +93,7 @@ const deleteMessage = async (ID: any) => {
           withCredentials: true,
           data: {
             user_id:user?.id,
-            messageId: ID 
+            messageId: selectedMessageId 
           }
         };
   
@@ -96,12 +107,53 @@ const deleteMessage = async (ID: any) => {
         } catch (error) {
           console.error("Error deleting message:", error);
       }
+    }
 };
 
-const deleteReply = (ID: any) => {
-   const updatedReplies = replies.filter(reply => reply.id !== ID);
-   setReplies(updatedReplies);
-        setReplyDiv(false);
+
+const handleDeleteClick = (ID: number) => {
+  setSelectedReplyId(ID);
+  setShowModal(true);
+  console.log('click')
+};
+
+const deleteReply = async () => {
+
+
+  if (selectedReplyId !== null)  {
+    setAllowedToDelete(false)
+    setDeletedReply(selectedReplyId)
+    setShowModal(false);
+    const updatedReplies = replies.filter(reply => reply.id !== selectedReplyId);
+
+   
+   setTimeout(()=>{   setReplies(updatedReplies);setDeletedReply(null);      setAllowedToDelete(true)},1100) 
+
+   const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    withCredentials: true,
+    data: {
+      user_id:user?.id,
+      messageId: selectedReplyId 
+    }
+  };
+
+  try {
+    const response = await axios.delete(`${BASE_URL}/deletereply`, config);
+    console.log(response);
+    setReplyDiv(false);
+    if (response.status === 201) {
+
+}
+    console.log(messages);
+  } catch (error) {
+    console.error("Error deleting message:", error);
+}
+
+
+  }
 };
 
 
@@ -124,10 +176,10 @@ return (
       <div className="flex  items-center gap-2"> 
          {message.user_id === user?.id &&
                  
-                 <div className={`${!isSubmitted && allowedToDelete? '' : 'pointer-events-none '} min-w-[25px] text-red-700  cursor-pointer hover:text-red-500`} 
-                      onClick={ ()=>deleteMessage(message.id)}
+                 <div className={`${!isSubmitted && allowedToDelete ? '' : 'pointer-events-none '} min-w-[25px] text-red-700  cursor-pointer hover:text-red-500`} 
+                      onClick={ ()=>handleDeleteMessageClick(message.id)}
                       >
-        <FaRegTrashAlt />
+            <FaRegTrashAlt /> 
                   </div>
                   }
         <div className="w-14 h-14 overflow-hidden rounded-full">
@@ -173,6 +225,8 @@ return (
              setReplies={setReplies}
              replies={replies} 
              message={message}
+             setAllowedToDelete={setAllowedToDelete}
+             setIsSubmitted={setIsSubmitted}
              />
 
     }
@@ -200,7 +254,7 @@ return (
 </h4>
     </div>
 <div className={`${hiddenAnswers ? 'hidden' : 'block'}`}>
-  {replies.map(reply => {
+  {replies.sort((a, b) => b.id - a.id).map(reply => {
     if (reply.message_id === message.id) {
 
       const currentDate = moment();
@@ -228,12 +282,13 @@ return (
     
       return (
 
-        <div className='shadow-xl	rounded-lg ' key={reply.id}>
-        <div key={reply.id} className='flex flex-col relative pt-2  border-t border-gray-400 dark:bg-gray-500 dark:text-gray-100'>
+        <div           className={`shadow-xl rounded-lg transition-opacity duration-1000 ${deletedReply === reply.id ? 'opacity-0  bg-red-500 pointer-events-none '  : 'opacity-100'}`}
+        key={reply.id}>
+        <div key={reply.id} className='flex flex-col relative pt-2  border-t border-gray-400 dark:text-gray-100'>
           <div className={`flex items-center gap-6 md:gap-2  cursor-pointer mt-1 ${reply.user_id ===  user?.id ? 'pl-1': 'p3-6' }`}>
             {reply.user_id === user?.id &&
-              <div className="text-red-700 hover:text-red-500 absolute top-20 left-24 md:left-4" onClick={() => deleteReply(reply.id)}>
-                <FaRegTrashAlt />
+              <div className="text-red-700 hover:text-red-500 absolute top-20 left-24 md:left-4" onClick={() => handleDeleteClick(reply.id)}>
+             {allowedToDelete &&   <FaRegTrashAlt />}
               </div>
             }
             <div className="w-12 h-12 overflow-hidden rounded-full">
@@ -242,15 +297,15 @@ return (
               alt="Profile"
               className="w-full h-full object-cover"
             />
-            </div>
+            </div>{reply.id}
             <div className="flex gap-1 ">
-            <p className={` ${reply.user_id ==  user?.id ? 'text-red-500 dark:text-red-300' : 'text-gray-600 dark:text-gray-100' }  font-bold bg-gray-500 `}>{reply.firstName ? reply.firstName.slice(0, 10) : '' }</p>
+            <p className={` ${reply.user_id ==  user?.id ? 'text-red-600 dark:text-lightAccent' : 'text-gray-600 dark:text-gray-100' }  font-bold  `}>{reply.firstName ? reply.firstName.slice(0, 10) : '' }</p>
             <p className="text-gray-600  dark:bg-gray-500 dark:text-gray-100 italic">   {displayText}</p>
             </div>
           </div>
          
           <div className="md:pl-14 " >
-            <p className={` ${reply.user_id ===  user?.id ? 'text-red-500 dark:text-red-300' : 'text-gray-600 dark:text-gray-100' }`}>{reply.message}</p>
+            <p className={` ${reply.user_id ===  user?.id ? 'text-red-600 dark:text-lightAccent'  : 'text-gray-600 dark:text-gray-100' }`}>{reply.message}</p>
          </div>
   
       </div>
@@ -268,10 +323,18 @@ return (
       return null; // Add a default return statement for other cases
     }
   })}
+
+
 </div>
 
-    </div>
 
+    </div>
+    <ConfirmationModal
+  show={showModal}
+  onClose={() => setShowModal(false)}
+  onConfirm={selectedReplyId ? deleteReply : deleteMessage}
+  message="Chceš opravdu smazat tuto zprávu?"
+/>
     </motion.div>
   );
 };
