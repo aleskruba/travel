@@ -122,7 +122,7 @@ function Navbar() {
                 <Link to="/traveltips" className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg relative">TravelTips                </Link>
                 <Link to="/spolucesty" className="hover:bg-lightAccent hover:text-darkBackground  hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg">Spolucesty</Link>
                
-               <Link to="/" className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-3 py-1 rounded-lg text-base" >
+               <Link to="/" className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-4 py-1 rounded-lg text-base" >
                 <IoHomeOutline /> 
                 
                 </Link>

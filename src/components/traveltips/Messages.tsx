@@ -207,7 +207,7 @@ function Messages() {
       </div>
 
 
-      { messages.length &&
+      { messages.length ?
       <ReactPaginate
         previousLabel={'<<'}
         nextLabel={'>>'}
@@ -222,7 +222,7 @@ function Messages() {
         previousClassName={'pagination-previous'}
         nextClassName={'pagination-next'}
         disabledClassName={'pagination-disabled'}
-      />
+      /> : ''
     }
    
     </div>
