@@ -81,8 +81,7 @@ const deleteMessage = async () => {
      
           const updatedMessages = messages.filter(message => message.id !== selectedMessageId);    
   
-          console.log(updatedMessages)
- 
+
           setTimeout(()=>{setMessages(updatedMessages)},1500) 
 
 
@@ -99,11 +98,9 @@ const deleteMessage = async () => {
   
       try {
           const response = await axios.delete(`${BASE_URL}/deletemessage`, config);
-          console.log(response);
           setReplyDiv(false);
           if (response.status === 201) {
           setAllowedToDelete(true) }
-          console.log(messages);
         } catch (error) {
           console.error("Error deleting message:", error);
       }
@@ -114,7 +111,6 @@ const deleteMessage = async () => {
 const handleDeleteClick = (ID: number) => {
   setSelectedReplyId(ID);
   setShowModal(true);
-  console.log('click')
 };
 
 const deleteReply = async () => {
@@ -142,12 +138,10 @@ const deleteReply = async () => {
 
   try {
     const response = await axios.delete(`${BASE_URL}/deletereply`, config);
-    console.log(response);
     setReplyDiv(false);
     if (response.status === 201) {
 
 }
-    console.log(messages);
   } catch (error) {
     console.error("Error deleting message:", error);
 }

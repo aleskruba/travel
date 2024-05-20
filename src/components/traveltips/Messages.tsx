@@ -42,10 +42,9 @@ function Messages() {
           const resultMessages = await axios.get(`${BASE_URL}/getmessages/${chosenCountry}`);
           const resultReplies = await axios.get(`${BASE_URL}/getreplies/${chosenCountry}`);
           setReplies(resultReplies.data );
-          console.log('resultReplies',resultReplies.data )
           setMessages(resultMessages.data);
           setIsLoading(false);
-          console.log('data fetched');
+     
         } catch (error) {
           console.error('Error fetching data:', error);
           setIsLoading(false);
@@ -99,8 +98,6 @@ function Messages() {
     const response = await axios.post(`${BASE_URL}/createmessage`, newMessage, config);
     
      if (response.status === 201){
-
-      console.log(response.data.message)   // id from database
 
       const updatedMessage = { ...newMessage, id: response.data.message };
       setMessages([updatedMessage, ...messages]);

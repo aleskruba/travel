@@ -56,7 +56,6 @@ function Reply({setReplyDiv,setReplies,replies,message,setAllowedToDelete,setIsS
           const response = await axios.post(`${BASE_URL}/createreply`, newReply, config);
       
           if (response.status === 201) {
-            console.log(response);
             const updatedReply = { ...newReply, id: response.data.message };
             setReplies([updatedReply, ...replies]);
       
@@ -78,7 +77,7 @@ function Reply({setReplyDiv,setReplies,replies,message,setAllowedToDelete,setIsS
         }
       };
       
-  useEffect(()=>console.log(replies),[replies])
+
   return (
     <form onSubmit={onSubmit}>
     <div className="flex flex-col items-center space-y-4 mt-4">
