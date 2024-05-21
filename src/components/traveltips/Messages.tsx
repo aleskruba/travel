@@ -66,9 +66,11 @@ function Messages() {
      event.preventDefault();
      setAllowedToDelete(false)
      setIsSubmitted(true)
-     if (message.message != undefined && !message.message.length ) {
-      setAllowedToDelete(true)
-      setIsSubmitted(false)
+
+
+    if (!message.message || !message.message.trim()) { // Check if reply.message is falsy or empty after trimming whitespace
+      setAllowedToDelete(true);
+      setIsSubmitted(false);
       return;
     }
 
