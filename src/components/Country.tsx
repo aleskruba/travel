@@ -61,16 +61,17 @@ function Country() {
         </div>
         </div>
        </> :<>
-       <div className='flex flex-col md:flex-row items-center justify-center h-screen '>
+       <div className='flex flex-col md:flex-row items-center justify-center pb-24 h-screen '>
 
         <div className=' transform rotate-90 md:block md:transform md:rotate-0'>
        <motion.div
         animate={{ x: [-10, 10, -10, 10, 0], rotate: [0, -5, 5, -5, 0] }}
         transition={{ duration: 0.3 }}
         >
-      <img src="arrow.png" alt="" className='w-[50%] h-auto' />
+      <img src="/arrow.png" alt="" className='w-[60%] h-auto md:hidden' />
       </motion.div>
       </div>
+
 
         <div className='flex flex-col items-center justify-center '>
           <h1 className='text-3xl md:text-6xl poppins-extrabold-italic'>

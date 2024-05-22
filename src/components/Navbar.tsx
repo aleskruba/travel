@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useThemeContext } from '../context/themeContext';
 import { useDialogContext } from '../context/dialogContext';
 import { useAuthContext } from '../context/authContext';
+import { useCountryContext } from '../context/countryContext';
 import { Link } from 'react-router-dom';
 import BASE_URL from '../config/config';
 import axios from 'axios';
@@ -12,6 +13,7 @@ import { IoHomeOutline } from "react-icons/io5";
 
 
 function Navbar() {
+  const { setChosenCountry} = useCountryContext();
     const { theme, setTheme, options } = useThemeContext();
     const { handleLoginClick ,handleSignUpClick} = useDialogContext();
     const { user,setUser,setUpdateUser} = useAuthContext();
@@ -20,6 +22,7 @@ function Navbar() {
     const navigate = useNavigate()
 
     const logOutFunction = () => { 
+      setChosenCountry('')
       const fetchUserData = async () => {
 
         try {
