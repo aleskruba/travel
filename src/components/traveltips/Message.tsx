@@ -188,7 +188,8 @@ return (
 
         <div className="flex flex-row gap-4 md:gap-2"> {message.id}
         <p className="text-gray-600 dark:bg-gray-500 dark:text-gray-100 font-semibold">{message?.firstName?.slice(0, 10)}</p>
-        <p className="text-gray-600 dark:bg-gray-500 dark:text-gray-100 w-[80px]">{moment(message.date).format('DD-MM YYYY ')}</p>
+        <p className="text-gray-600 dark:bg-gray-500 dark:text-gray-100 w-[80px] shrink-0 whitespace-nowrap overflow-hidden text-ellipsis">
+{moment(message.date).format('DD-MM YYYY ')}</p>
 
      
         </div>
