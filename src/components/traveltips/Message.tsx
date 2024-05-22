@@ -186,7 +186,7 @@ return (
         />
       </div>
 
-        <div className="flex flex-row gap-4 md:gap-2"> {message.id}
+        <div className="flex flex-row gap-4 md:gap-2"> 
         <p className="text-gray-600 dark:bg-gray-500 dark:text-gray-100 font-semibold">{message?.firstName?.slice(0, 10)}</p>
         <p className="text-gray-600 dark:bg-gray-500 dark:text-gray-100  shrink-0 whitespace-nowrap overflow-hidden text-ellipsis">
 {moment(message.date).format('DD-MM YYYY ')}</p>
@@ -200,22 +200,24 @@ return (
      </div>
     
 
-{user?.id !== message.user_id &&
-    <div>
+
+ 
 
      <div className='flex items-center gap-2'>
         
-         <div className='cursor-pointer'><BiLike/></div>  
+         <div className={`${user?.id === message.user_id ? 'pointer-events-none opacity-30 ': 'cursor-pointer'}`}><BiLike/></div>  
               <div>126</div>
-           <div className='cursor-pointer'><BiDislike/></div>  
+           <div className={`${user?.id === message.user_id ? 'pointer-events-none opacity-30 ': 'cursor-pointer'}`}><BiDislike/></div>  
 
 
-       {!replyDiv &&  
+       {!replyDiv &&  user?.id !== message.user_id  &&
      <button className='bg-gray-300 text-gray-700 px-4 py-1 text-sm	 rounded-full hover:bg-gray-400 focus:outline-none focus:ring focus:border-gray-500'
              onClick={()=>{setReplyDiv(true);setHiddenAnswes(false)}} >
         Odpověz
       </button>
       }
+
+
     </div>
     {replyDiv &&
         <Reply setReplyDiv={setReplyDiv} 
@@ -227,7 +229,7 @@ return (
              />
 
     }
-</div>}
+
 
 <div className=''>
   <div className='flex gap-4' onClick={()=>setHiddenAnswes(!hiddenAnswers)}>
@@ -294,7 +296,7 @@ return (
               alt="Profile"
               className="w-full h-full object-cover"
             />
-            </div>{reply.id}
+            </div>
             <div className="flex gap-1 ">
             <p className={` ${reply.user_id ==  user?.id ? 'text-red-600 dark:text-lightAccent' : 'text-gray-600 dark:text-gray-100' }  font-bold  `}>{reply.firstName ? reply.firstName.slice(0, 10) : '' }</p>
             <p className="text-gray-600  dark:bg-gray-500 dark:text-gray-100 italic">   {displayText}</p>
@@ -308,9 +310,9 @@ return (
       </div>
         
          <div className='flex items-center gap-2 md:pl-14'>
-            <div className='cursor-pointer'><BiLike/></div>  
+            <div className={`${user?.id === reply.user_id ? 'pointer-events-none opacity-30 ': 'cursor-pointer'}`}><BiLike/></div>  
               <div>126</div>
-           <div className='cursor-pointer'><BiDislike/></div>  
+           <div className={`${user?.id === reply.user_id ? 'pointer-events-none opacity-30 ': 'cursor-pointer'}`}><BiDislike/></div>  
         </div>
         
       </div>
