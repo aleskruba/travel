@@ -114,7 +114,9 @@ const footerItems = [
     'Etiopie',
     'Kamerun',
     'Madagaskar',
-    'Kuba'
+    'Kuba',
+    'Dominikánska republika',
+    'Tunisko',
   ];
 
 
@@ -133,12 +135,10 @@ const footerItems = [
     'Bulharsko',
     'Velká Británie',
     'Portugalsko',
-    'USA',
-    'Dominikánská republika',
-    'Tunisko',
     'Maďarsko',
     'Švýcarsko',
-    'Indie'
+    'Indie',
+    'Kuba'
   ];
   
   export const countriesData = [
@@ -333,26 +333,15 @@ const footerItems = [
       flag: 'https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_Portugal.svg',
 
     },
+ 
     {
-      name: 'USA',
-      population: '331 milionů',
-      currency: 'Dolar (USD)',
-      language: 'Angličtina',
-      capital: 'Washington, D.C.',
-      area: '9,83 milionu km²',
-      timezone: 'UTC−4 až UTC−12, +10, +11',
-      continent: 'Severní Amerika',
-      flag: 'https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg',
-   
-    },
-    {
-      name: 'Dominikánská republika',
+      name: 'Dominikánska republika',
       population: '10,9 milionu',
       currency: 'Dominikánské peso (DOP)',
       language: 'Španělština',
       capital: 'Santo Domingo',
       area: '48 671 km²',
-      timezone: 'UTC−4',
+      timezone: 'UTC-4',
       continent: 'Severní Amerika',
       flag: 'https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_the_Dominican_Republic.svg',
 
@@ -435,7 +424,29 @@ const footerItems = [
       timezone: 'UTC+05:30',
       continent: 'Asie',
       flag: 'https://upload.wikimedia.org/wikipedia/commons/4/41/Flag_of_India.svg',
-    }
+    },
+    {
+      name: 'Kuba',
+      population: '11,3 milionu',
+      currency: 'Kubánské peso (CUP)',
+      language: 'Španělština',
+      capital: 'Havana',
+      area: '109 884 km²',
+      timezone: 'UTC-5 až UTC-4',
+      continent: 'Severní Amerika',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/b/bd/Flag_of_Cuba.svg',
+  },
+  {
+      name: 'Kolumbie',
+      population: '50,9 milionu',
+      currency: 'Kolumbijské peso (COP)',
+      language: 'Španělština',
+      capital: 'Bogotá',
+      area: '1 141 748 km²',
+      timezone: 'UTC-5',
+      continent: 'Jižní Amerika',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Colombia.svg',
+  }
     
     
   ]

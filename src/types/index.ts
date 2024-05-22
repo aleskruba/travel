@@ -51,9 +51,10 @@ export type MessageProps = {
 export type VideoCard = {
     id: number;
     country: string;
+    firstName: string;
     title: string;
     video: string;
-    posted: string;
+    user_id: number | null;
   };
   
 export type ChosenCountryData = {

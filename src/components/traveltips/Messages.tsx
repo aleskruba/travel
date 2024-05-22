@@ -10,7 +10,7 @@ import { useDialogContext } from '../../context/dialogContext';
 import { useCountryContext } from '../../context/countryContext';
 import BASE_URL, { config } from '../../config/config';
 import CreateMessage from './CreateMessage';
-import moment from 'moment';
+import EmojiPicker from 'emoji-picker-react';
 
 const ITEMS_PER_PAGE = 15;
 type PartialMessageProps = Partial<MessageProps>;
@@ -29,12 +29,11 @@ function Messages() {
   const [isLoading, setIsLoading] = useState(false);
   const [allowedToDelete, setAllowedToDelete] = useState(true)
   const [isSubmitted, setIsSubmitted] = useState(false);
-  
-  
+
 
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!isLoading ) {
       setIsLoading(true);
   
       const fetchData = async () => {
@@ -62,13 +61,13 @@ function Messages() {
   };
 
 
-  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
      event.preventDefault();
      setAllowedToDelete(false)
      setIsSubmitted(true)
 
 
-    if (!message.message || !message.message.trim()) { // Check if reply.message is falsy or empty after trimming whitespace
+    if (!message.message || !message.message.trim()) { 
       setAllowedToDelete(true);
       setIsSubmitted(false);
       return;
@@ -98,13 +97,13 @@ function Messages() {
     setMessages([newMessage, ...messages]); 
    
     const response = await axios.post(`${BASE_URL}/createmessage`, newMessage, config);
-    
+    setAllowedToDelete(true)
      if (response.status === 201){
 
       const updatedMessage = { ...newMessage, id: response.data.message };
       setMessages([updatedMessage, ...messages]);
 
-      setAllowedToDelete(true)
+ 
       setIsSubmitted(false)
       setMessage({
           id: 0,
@@ -165,11 +164,12 @@ function Messages() {
     <div className="flex flex-col  px-2 md:px-4 w-full">
       {user ?
       <CreateMessage 
-          onSubmit={onSubmit} 
+          onSubmit={handleSubmit} 
           handleChange={handleChange} 
           user={user} 
           message={message} 
           backendError={backendError}
+          setMessage={setMessage}
    
           />
         : 

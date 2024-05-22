@@ -1,4 +1,4 @@
-import React, {useEffect, useState,useCallback } from 'react';
+import React, {useEffect, useState} from 'react';
 import { BiLike,BiDislike  } from "react-icons/bi";
 import moment from 'moment';
 import Reply from './Reply';
@@ -99,8 +99,10 @@ const deleteMessage = async () => {
       try {
           const response = await axios.delete(`${BASE_URL}/deletemessage`, config);
           setReplyDiv(false);
+        console.log(response);
           if (response.status === 201) {
-          setAllowedToDelete(true) }
+            setAllowedToDelete(true) 
+          }
         } catch (error) {
           console.error("Error deleting message:", error);
       }
@@ -123,7 +125,7 @@ const deleteReply = async () => {
     const updatedReplies = replies.filter(reply => reply.id !== selectedReplyId);
 
    
-   setTimeout(()=>{   setReplies(updatedReplies);setDeletedReply(null);      setAllowedToDelete(true)},1100) 
+   setTimeout(()=>{   setReplies(updatedReplies);setDeletedReply(null);},1100) 
 
    const config = {
     headers: {
@@ -140,7 +142,7 @@ const deleteReply = async () => {
     const response = await axios.delete(`${BASE_URL}/deletereply`, config);
     setReplyDiv(false);
     if (response.status === 201) {
-
+      setAllowedToDelete(true)
 }
   } catch (error) {
     console.error("Error deleting message:", error);
@@ -282,7 +284,7 @@ return (
           <div className={`flex items-center gap-6 md:gap-2  cursor-pointer mt-1 ${reply.user_id ===  user?.id ? 'pl-1': 'p3-6' }`}>
             {reply.user_id === user?.id &&
               <div className="text-red-700 hover:text-red-500 absolute top-20 left-24 md:left-4" onClick={() => handleDeleteClick(reply.id)}>
-             {allowedToDelete &&   <FaRegTrashAlt />}
+             {allowedToDelete &&  <FaRegTrashAlt />}
               </div>
             }
             <div className="w-12 h-12 overflow-hidden rounded-full">

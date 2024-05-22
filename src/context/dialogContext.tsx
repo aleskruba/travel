@@ -1,6 +1,5 @@
 import React, { createContext, useState,  ReactNode ,useContext} from 'react';
 
-
 type Dialog = boolean;
 
 interface DialogContextProps {
@@ -38,7 +37,7 @@ export const DialogProvider: React.FC<DialogProviderProps> = ({ children }) => {
     const [showDialog, setShowDialog] = useState<Dialog>(false)
     const [showSignUpDialog, setShowSignUpDialog] = useState<Dialog>(false)
     const [showForgottenPasswordDialog, setShowForgottenPasswordDialog] = useState<Dialog>(false)
-
+ 
     const handleLoginClick = () => {
         setShowDialog(true);
       };

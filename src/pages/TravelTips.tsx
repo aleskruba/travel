@@ -54,7 +54,7 @@ function TravelTips() {
             </button>
           )}
         </div>
-        {selectComp && chosenCountry ? <Messages /> : <Cards />}
+        {selectComp && chosenCountry ? <Messages  /> : <Cards />}
       </div>
     </div>
   );

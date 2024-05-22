@@ -229,7 +229,10 @@ function Profile() {
 
   return (
      <div className="flex  items-center h-full pb-4 flex-col pt-8 gap-6">
-
+  
+    <Link to={`/tvojeblogy`} className="p-6 rounded-lg shadow-md w-96 flex justify-center items-center font-extrabold bg-blue-500 text-white cursor-pointer">
+        tvoje blogy
+    </Link>
 
     <Link to={`/tvojespolucesty`} className="p-6 rounded-lg shadow-md w-96 flex justify-center items-center font-extrabold bg-blue-500 text-white cursor-pointer">
         tvoje spolucesty

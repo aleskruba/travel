@@ -12,8 +12,8 @@ import { VideoCard } from '../../types';
       <div className={`px-6 py-2`}>
         <div className="font-bold text-xl mb-2">{card.title.length > 20 ? `${card.title.slice(0, 20)} ...` : card.title}</div>
         <div className="flex justify-between">
-          <div className="text-gray-700 text-base">nahráno: {card.posted}</div>
-          <div className="text-gray-700 text-base">autor: Pepa</div>
+
+          <div className="text-gray-700 text-base">autor: {card.firstName}</div>
         </div>
       </div>
       <div className={`${isVideoLoading ? 'bg-black w-full h-[60%]' : 'w-full aspect-w-16 aspect-h-9'}`}>

@@ -5,6 +5,10 @@ import { ReplyProps } from '../../types';
 import { useAuthContext } from '../../context/authContext';
 import axios from 'axios';
 import BASE_URL, { config } from '../../config/config';
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
+import { BsEmojiGrin } from "react-icons/bs";
+
 
   interface Props {
     setReplyDiv: React.Dispatch<boolean>; 
@@ -20,6 +24,26 @@ function Reply({setReplyDiv,setReplies,replies,message,setAllowedToDelete,setIsS
   const { user} = useAuthContext();
 
       const [reply, setReply] = useState<PartialReplyProps>({});
+      const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+      const addEmoji = (event: any) => {
+        const sym = event.unified.split("_");
+        console.log(sym);
+        const codeArray: any[] = [];
+      
+        sym.forEach((el: any) => {
+          codeArray.push("0x" + el);
+        });
+        let emoji = String.fromCodePoint(...codeArray);
+      
+        console.log(emoji);
+      
+        // Ensure the message object is updated correctly
+        setReply((prevMessage: any) => ({
+          ...prevMessage,
+          message: (prevMessage.message || '') + emoji,
+        }));
+      };
    
       const handleChangeReply = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         const sanitizedMessage = DOMPurify.sanitize(event.target.value);
@@ -50,7 +74,7 @@ function Reply({setReplyDiv,setReplies,replies,message,setAllowedToDelete,setIsS
             message_id: message.id || 0,
             user_id: user?.id || 0,
           };
-      
+          setReplyDiv(false);
           setReplies([newReply, ...replies]);
       
           const response = await axios.post(`${BASE_URL}/createreply`, newReply, config);
@@ -69,18 +93,22 @@ function Reply({setReplyDiv,setReplies,replies,message,setAllowedToDelete,setIsS
               user_id: null,
             });
       
-            setReplyDiv(false);
+            
           }
         } catch (error) {
           console.error('Error submitting reply:', error);
           // Handle error, e.g., show a toast message to the user
         }
       };
-      
+      useEffect(() => {
+        setShowEmojiPicker(false)
+      },[reply]) 
 
   return (
+   
     <form onSubmit={onSubmit}>
     <div className="flex flex-col items-center space-y-4 mt-4">
+      <div className='relative w-full'>
     <textarea
       name="reply"
       value={reply.message}
@@ -90,6 +118,8 @@ function Reply({setReplyDiv,setReplies,replies,message,setAllowedToDelete,setIsS
       placeholder="Sdlej svůj názor (max 500 znaků)"
       maxLength={500} 
     />
+           <div className='absolute top-5 right-2 dark:text-black text-xl cursor-pointer ' onClick={() => setShowEmojiPicker(!showEmojiPicker)} ><BsEmojiGrin /></div> 
+        </div>
     <div className="flex justify-center space-x-4">
       <button className="bg-blue-500 w-[80px] text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-700"
               type="submit" 
@@ -104,7 +134,17 @@ function Reply({setReplyDiv,setReplies,replies,message,setAllowedToDelete,setIsS
 
     </div>
   </div>
+  <div className='flex justify-center mt-2 '>
+ {showEmojiPicker && (
+       <Picker
+             data={data}
+        onEmojiSelect={addEmoji}
+   />
+    )}
+</div>
+
   </form>
+
   )
 }
 
