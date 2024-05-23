@@ -8,6 +8,7 @@ import { Flip, toast } from 'react-toastify';
 import DOMPurify from 'dompurify';
 import Resizer from "react-image-file-resizer";
 import { FaEye ,FaEyeSlash } from "react-icons/fa";
+import Modal from '../components/Modal';
 
 
 
@@ -226,6 +227,18 @@ function Profile() {
     }
   };
 
+  const [showFoto,setShowFoto] = useState(false)
+ 
+  
+  const showFotoFunction = () => {
+    setShowFoto(true);
+  
+  };
+  
+  const closeModal = () => {
+    setShowFoto(false);
+  };
+  
 
   return (
      <div className="flex  items-center h-full pb-4 flex-col pt-8 gap-6">
@@ -247,8 +260,15 @@ function Profile() {
     <div className="bg-gray-100 dark:bg-gray-500 dark:text-gray-100 p-6 rounded-lg shadow-md w-96 ">
     <div className="col-span-full darK:bg-">
           <label htmlFor="photo" className="text-lg font-semibold mb-2">Foto</label>
-          <div className="mt-2 flex items-center gap-x-3 w-full justify-center">
-              <img src={user?.image ? user?.image : 'profile.png'} alt="Profile" className="h-16 w-16 rounded-full object-cover text-gray-300" />
+          <div className="mt-2 flex items-center gap-x-3 w-full justify-center "  >
+              <img src={user?.image ? user?.image : 'profile.png'}
+                   alt="Profile" 
+                   className="h-16 w-16 rounded-full object-cover text-gray-300" 
+                   onClick={()=>!showFoto && setShowFoto(true)}/>
+           
+            <Modal show={showFoto} onClose={()=>setShowFoto(false)} imageUrl={user?.image} />
+          
+           
               <label htmlFor="imageInput" className="cursor-pointer">
               <span className="relative">
             <input

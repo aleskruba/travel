@@ -200,7 +200,7 @@ function Cards() {
           ))
         )}
       </div>
-      {chosenCountry && cards?.length &&
+      {chosenCountry && cards?.length ?
       <ReactPaginate
         previousLabel={'<<'}
         nextLabel={'>>'}
@@ -215,7 +215,7 @@ function Cards() {
         previousClassName={'pagination-previous'}
         nextClassName={'pagination-next'}
         disabledClassName={'pagination-disabled'}
-      />
+      />:""
     }
     </div>
   );
