@@ -20,7 +20,7 @@ import NotFound404 from './pages/NotFound404';
 import ForgottenPasswordDialog from './pages/ForgottenPassword';
 import ResetPassword from './pages/ResetPassword';
 import ProtectedRoutes from './components/ProtectedRoutes';
-import YourBlogs from './components/traveltips/YourBlogs';
+import YourCards from './components/traveltips/YourCards';
 
 
 
@@ -60,7 +60,7 @@ function App() {
             <Route element={<ProtectedRoutes />}>
                 <Route path="/novacesta" element={<CreateTour />}/>
                 <Route path="/profile" element={<Profile />}/> 
-                <Route path="/tvojeblogy" element={<YourBlogs />}/> 
+                <Route path="/tvojeblogy" element={<YourCards />}/> 
                 <Route path="/tvojespolucesty" element={<YourTours />}/> 
                 <Route path="/tvojespolucesty/:id" element={<YourTourDetail />}/> 
             </Route>

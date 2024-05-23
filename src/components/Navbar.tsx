@@ -22,13 +22,14 @@ function Navbar() {
     const navigate = useNavigate()
 
     const logOutFunction = () => { 
-      setChosenCountry('')
+ 
       const fetchUserData = async () => {
 
         try {
           const url = `${BASE_URL}/logout`;
           const response = await axios.get(url, { withCredentials: true });
           if (response.status === 201) {
+            setChosenCountry('')
             toast.success(response.data.message,  {
               position: "top-left",
               autoClose: 1500,

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState } from 'react';
 import { BiLike,BiDislike  } from "react-icons/bi";
 import moment from 'moment';
 import Reply from './Reply';
@@ -11,6 +11,7 @@ import axios from 'axios';
 import BASE_URL from '../../config/config';
 import { motion, useAnimation } from 'framer-motion';
 import ConfirmationModal from '../ConfirmationModal';
+import Modal from '../Modal';
 
 type Props = {
   messages:MessageProps[];
@@ -155,6 +156,22 @@ const deleteReply = async () => {
 
 const imageUrl = message?.image ? message?.image : '/profile.png';
 
+const [showFoto,setShowFoto] = useState(false)
+const [showReplyFoto,setShowReplyFoto] = useState(false)
+
+
+const showFotoFunction = () => {
+  setShowFoto(true);
+
+};
+
+const closeModal = () => {
+  setShowFoto(false);
+};
+
+
+
+
 return (
   <motion.div
   className='flex flex-col dark:bg-gray-500 dark:text-gray-100 px-4 py-2 shadow-2xl rounded-lg'
@@ -178,13 +195,15 @@ return (
             <FaRegTrashAlt /> 
                   </div>
                   }
-        <div className="w-14 h-14 overflow-hidden rounded-full">
-        <img
-          src={imageUrl}
-          alt="Profile"
-          className="w-full h-full object-cover"
-        />
+     <div
+  
+        className={'w-14 h-14 overflow-hidden rounded-full cursor-pointer'}
+        onClick={showFotoFunction}
+      >
+        <img src={imageUrl} alt="Profile" className='w-full h-full object-cover'/>
       </div>
+      <Modal show={showFoto} onClose={closeModal} imageUrl={imageUrl} />
+
 
         <div className="flex flex-row gap-4 md:gap-2"> 
         <p className="text-gray-600 dark:bg-gray-500 dark:text-gray-100 font-semibold">{message?.firstName?.slice(0, 10)}</p>
@@ -290,12 +309,18 @@ return (
              {allowedToDelete &&  <FaRegTrashAlt />}
               </div>
             }
-            <div className="w-12 h-12 overflow-hidden rounded-full">
+            <div className={'w-14 h-14 overflow-hidden rounded-full cursor-pointer'}
+            onClick={()=>!showReplyFoto && setShowReplyFoto(true)}>
             <img
               src={reply.image ? reply.image : 'profile.png' }
               alt="Profile"
-              className="w-full h-full object-cover"
+              className="w-full z-30 h-full object-cover"
             />
+    <Modal show={showReplyFoto} onClose={()=>setShowReplyFoto(false)} imageUrl={reply.image} />
+
+
+
+
             </div>
             <div className="flex gap-1 ">
             <p className={` ${reply.user_id ==  user?.id ? 'text-red-600 dark:text-lightAccent' : 'text-gray-600 dark:text-gray-100' }  font-bold  `}>{reply.firstName ? reply.firstName.slice(0, 10) : '' }</p>

@@ -230,13 +230,19 @@ function Profile() {
   return (
      <div className="flex  items-center h-full pb-4 flex-col pt-8 gap-6">
   
-    <Link to={`/tvojeblogy`} className="p-6 rounded-lg shadow-md w-96 flex justify-center items-center font-extrabold bg-blue-500 text-white cursor-pointer">
-        tvoje blogy
-    </Link>
+  <Link
+  to={`/tvojeblogy`}
+  className="p-6 rounded-lg shadow-md w-96 flex justify-center items-center font-extrabold bg-gradient-to-br  from-teal-600 to-indigo-600 text-white cursor-pointer hover:bg-opacity-90 hover:shadow-lg transition duration-300 ease-in-out"
+>
+  Tvoje Blogy
+</Link>
 
-    <Link to={`/tvojespolucesty`} className="p-6 rounded-lg shadow-md w-96 flex justify-center items-center font-extrabold bg-blue-500 text-white cursor-pointer">
-        tvoje spolucesty
-    </Link>
+<Link
+  to={`/tvojespolucesty`}
+  className="mt-4 p-6 rounded-lg shadow-md w-96 flex justify-center items-center font-extrabold bg-gradient-to-br from-green-500 to-teal-600 text-white cursor-pointer hover:bg-opacity-90 hover:shadow-lg transition duration-300 ease-in-out"
+>
+  Tvoje Spolucesty
+</Link>
 
     <div className="bg-gray-100 dark:bg-gray-500 dark:text-gray-100 p-6 rounded-lg shadow-md w-96 ">
     <div className="col-span-full darK:bg-">

@@ -81,4 +81,20 @@
     opacity: 0.5;
     cursor: not-allowed;
   }
+  .modal-content-enter {
+    width: 0;
+  }
   
+  .modal-content-enter-active {
+    width: 80%;
+    transition: width 0.3s ease-in-out;
+  }
+  
+  .modal-content-leave {
+    width: 80%;
+  }
+  
+  .modal-content-leave-active {
+    width: 0;
+    transition: width 0.3s ease-in-out;
+  }

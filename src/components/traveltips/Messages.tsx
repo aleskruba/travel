@@ -207,22 +207,24 @@ function Messages() {
 
 
       { messages.length ?
-      <ReactPaginate
-        previousLabel={'<<'}
-        nextLabel={'>>'}
-        breakLabel={'...'}
-        breakClassName={'break-me'}
-        pageCount={Math.ceil(messages.length / ITEMS_PER_PAGE)}
-        marginPagesDisplayed={2}
-        pageRangeDisplayed={5}
-        onPageChange={handlePageChange}
-        containerClassName={'pagination'}
-        activeClassName={'active'}
-        previousClassName={'pagination-previous'}
-        nextClassName={'pagination-next'}
-        disabledClassName={'pagination-disabled'}
-      /> : ''
+     
+     <ReactPaginate
+     previousLabel={'<<'}
+     nextLabel={'>>'}
+     breakLabel={'...'}
+     breakClassName={'break-me'}
+     pageCount={Math.ceil(messages.length / ITEMS_PER_PAGE)}
+     marginPagesDisplayed={2}
+     pageRangeDisplayed={5}
+     onPageChange={handlePageChange}
+     containerClassName={'pagination  z-10'}       // Adding z-index class here
+     activeClassName={'active z-20'}              // Example of adding z-index to active class
+     previousClassName={'pagination-previous z-10'} // Example of
+     nextClassName={'pagination-next z-10'}
+     disabledClassName={'pagination-disabled z-10'}
+   />  : ''
     }
+  
    
     </div>
   );
