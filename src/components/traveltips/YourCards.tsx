@@ -42,8 +42,9 @@ function YourCards() {
         <div key={el.id} className="flex flex-col">
           <div className="bg-white dark:bg-gray-800 text-black dark:text-white p-4 rounded-lg shadow-md flex-1">
           <div className=" text-2xl pb-2">{el.country}</div>
-            <div className="text-lg font-semibold">{el.title}</div>
-            <div className="text-lg font-semibold">{el.video}</div>
+          <div className="text-lg font-semibold">{el.title.slice(0, 15)}</div>
+          <div className="text-lg font-semibold">{el.video.slice(0, 15)}</div>
+
      
             <div className="aspect-w-16 aspect-h-9 mt-4">
               {/* Assuming `el.video` is a URL to a video */}
