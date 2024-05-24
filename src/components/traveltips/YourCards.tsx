@@ -35,7 +35,7 @@ function YourCards() {
 
   console.log(cards)
   return (
-
+    <div className='max-w-[80%]'>
     <div className="grid grid-cols-1 md:grid-cols-auto lg:grid-cols-3 gap-4 border-b-4 border-indigo-500 pb-4">
 
       {cards.map((el) => (
@@ -49,7 +49,7 @@ function YourCards() {
               {/* Assuming `el.video` is a URL to a video */}
               <iframe
                 title={el.title}
-                className="w-[80%] h-full object-cover"
+                className="w-full h-full object-cover"
                 src={el.video}
                 allowFullScreen
               ></iframe>
@@ -62,7 +62,7 @@ function YourCards() {
         </div>
       ))}
 
-
+</div>
     </div>
 
 
