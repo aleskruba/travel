@@ -35,15 +35,20 @@ function YourCards() {
 
   console.log(cards)
   return (
-    <div className='max-w-[80%]'>
+
     <div className="grid grid-cols-1 md:grid-cols-auto lg:grid-cols-3 gap-4 border-b-4 border-indigo-500 pb-4">
 
       {cards.map((el) => (
         <div key={el.id} className="flex flex-col">
           <div className="bg-white dark:bg-gray-800 text-black dark:text-white p-4 rounded-lg shadow-md flex-1">
           <div className=" text-2xl pb-2">{el.country}</div>
-          <div className="text-lg font-semibold">{el.title.slice(0, 15)}</div>
-          <div className="text-lg font-semibold">{el.video.slice(0, 15)}</div>
+          <div className="text-lg font-semibold">
+                {el.title.length > 27 ? `${el.title.slice(0, 27)}...` : el.title}
+              </div>
+              <div className="text-lg font-semibold">
+                {el.video.length > 27 ? `${el.video.slice(0, 27)}...` : el.video}
+              </div>
+
 
      
             <div className="aspect-w-16 aspect-h-9 mt-4">
@@ -64,7 +69,7 @@ function YourCards() {
       ))}
 
 </div>
-    </div>
+
 
 
   )
