@@ -218,7 +218,7 @@ function Messages() {
      pageRangeDisplayed={5}
      onPageChange={handlePageChange}
      containerClassName={'pagination  z-10'}       // Adding z-index class here
-     activeClassName={'active z-20'}              // Example of adding z-index to active class
+     activeClassName={'active z-10'}              // Example of adding z-index to active class
      previousClassName={'pagination-previous z-10'} // Example of
      nextClassName={'pagination-next z-10'}
      disabledClassName={'pagination-disabled z-10'}
