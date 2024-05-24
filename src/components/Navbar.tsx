@@ -116,7 +116,7 @@ function Navbar() {
 
 
 
-    <div className={`${visible ? 'md:hidden fixed  bg-darkAccent z-50  bottom-1 border rounded-lg shadow-lg left-1/2 transform -translate-x-1/2 w-[95%] md:w-[50%] ' : 'fixed  bg-darkAccent  bottom-1 border rounded-lg shadow-lg left-1/2 transform -translate-x-1/2 w-[95%] md:w-[60%] '}`}>
+    <div className={`${visible ? 'md:hidden fixed  bg-darkAccent z-50  bottom-1 border rounded-lg shadow-lg left-1/2 transform -translate-x-1/2 w-[95%] md:w-[50%] ' : 'fixed  bg-darkAccent z-50   bottom-1 border rounded-lg shadow-lg left-1/2 transform -translate-x-1/2 w-[95%] md:w-[60%] '}`}>
         
     <div className='flex justify-between w-full px-2 py-4 text-white text-xs'>
              
