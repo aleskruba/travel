@@ -49,7 +49,7 @@ function YourCards() {
               {/* Assuming `el.video` is a URL to a video */}
               <iframe
                 title={el.title}
-                className="w-full h-full object-cover"
+                className="w-[80%] h-full object-cover"
                 src={el.video}
                 allowFullScreen
               ></iframe>
