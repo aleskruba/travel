@@ -34,14 +34,11 @@ type Props = {
     //const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
     const [tour, setTour] = useState<TourProps>({
       id: 0,
-      fname: '',
-      email:'',
-      img:'',
       date: new Date(),
       tourdate: new Date(),
       tourdateEnd: new Date(),
       destination: '',
-      type: [],
+      tourtype: [],
       fellowtraveler: '',
       aboutme: '',
       user_id: 4
@@ -52,20 +49,17 @@ type Props = {
    
     const [updateTour, setUpdateTour] = useState<TourProps>({
       id: yourTour.id,
-      fname: yourTour.fname,
-      email:yourTour.email,
-      img:yourTour.img,
       date: new Date(),
       tourdate: yourTour.tourdate,
       tourdateEnd:yourTour.tourdateEnd,
       destination: yourTour.destination,
-      type: yourTour.type,
+      tourtype: yourTour.tourtype,
       fellowtraveler: yourTour.fellowtraveler,
       aboutme: yourTour.aboutme,
       user_id: yourTour.user_id
     });
 
-    const [selectedTypes, setSelectedTypes] = useState<string[]>(yourTour.type);
+    const [selectedTypes, setSelectedTypes] = useState<string[]>(yourTour.tourtype);
     const [selectedDate, setSelectedDate] = useState<Date | null>(yourTour.tourdate);
     const [selectedDateEnd, setSelectedDateEnd] = useState<Date | null>(yourTour.tourdateEnd);
     const [chosenCountry, setChosenCountry] = useState(yourTour.destination);
@@ -134,14 +128,11 @@ type Props = {
         }
         const newTour: TourProps = {
           id: updateTour.id, // Generate a unique ID
-          fname: updateTour.fname,
-          email:updateTour.email,
-          img:updateTour.img, 
           date: updateTour.date,
           tourdate: updateTour.tourdate,
           tourdateEnd: updateTour.tourdateEnd,
           destination: updateTour.destination,
-          type: updateTour.type, // Use selectedTypes instead of tour.type
+          tourtype: updateTour.tourtype, // Use selectedTypes instead of tour.type
           fellowtraveler: updateTour.fellowtraveler,
           aboutme: updateTour.aboutme,
           user_id: updateTour.user_id
@@ -166,14 +157,11 @@ type Props = {
             // If it matches, update the properties with the new values
             return {
               ...tour, // Keep the existing properties
-              fname: updateTour.fname,
-              email: updateTour.email,
-              img: updateTour.img,
               date: updateTour.date,
               tourdate: updateTour.tourdate,
               tourdateEnd: updateTour.tourdateEnd,
               destination: updateTour.destination,
-              type: updateTour.type,
+              type: updateTour.tourtype,
               fellowtraveler: updateTour.fellowtraveler,
               aboutme: updateTour.aboutme,
               user_id: updateTour.user_id
@@ -189,14 +177,11 @@ type Props = {
         // Reset the tour input
         setUpdateTour({
           id: 0,
-          fname: '',
-          email:'',
-          img:'',
           date: new Date(),
           tourdate: new Date(),
           tourdateEnd: new Date(),
           destination: '',
-          type: [],
+          tourtype: [],
           fellowtraveler: '',
           aboutme: '',
           user_id: 4

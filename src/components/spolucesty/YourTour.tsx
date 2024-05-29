@@ -21,12 +21,12 @@ const YourTour: React.FC<Props> = ({yourTour }) => {
             <img src="man.png" alt="" className='w-full rounded-full' />
          </div>
           <div>
-            <h4 className='text-xl font-thin dark:text-white'>{yourTour.fname}</h4>
+            <h4 className='text-xl font-thin dark:text-white'>{yourTour.firstName}</h4>
          </div>
     </div>
       <div className={`mt-2`}>
          <div className="font-bold text-xl mb-1 dark:text-white">{yourTour.destination}</div> 
-         <div className="  text-base italic">{yourTour.type} </div>
+         <div className="  text-base italic">{yourTour.tourtype} </div>
          <div className=" text-base">  {moment(yourTour.tourdate).format('YYYY-MM-DD')} - {moment(yourTour.tourdateEnd).format('YYYY-MM-DD')}
  </div>
       

@@ -98,7 +98,7 @@ const deleteMessage = async () => {
         };
   
       try {
-          const response = await axios.delete(`${BASE_URL}/deletemessage`, config);
+          const response = await axios.delete(`${BASE_URL}/message`, config);
           setReplyDiv(false);
         console.log(response);
           if (response.status === 201) {
@@ -140,7 +140,7 @@ const deleteReply = async () => {
   };
 
   try {
-    const response = await axios.delete(`${BASE_URL}/deletereply`, config);
+    const response = await axios.delete(`${BASE_URL}/reply`, config);
     setReplyDiv(false);
     if (response.status === 201) {
       setAllowedToDelete(true)
@@ -213,7 +213,7 @@ return (
      
         </div>
       </div>
-        <div className="md:px-4" >
+        <div className="md:px-4 break-all" >
           <p className="">{message.message} </p>
       </div>
      </div>
@@ -323,12 +323,12 @@ return (
 
             </div>
             <div className="flex gap-1 ">
-            <p className={` ${reply.user_id ==  user?.id ? 'text-red-600 dark:text-lightAccent' : 'text-gray-600 dark:text-gray-100' }  font-bold  `}>{reply.firstName ? reply.firstName.slice(0, 10) : '' }</p>
+            <p className={` ${reply.user_id ===  user?.id ? 'text-red-600 dark:text-lightAccent' : 'text-gray-600 dark:text-gray-100' }  font-bold  `}>{reply.firstName ? reply.firstName.slice(0, 10) : '' }</p>
             <p className="text-gray-600  dark:bg-gray-500 dark:text-gray-100 italic">   {displayText}</p>
             </div>
           </div>
          
-          <div className="md:pl-14 " >
+          <div className="md:pl-14 break-all" >
             <p className={` ${reply.user_id ===  user?.id ? 'text-red-600 dark:text-lightAccent'  : 'text-gray-600 dark:text-gray-100' }`}>{reply.message}</p>
          </div>
   

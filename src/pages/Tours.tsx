@@ -5,6 +5,7 @@ import { Link,useSearchParams  } from 'react-router-dom';
 import SearchComponent from '../components/spolucesty/SearchComponent';
 import { useTourContext } from '../context/tourContext';
 import { TourProps } from '../types';
+import BASE_URL from '../config/config';
 
 function Tours() {
   const {tours, setTours} = useTourContext()
@@ -21,7 +22,8 @@ function Tours() {
 
     const fetchData = async () => {
       try {
-        const resultTours = await axios.get('tours.json');
+        const resultTours = await axios.get(`${BASE_URL}/tours`)
+        console.log('resultTours:',resultTours);
         setTours(resultTours.data.tours);
         setFilteredTours(resultTours.data.tours)
         setIsLoading(false);
@@ -58,7 +60,7 @@ function Tours() {
       filtered = filtered.filter(tour => tour.destination === country);
     }
     if (tourType) {
-      filtered = filtered.filter(tour => tour.type.includes(tourType));
+      filtered = filtered.filter(tour => tour.tourtype.includes(tourType));
     }
     if (date) {
       const selectedDate = typeof date === 'string' ? date : date.toISOString().split('T')[0]; // Convert to ISO string and extract date part

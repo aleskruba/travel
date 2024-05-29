@@ -77,7 +77,7 @@ function Reply({setReplyDiv,setReplies,replies,message,setAllowedToDelete,setIsS
           setReplyDiv(false);
           setReplies([newReply, ...replies]);
       
-          const response = await axios.post(`${BASE_URL}/createreply`, newReply, config);
+          const response = await axios.post(`${BASE_URL}/reply`, newReply, config);
       
           if (response.status === 201) {
             const updatedReply = { ...newReply, id: response.data.message };

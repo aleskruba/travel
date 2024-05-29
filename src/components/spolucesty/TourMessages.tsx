@@ -1,102 +1,108 @@
-import React, { useState,useEffect ,FormEvent } from 'react';
+import React, { useState, useEffect, FormEvent } from 'react';
 import ReactPaginate from 'react-paginate';
 import DOMPurify from 'dompurify';
 import axios from 'axios';
 import TourMessage from './TourMessage';
 import { TourMessageProps } from '../../types';
-import { ReplyProps } from '../../types';
-
-
+import BASE_URL, { config } from '../../config/config';
+import { useAuthContext } from '../../context/authContext';
+import { useParams } from 'react-router-dom';
 
 const ITEMS_PER_PAGE = 5;
 
 function TourMessages() {
+  let { id } = useParams<string>(); // id is of type string | undefined
+  const intId = id ? parseInt(id) : NaN;
 
+  const { user } = useAuthContext();
   const [currentPage, setCurrentPage] = useState(0);
-  const [tourReplies, setTourReplies] = useState<ReplyProps[]>([]);
   const [tourMessage, setTourMessage] = useState<TourMessageProps>({
     id: 0,
-    email: '',
     firstName: '',
     date: new Date(),
     image: '',
     message: '',
-    user_id: 4
+    user_id: null,
+    tour_id: null,
   });
 
   const [isLoading, setIsLoading] = useState(false);
   const [tourMessages, setTourMessages] = useState<TourMessageProps[]>([]);
- 
-   useEffect(() => {
- 
-      setIsLoading(true);
-      const fetchData = async () => {
-        try {
-          const resultTourMessages = await axios.get('/messages.json');
-          setTourMessages(resultTourMessages.data.messages);
-/*           const resultTourReplies = await axios.get('/replies.json');
+  const [backendError, setBackendError] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
-         
-    
-            setTourReplies(resultTourReplies.data.tourReplies); */
-
-      /*       console.log(resultTourMessages.data.messages)
-            
-            console.log(resultTourReplies.data.tourReplies) */
-            
-      setIsLoading(false);
-        } catch (error) {
-            // Handle errors
-            console.error('Error fetching data:', error);
-        }
-    };
-    
-
-      fetchData();
-  
-  }, []); 
-  
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const sanitizedMessage = DOMPurify.sanitize(event.target.value);
-    setTourMessage({...tourMessage,[event.target.name]:sanitizedMessage});
-  };
-
-
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
- 
-    if (!tourMessage.message.length) {
+  useEffect(() => {
+    if (isNaN(intId)) {
+      setError('Invalid tour ID');
       return;
     }
 
-  
-    const newMessage = {
-      id: tourMessages.length + 1, // Generate a unique ID
-      email: 'new@example.com',
-      firstName: 'ales',
-      date: new Date(),
-      image: '/man.png',
-      message: tourMessage.message,
-      user_id:4
+    setIsLoading(true);
+    const fetchData = async () => {
+      try {
+        const resultTourMessages = await axios.get(`${BASE_URL}/tourmessages/${intId}`);
+        setTourMessages(resultTourMessages.data.tourMessages);
+        setIsLoading(false);
+      } catch (error:any) {
+        if (error.response.status === 404) {
+          setTourMessages([]);
+          setError('Error fetching data');
+        }
+        setIsLoading(false);
+      }
     };
-  
-    setTourMessages([newMessage, ...tourMessages]); // Prepend the new message
-  
-    // Reset the message input
-    setTourMessage({
-      id: 0,
-      email: '',
-      firstName: '',
-      date: new Date(),
-      image: '',
-      message: '',
-      user_id: 4,
-    });
+
+    fetchData();
+  }, [intId]);
+
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const sanitizedMessage = DOMPurify.sanitize(event.target.value);
+    setTourMessage({ ...tourMessage, [event.target.name]: sanitizedMessage });
   };
-  
 
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
+    if (!tourMessage.message || !tourMessage.message.trim()) {
+      return;
+    }
+
+    if (tourMessage.message !== undefined && tourMessage.message.length > 400) {
+      setBackendError('Příliš dlouhý text , max 400 znaků ');
+      return;
+    }
+
+    try {
+      const newMessage = {
+        id: tourMessages.length + 1, // Generate a unique ID
+        firstName: user?.firstName || '', // Default to empty string if undefined
+        date: new Date(),
+        image: user?.image || '', // Default to empty string if undefined
+        message: tourMessage.message,
+        user_id: user?.id || null,
+        tour_id: intId || null,
+      };
+
+      const response = await axios.post(`${BASE_URL}/tourmessages`, newMessage, config);
+
+      if (response.status === 201) {
+        const updatedMessage = { ...newMessage, id: response.data.message };
+
+        setTourMessages((prevMessages) => [updatedMessage, ...prevMessages].sort((a, b) => b.id - a.id));
+        setTourMessage({
+          id: 0,
+          firstName: '',
+          date: new Date(),
+          image: '',
+          message: '',
+          user_id: user?.id || null,
+          tour_id: intId || null,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handlePageChange = ({ selected }: any) => {
     setCurrentPage(selected);
@@ -109,84 +115,80 @@ function TourMessages() {
   const currentMessages = tourMessages?.slice(startIndex, endIndex);
 
   return (
-    <div className="flex flex-col  px-2 md:px-4 w-full">
-
-
-      <form onSubmit={onSubmit}>
-        <div className="flex justify-between items-center dark:text-lighTextColor gap-4 bg-gray-100 px-2 py-2 md:rounded-lg shadow-md mt-2">
-          <div className="flex items-center gap-2"> 
-            <div className="w-14 h-14 overflow-hidden rounded-full">
-              <img src="/man.png" alt="Profile" className="w-full h-full object-cover" />
+    <div className="flex flex-col px-2 md:px-4 w-full">
+      {error ? (
+        <div>Error: {error}</div>
+      ) : (
+        <>
+          <form onSubmit={onSubmit}>
+            <div className="flex justify-between items-center dark:text-lighTextColor gap-4 bg-gray-100 px-2 py-2 md:rounded-lg shadow-md mt-2">
+              <div className="flex items-center gap-2">
+                <div className="w-14 h-14 overflow-hidden rounded-full">
+                  <img src={user?.image ? user?.image : '/profile.png'} alt="Profile" className="w-full h-full object-cover" />
+                </div>
+              </div>
+              <div className="flex-1 hidden md:flex">
+                <textarea
+                  name="message"
+                  value={tourMessage.message}
+                  onChange={handleChange}
+                  className="w-full py-2 px-4 bg-gray-200 rounded-lg text-black focus:outline-none focus:ring focus:border-blue-500 resize-none"
+                  placeholder="Zde můžeš cestovateli napsat (max 500 characters)"
+                  maxLength={500}
+                />
+              </div>
+              <div>
+                <button type="submit" className="py-2 px-4 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring focus:border-green-700">
+                  Odešli
+                </button>
+              </div>
             </div>
-           </div>
-          <div className="flex-1 hidden md:flex">
-            <textarea
-              name="message"
-              value={tourMessage.message}
-              onChange={handleChange}
-              className="w-full py-2 px-4 bg-gray-200 rounded-lg text-black focus:outline-none focus:ring focus:border-blue-500 resize-none"
-              placeholder="Zde můžeš cestovateli napsat (max 500 characters)"
-              maxLength={500} 
 
-           />
+            <div className="md:hidden">
+              <textarea
+                name="message"
+                value={tourMessage.message}
+                onChange={handleChange}
+                className="w-full py-2 px-4 bg-gray-200 text-black focus:outline-none focus:ring focus:border-blue-500 resize-none"
+                placeholder="Zde můžeš cestovateli napsat"
+                maxLength={500}
+              />
+            </div>
+          </form>
+
+          <div className='flex flex-col mt-4 gap-1'>
+            {!isLoading ? (
+              currentMessages
+                .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) // Reverse sorting order
+                .map((tourMessage, idx) => (
+                  <TourMessage key={idx} tourMessages={tourMessages} tourMessage={tourMessage} setTourMessages={setTourMessages} />
+                ))
+            ) : (
+              <>moment prosím</>
+            )}
           </div>
-          <div>
-            <button type="submit" className="py-2 px-4 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring focus:border-green-700">Odešli</button>
-          </div>
-        </div>
 
-        <div className="md:hidden">
-          <textarea
-            name="message"
-            value={tourMessage.message}
-            onChange={handleChange}
-            className="w-full py-2 px-4 bg-gray-200 text-black focus:outline-none focus:ring focus:border-blue-500 resize-none"
-            placeholder="Zde můžeš cestovateli napsat"
-            maxLength={500} 
-       />
-        </div>
-      </form>
-
-
-      <div className='flex flex-col mt-4 gap-1'>
-      <div className='flex flex-col mt-4 gap-1'>
-      {
-        !isLoading ? (
-          currentMessages
-            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) // Reverse sorting order
-            .map((tourMessage, idx) => (
-              <TourMessage key={idx} tourMessages={tourMessages} tourMessage={tourMessage} tourReplies={tourReplies} setTourMessages={setTourMessages} setTourReplies={setTourReplies} />
-            ))
-        ) : (
-          <>moment prosím</>
-        )
-      } 
-
-      </div>
-
-      </div>
-
-      { tourMessages.length &&
-      <ReactPaginate
-        previousLabel={'<<'}
-        nextLabel={'>>'}
-        breakLabel={'...'}
-        breakClassName={'break-me'}
-        pageCount={Math.ceil(tourMessages.length / ITEMS_PER_PAGE)}
-        marginPagesDisplayed={2}
-        pageRangeDisplayed={5}
-        onPageChange={handlePageChange}
-        containerClassName={'pagination'}
-        activeClassName={'active'}
-        previousClassName={'pagination-previous'}
-        nextClassName={'pagination-next'}
-        disabledClassName={'pagination-disabled'}
-      />
-    }
-   
+          {tourMessages.length > 0 &&
+            <ReactPaginate
+              previousLabel={'<<'}
+              nextLabel={'>>'}
+              breakLabel={'...'}
+              breakClassName={'break-me'}
+              pageCount={Math.ceil(tourMessages.length / ITEMS_PER_PAGE)}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={handlePageChange}
+              containerClassName={'pagination'}
+              activeClassName={'active'}
+              previousClassName={'pagination-previous'}
+              nextClassName={'pagination-next'}
+              disabledClassName={'pagination-disabled'}
+            />
+          }
+        </>
+      )}
     </div>
   );
 }
 
 export default TourMessages;
-

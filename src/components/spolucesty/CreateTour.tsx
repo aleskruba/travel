@@ -4,15 +4,17 @@ import 'react-datepicker/dist/react-datepicker.css';
 import DOMPurify from 'dompurify';
 import { typeOfTour } from '../../constants';
 import { countryNames } from '../../constants';
+import { useAuthContext } from '../../context/authContext';
 import axios from 'axios';
 import { useTourContext } from '../../context/tourContext';
 import { useNavigate } from "react-router-dom";
 import { TourProps } from '../../types';
+import BASE_URL, { config } from '../../config/config';
 
 
 function CreateTour() {
   const {tours, setTours} = useTourContext()
-
+  const { user } = useAuthContext();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [chosenCountry, setChosenCountry] = useState('');
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -22,19 +24,17 @@ function CreateTour() {
   const [selectedDateEnd, setSelectedDateEnd] = useState<Date | null>(null);
   const [errors, setErrors] = useState('');
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [backendError, setBackendError] = useState(null);
   const [tour, setTour] = useState<TourProps>({
     id: 0,
-    fname: '',
-    email:'',
-    img:'',
     date: new Date(),
     tourdate: new Date(),
     tourdateEnd: new Date(),
     destination: '',
-    type: [],
+    tourtype: [],
     fellowtraveler: '',
     aboutme: '',
-    user_id: 4
+    user_id: null
   });
 
   const navigate = useNavigate();
@@ -78,7 +78,7 @@ function CreateTour() {
     });
   };
 
-  const onSubmitFunction = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmitFunction = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     let isValid = true;
     const newErrors: { [key: string]: string } = {};
@@ -94,58 +94,51 @@ function CreateTour() {
     }
     const newTour: TourProps = {
       id: tours.length + 1, // Generate a unique ID
-      fname: tour.fname,
-      email:tour.email,
-      img:tour.img, 
       date: tour.date,
       tourdate: tour.tourdate,
       tourdateEnd: tour.tourdateEnd,
       destination: tour.destination,
-      type: selectedTypes, // Use selectedTypes instead of tour.type
+      tourtype: selectedTypes, // Use selectedTypes instead of tour.type
       fellowtraveler: tour.fellowtraveler,
       aboutme: tour.aboutme,
-      user_id: tour.user_id
+      user_id: user?.id || null
     };
 
-    const fetchData = async () => {
+
       try {
-        const resultTours = await axios.post('/tours.json', newTour);
+        const resultTours = await axios.post(`${BASE_URL}/tours`, newTour, config);
         // Assuming 'tours.json' is the correct endpoint to post the data
         console.log(resultTours.data); // Logging the response data if needed
-      } catch (e) {
-        console.error(e);
+
+        setTours([newTour, ...tours]); // Prepend the new tour to the existing list of tours
+
+        // Reset the tour input
+        setTour({
+          id: 0,
+          date: new Date(),
+          tourdate: new Date(),
+          tourdateEnd: new Date(),
+          destination: '',
+          tourtype: [],
+          fellowtraveler: '',
+          aboutme: '',
+          user_id: user?.id || null
+        });
+        setSelectedDate(null);
+        setSelectedTypes([]);
+        setErrors('');
+        setChosenCountry('');
+        setSearchTerm('');
+        setBackendError(null);
+
+      } catch (err:any) {
+        console.error(err.response.data.error);
+       setBackendError(err.response.data.error);
       }
     };
   
-    fetchData();
 
-    setTours([newTour, ...tours]); // Prepend the new tour to the existing list of tours
-
-    // Reset the tour input
-    setTour({
-      id: 0,
-      fname: '',
-      email:'',
-      img:'',
-      date: new Date(),
-      tourdate: new Date(),
-      tourdateEnd: new Date(),
-      destination: '',
-      type: [],
-      fellowtraveler: '',
-      aboutme: '',
-      user_id: 4
-    });
-    setSelectedDate(null);
-    setSelectedTypes([]);
-    setErrors('');
-    setChosenCountry('');
-    setSearchTerm('');
-
-   // navigate("/spolucesty");
-  };
-
-useEffect(() => {console.log(tours)},[tours])
+//useEffect(() => {console.log(tours)},[tours])
 
   const handleSelectCountry = (country: string) => {
 
@@ -420,8 +413,9 @@ useEffect(() => {console.log(tours)},[tours])
               >
                 Odeslat
               </button>
-            </form>
 
+            </form>
+{backendError ? <p className='text-red-500'>{backendError}</p>: null}
             
           </div>
         </div>

@@ -42,7 +42,7 @@ function Cards() {
 
       try { 
       const fetchData = async () => {
-        const result = await axios.get(`${BASE_URL}/getblogs/${chosenCountry}`);
+        const result = await axios.get(`${BASE_URL}/blogs/${chosenCountry}`);
           setCards(result.data.cards);
           setIsLoading(false)
                    console.log(result.data)
@@ -99,7 +99,7 @@ function Cards() {
         const updatedCard = { ...card, video: embedUrl };
         console.log(updatedCard);
  try{
-        const response = await axios.post(`${BASE_URL}/createblog`, updatedCard, config);
+        const response = await axios.post(`${BASE_URL}/blogs`, updatedCard, config);
       console.log(response)
         if (response.status === 201){ 
           setShowCreateCard(false)

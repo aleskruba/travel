@@ -31,7 +31,7 @@ function LoginDialog() {
   
 
     useEffect(() => {
-      console.log(location.pathname);
+
     }, []);
 
     const validationSchema = Yup.object({

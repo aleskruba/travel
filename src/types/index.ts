@@ -27,13 +27,12 @@ export type MessageProps = {
 
   export type TourMessageProps = {
     id: number;
-    email: string;
     firstName: string;
     date: Date;
     image: string;
     message: string;
-
-    user_id: number  ;
+    user_id: number | null;
+    tour_id: number | null;
   
   };
   
@@ -72,17 +71,17 @@ export type ChosenCountryData = {
 
   export interface TourProps {
     id: number;
-    fname: string;
-    email: string;
-    img: string;
+    firstName?: string;
+    email?: string;
+    image?: string;
     date: Date ;
     tourdate: Date ;
     tourdateEnd: Date;
     destination: string;
-    type: string[];
+    tourtype: string[] ;
     fellowtraveler: string;
     aboutme: string;
-    user_id: number;
+    user_id: number | null;
   }
 
 

@@ -37,7 +37,7 @@ function ResetPassword() {
           value,
           config
         );
-        console.log(response.status);
+    
         if (response.status === 201) {
           setTokenChecked(true);
         }
