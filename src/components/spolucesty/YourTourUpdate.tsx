@@ -7,46 +7,26 @@ import { countryNames } from '../../constants';
 import axios from 'axios';
 import { useTourContext } from '../../context/tourContext';
 import { TourProps } from '../../types';
-
+import { useNavigate } from "react-router-dom";
+import BASE_URL, { config } from '../../config/config';
 
 
 type Props = {
     setUpdateToggle: (value: boolean) => void;
-
+    yourTour:TourProps ,
   };
 
 
-  const YourTourUpdate: React.FC<Props> = ({ setUpdateToggle }) => {
+  const YourTourUpdate: React.FC<Props> = ({ setUpdateToggle,yourTour }) => {
 
+    const navigate = useNavigate();
+    const {yourTours, setYourTours} = useTourContext()
 
-
-    const {tours, setTours} = useTourContext()
-    const yourTour: TourProps = tours[6];
-    console.log(yourTour)
     const dropdownRef = useRef<HTMLDivElement>(null);
-  //  const [chosenCountry, setChosenCountry] = useState('');
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
-   // const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-   // const [selectedDateEnd, setSelectedDateEnd] = useState<Date | null>(null);
     const [errors, setErrors] = useState('');
-    //const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-    const [tour, setTour] = useState<TourProps>({
-      id: 0,
-      date: new Date(),
-      tourdate: new Date(),
-      tourdateEnd: new Date(),
-      destination: '',
-      tourtype: [],
-      fellowtraveler: '',
-      aboutme: '',
-      user_id: 4
-    });
-
-
-  
-   
     const [updateTour, setUpdateTour] = useState<TourProps>({
       id: yourTour.id,
       date: new Date(),
@@ -58,65 +38,136 @@ type Props = {
       aboutme: yourTour.aboutme,
       user_id: yourTour.user_id
     });
-
     const [selectedTypes, setSelectedTypes] = useState<string[]>(yourTour.tourtype);
     const [selectedDate, setSelectedDate] = useState<Date | null>(yourTour.tourdate);
     const [selectedDateEnd, setSelectedDateEnd] = useState<Date | null>(yourTour.tourdateEnd);
     const [chosenCountry, setChosenCountry] = useState(yourTour.destination);
+    const [allowSubmitButton, setAllowSubmitButton] = useState(false);
 
     useEffect(() => {
       setUpdateTour(prevState => ({
         ...prevState,
         type: selectedTypes
       }));
+
     }, [selectedTypes]);
     
+
+    const matchChanges = (updatedState: TourProps, oldState: TourProps): boolean => { 
+      const hasChanges =
+          updatedState.destination !== oldState.destination ||
+          updatedState.tourtype.length !== oldState.tourtype.length ||
+          updatedState.tourtype.some((type, index) => type !== oldState.tourtype[index]) ||
+          updatedState.fellowtraveler !== oldState.fellowtraveler ||
+          updatedState.aboutme !== oldState.aboutme ||
+          new Date(updatedState.tourdate).toISOString() !== yourTour.tourdate.toString() ||
+          new Date(updatedState.tourdateEnd).toISOString() !== yourTour.tourdateEnd.toString() 
     
-    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      return hasChanges;
+    }
+
+
+      const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         const sanitizedValue = DOMPurify.sanitize(value); // Sanitize the value
-        setUpdateTour(prevState => ({
-          ...prevState,
-          [name]: sanitizedValue
-        }));
-      };
     
-      const handleDateChange = (date: Date | null) => {
-        setSelectedDate(date); // Update selectedDate state with the selected date
-        setTour(prevState => ({ ...prevState, tourdate: date || new Date() })); // Update tourdate property in the tour state with the selected date
-      };
-      const filterPastMonths = (date: Date | null)  => {
-        // Disable dates before the selectedDate or in the past
-        if (date && selectedDate) {
-      
-        return date >= selectedDate;
-        }else {
-          return false
-        }
-      };
+        setUpdateTour(prevState => {
+            const newState = { ...prevState, [name]: sanitizedValue };
     
+            // Compare newState and tour to check if any changes have been made
+            const hasChanges =  matchChanges(newState,yourTour)
+    
+            setAllowSubmitButton(hasChanges);
+    
+            return newState;
+        });
+    };
+    
+
+    const filterPastMonths = () => {
+      if (selectedDate && selectedDateEnd) {
+     
+          const dateObj1 = new Date(selectedDate);
+          const dateObj2 = new Date(selectedDateEnd);
+  
+          return dateObj2 >= dateObj1;
+      } else {
+          return false;
+      }
+  };
+  
+
+    const handleDateChange = (date: Date | null) => {
+      setSelectedDate(date); 
+
+      if (date && selectedDateEnd) {
+        if
+         (new Date(date) >= new Date(selectedDateEnd) ) {
+            setSelectedDateEnd(date)
+         };
+      }
+
+      setUpdateTour(prevState => {
+          const newState = { ...prevState, tourdate: date || new Date() };
+  
+          const hasChanges =  matchChanges(newState,yourTour)
+    
+          setAllowSubmitButton(hasChanges);
+                  
+              setAllowSubmitButton(hasChanges);
+            return newState;
+      });
+  };
+  
+    
+          
       const handleDateEndChange = (date: Date | null) => {
-        setSelectedDateEnd(date); // Update selectedDate state with the selected date
-        setUpdateTour(prevState => ({ ...prevState, tourdateEnd: date || new Date() })); // Update tourdate property in the tour state with the selected date
-      };
+        setSelectedDateEnd(date); 
     
+        setUpdateTour(prevState => {
+            const newState = { ...prevState, tourdateEnd: date || new Date() };
+    
+            const hasChanges =  matchChanges(newState,yourTour)
+    
+            setAllowSubmitButton(hasChanges);
+ 
+            return newState;
+        });
+    };
+    
+
+
       const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
+        
         setSelectedTypes(prevSelectedTypes => {
-          if (prevSelectedTypes.includes(value)) {
-            return prevSelectedTypes.filter(type => type !== value);
-          } else {
-            return [...prevSelectedTypes, value];
-          }
-        });
-      };
+            let newSelectedTypes;
+            
+            if (prevSelectedTypes.includes(value)) {
+                newSelectedTypes = prevSelectedTypes.filter(type => type !== value);
+            } else {
+                newSelectedTypes = [...prevSelectedTypes, value];
+            }
     
-      const onSubmitFunction = (event: FormEvent<HTMLFormElement>) => {
+            const newState = {
+              ...yourTour,
+              tourtype: newSelectedTypes
+          };
+
+          setUpdateTour(newState);
+          const hasChanges = matchChanges(newState, yourTour);
+
+          setAllowSubmitButton(hasChanges);
+            return newSelectedTypes;
+        });
+    };
+    
+    
+      const onSubmitFunction = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         let isValid = true;
         const newErrors: { [key: string]: string } = {};
-        console.log()
-    
+   
         if (!updateTour.destination || selectedTypes.length === 0 || !updateTour.fellowtraveler || !updateTour.aboutme || !selectedDate) {
           newErrors['all'] = 'Všechna pole musí být vyplněna';
           isValid = false;
@@ -132,49 +183,43 @@ type Props = {
           tourdate: updateTour.tourdate,
           tourdateEnd: updateTour.tourdateEnd,
           destination: updateTour.destination,
-          tourtype: updateTour.tourtype, // Use selectedTypes instead of tour.type
+          tourtype: updateTour.tourtype, 
           fellowtraveler: updateTour.fellowtraveler,
           aboutme: updateTour.aboutme,
           user_id: updateTour.user_id
         };
 
+        const hasChanges =  matchChanges(newTour,yourTour)
+        setAllowSubmitButton(hasChanges);
 
-    
-  /*       const fetchData = async () => {
-          try {
-            const resultTours = await axios.post('/tours.json', newTour);
-            // Assuming 'tours.json' is the correct endpoint to post the data
-          } catch (e) {
-            console.error(e);
-          }
-        };
-      
-        fetchData(); */
-    
-        const updatedTours = tours.map(tour => {
-          // Check if the current tour's id matches the id of the tour you want to update
-          if (tour.id === updateTour.id) {
-            // If it matches, update the properties with the new values
-            return {
-              ...tour, // Keep the existing properties
-              date: updateTour.date,
-              tourdate: updateTour.tourdate,
-              tourdateEnd: updateTour.tourdateEnd,
-              destination: updateTour.destination,
-              type: updateTour.tourtype,
-              fellowtraveler: updateTour.fellowtraveler,
-              aboutme: updateTour.aboutme,
-              user_id: updateTour.user_id
+        if (!hasChanges) {
+            console.log('žádná změna',newTour);
+            return;
+        }
+
+
+        try {
+         const updatedyourTours = yourTours.map(tour => {
+
+          if (tour.id === newTour.id) {
+                return {
+              ...tour, 
+              date: newTour.date,
+              tourdate: newTour.tourdate,
+              tourdateEnd: newTour.tourdateEnd,
+              destination: newTour.destination,
+              type: newTour.tourtype,
+              fellowtraveler: newTour.fellowtraveler,
+              aboutme: newTour.aboutme,
+              user_id: newTour.user_id
             };
           }
-          // If it doesn't match, return the tour as is
           return tour;
         });
-        
-        // Update the state with the updatedTours array
-        setTours(updatedTours); // Prepend the new tour to the existing list of tours
-    
-        // Reset the tour input
+        setYourTours(updatedyourTours); 
+
+        const resultTours = await axios.put(`${BASE_URL}/yourtours`, newTour, config);
+      
         setUpdateTour({
           id: 0,
           date: new Date(),
@@ -192,19 +237,32 @@ type Props = {
         setChosenCountry('');
         setSearchTerm('');
     
-       // navigate("/spolucesty");
+      navigate("/tvojespolucesty");
+
+        } catch (error) {
+          console.log(error);
+        }
       };
     
-useEffect(() => {console.log(tours) },[tours])
+useEffect(() => {console.log(yourTours) },[yourTours])
 
 
-      const handleSelectCountry = (country: string) => {
+const handleSelectCountry = (country: string) => {
+  setChosenCountry(country);
+  setIsOpen(false);
+  setSearchTerm('');
+
+  setUpdateTour(prevState => {
+      const newState = { ...prevState, destination: country };
+
+      const hasChanges =  matchChanges(newState,yourTour)
     
-        setChosenCountry(country);
-        setIsOpen(false);
-        setSearchTerm('');
-        setUpdateTour(prevState => ({ ...prevState, destination: country}));
-      };
+      setAllowSubmitButton(hasChanges);
+
+      return newState;
+  });
+};
+
       
       const maxDisplayedCountries = 15;
     
@@ -448,7 +506,7 @@ useEffect(() => {console.log(tours) },[tours])
               <div className='text-lightError pb-4 text-xl '>{errors ? errors : ''}</div>
               <div className=' flex justify-center items-center space-x-4 w-full mt-2 mb-2 '>
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white min-w-[150px] font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                className={` ${allowSubmitButton ? ':hover:bg-blue-700  cursor-pointer':' opacity-30  cursor-default py-2 px-4 pointer-events-none ' } bg-blue-500 min-w-[150px]  text-whitefont-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline `}
                 type="submit"
               >
                 Uložit

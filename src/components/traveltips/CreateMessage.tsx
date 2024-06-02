@@ -25,7 +25,7 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ onSubmit, handleChange, u
 
   const addEmoji = (event: any) => {
     const sym = event.unified.split("_");
-    console.log(sym);
+
     const codeArray: any[] = [];
   
     sym.forEach((el: any) => {
@@ -33,7 +33,7 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ onSubmit, handleChange, u
     });
     let emoji = String.fromCodePoint(...codeArray);
   
-    console.log(emoji);
+    
   
     // Ensure the message object is updated correctly
     setMessage((prevMessage: any) => ({

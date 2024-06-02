@@ -178,7 +178,17 @@ const signUp = useGoogleLogin({
       console.log(error)
       console.error(error.response.data.error);
       setBackendErrorGoogle(error.response.data.error)
-    
+      toast.error('Chyba při ukládání',  {
+        position: "top-left",
+        autoClose: 1500,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Flip,
+        });
     }
   }
    }

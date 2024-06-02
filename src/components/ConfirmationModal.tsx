@@ -11,8 +11,8 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ show, onClose, on
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white text-black p-6 rounded shadow-lg max-w-md mx-auto">
+    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
+      <div className="bg-white text-black p-6 rounded shadow-lg max-w-md mx-auto ">
         <h2 className="text-xl mb-4">{message}</h2>
         <div className="flex justify-center space-x-4">
           <button

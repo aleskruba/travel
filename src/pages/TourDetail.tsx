@@ -75,7 +75,7 @@ function TourDetail() {
   const tourStart = moment(tourDetail?.tourdate).format('MMMM');
   const tourEnd = moment(tourDetail?.tourdateEnd).format('MMMM YYYY ');
 
-console.log(moment(tourDetail?.tourdate).format('MMMM') == moment(tourDetail?.tourdateEnd).format('MMMM') )
+//console.log(moment(tourDetail?.tourdate).format('MMMM') == moment(tourDetail?.tourdateEnd).format('MMMM') )
   const [showFoto,setShowFoto] = useState(false)
 
 
@@ -83,7 +83,7 @@ const showFotoFunction = () => {
   setShowFoto(true);
 
 };
-console.log(tourEnd,tourStart)
+// console.log(tourEnd,tourStart)
   return (
   
     <div className='dark:text-white flex flex-col items-center '>
@@ -96,7 +96,7 @@ console.log(tourEnd,tourStart)
  <span className='ml-4'>ZPĚT</span></div>
 
       {!isLoading ? (
-      <div className=' flex flex-col items-center w-full md:px-12 px-1'>
+      <div className=' flex flex-col items-center w-full md:px-12 px-1 py-8'>
       <div className='bg-gray-100 dark:bg-gray-800 rounded-lg min-w-[380px]  w-full shadow-lg  '>
           <div className='mb-4  px-1  md:text-xl'>
    

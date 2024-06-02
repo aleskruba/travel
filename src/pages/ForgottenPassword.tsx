@@ -91,8 +91,7 @@ function ForgottenPasswordDialog() {
         navigate("/resetpassword");
         handleCloseDialog();
       } else {
-        console.log(response);
-
+   
         handleCloseDialog();
         navigate("/");
 

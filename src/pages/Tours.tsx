@@ -23,7 +23,7 @@ function Tours() {
     const fetchData = async () => {
       try {
         const resultTours = await axios.get(`${BASE_URL}/tours`)
-        console.log('resultTours:',resultTours);
+       // console.log('resultTours:',resultTours);
         setTours(resultTours.data.tours);
         setFilteredTours(resultTours.data.tours)
         setIsLoading(false);
@@ -35,7 +35,7 @@ function Tours() {
           
            if ((country || tourType || date)) {
          
-             console.log(country ,tourType ,date)
+           
              setUpdateParams(true)
        
            }
@@ -89,7 +89,7 @@ function Tours() {
     setSelectedCountry(country ? { value: country, label: country } : null);
     setSelectedTourType(tourType ? { value: tourType, label: tourType } : null);
     setSelectedDate(date ? { value: date, label: date } : null);
-    console.log(country, tourType, date)
+    // console.log(country, tourType, date)
 
         if(country || tourType || date) {
         filterTours(country, tourType, date);

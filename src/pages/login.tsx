@@ -77,6 +77,18 @@ function LoginDialog() {
 
       console.error('Error submitting form:', error.response.data);
       setBackendError(error.response.data.error)
+
+      toast.error('Chyba při ukládání',  {
+        position: "top-left",
+        autoClose: 1500,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Flip,
+        });
     } finally {
 
       resetForm();

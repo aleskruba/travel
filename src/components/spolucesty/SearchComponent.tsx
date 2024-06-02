@@ -33,17 +33,17 @@ function SearchComponent({ filterTours, selectedCountry, selectedTourType, selec
 
     const handleCountryChange = (selectedOption: any) => {
         setSelectedCountry(selectedOption);
-        console.log("Selected Country:", selectedOption);
+    //    console.log("Selected Country:", selectedOption);
     };
 
     const handleTourTypeChange = (selectedOption: any) => {
         setSelectedTourType(selectedOption);
-        console.log("Selected Tour Type:", selectedOption);
+       // console.log("Selected Tour Type:", selectedOption);
     };
 
     const handleDateChange = (selectedOption: any) => {
         setSelectedDate(selectedOption);
-        console.log("Selected Date:", selectedOption);
+        // console.log("Selected Date:", selectedOption);
     };
 
     const handleSubmit = () => {

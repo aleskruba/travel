@@ -45,7 +45,7 @@ function Cards() {
         const result = await axios.get(`${BASE_URL}/blogs/${chosenCountry}`);
           setCards(result.data.cards);
           setIsLoading(false)
-                   console.log(result.data)
+          
       };
 
       fetchData();

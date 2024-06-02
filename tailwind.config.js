@@ -18,7 +18,9 @@ module.exports = {
         primaryText: '#4B5563', 
         sky600: '#87CEEB', 
         email: '#00b1b7',
-        facebook: '#3d59c4'
+        facebook: '#3d59c4',
+        shinyblack: '#0d0d0d', // Shiny black
+        nicegray: '#b0b0b0', // Nice gray
       },
       keyframes: {
         fadeOut: {

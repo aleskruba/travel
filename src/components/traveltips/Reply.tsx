@@ -28,16 +28,14 @@ function Reply({setReplyDiv,setReplies,replies,message,setAllowedToDelete,setIsS
 
       const addEmoji = (event: any) => {
         const sym = event.unified.split("_");
-        console.log(sym);
-        const codeArray: any[] = [];
+           const codeArray: any[] = [];
       
         sym.forEach((el: any) => {
           codeArray.push("0x" + el);
         });
         let emoji = String.fromCodePoint(...codeArray);
       
-        console.log(emoji);
-      
+         
         // Ensure the message object is updated correctly
         setReply((prevMessage: any) => ({
           ...prevMessage,
@@ -121,6 +119,7 @@ function Reply({setReplyDiv,setReplies,replies,message,setAllowedToDelete,setIsS
            <div className='absolute top-5 right-2 dark:text-black text-xl cursor-pointer ' onClick={() => setShowEmojiPicker(!showEmojiPicker)} ><BsEmojiGrin /></div> 
         </div>
     <div className="flex justify-center space-x-4">
+      
       <button className="bg-blue-500 w-[80px] text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-700"
               type="submit" 
       >

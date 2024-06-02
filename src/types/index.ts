@@ -38,10 +38,11 @@ export type MessageProps = {
   
   export interface ReplyProps {
     id: number;
-    firstName: string;
-    date: Date;
-    image: string;
+    firstName?: string;
+    date?: Date;
+    image?: string;
     message: string | undefined;
+    messageType?:number | null;
     message_id: number | null;
     user_id: number | null;
   }

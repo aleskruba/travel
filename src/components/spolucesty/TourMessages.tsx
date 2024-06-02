@@ -3,7 +3,7 @@ import ReactPaginate from 'react-paginate';
 import DOMPurify from 'dompurify';
 import axios from 'axios';
 import TourMessage from './TourMessage';
-import { TourMessageProps } from '../../types';
+import { ReplyProps, TourMessageProps } from '../../types';
 import BASE_URL, { config } from '../../config/config';
 import { useAuthContext } from '../../context/authContext';
 import { useParams } from 'react-router-dom';
@@ -30,6 +30,18 @@ function TourMessages() {
   const [tourMessages, setTourMessages] = useState<TourMessageProps[]>([]);
   const [backendError, setBackendError] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [replies, setReplies] = useState<ReplyProps[]>([]);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [allowedToDelete, setAllowedToDelete] = useState(true);
+
+
+  const configGet = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    withCredentials: true,
+
+  };
 
   useEffect(() => {
     if (isNaN(intId)) {
@@ -41,6 +53,9 @@ function TourMessages() {
     const fetchData = async () => {
       try {
         const resultTourMessages = await axios.get(`${BASE_URL}/tourmessages/${intId}`);
+        const resultTourReplies = await axios.get(`${BASE_URL}/tourreplies/${intId}`,configGet);
+      
+        setReplies(resultTourReplies.data.tourReplies);
         setTourMessages(resultTourMessages.data.tourMessages);
         setIsLoading(false);
       } catch (error:any) {
@@ -87,7 +102,7 @@ function TourMessages() {
 
       if (response.status === 201) {
         const updatedMessage = { ...newMessage, id: response.data.message };
-
+        setBackendError('')
         setTourMessages((prevMessages) => [updatedMessage, ...prevMessages].sort((a, b) => b.id - a.id));
         setTourMessage({
           id: 0,
@@ -101,6 +116,7 @@ function TourMessages() {
       }
     } catch (error) {
       console.error(error);
+      setBackendError('Příliš dlouhý text , max 400 znaků ');
     }
   };
 
@@ -154,6 +170,8 @@ function TourMessages() {
                 maxLength={500}
               />
             </div>
+
+            {backendError && <span className='text-red-500'>{backendError}</span>}
           </form>
 
           <div className='flex flex-col mt-4 gap-1'>
@@ -161,7 +179,17 @@ function TourMessages() {
               currentMessages
                 .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) // Reverse sorting order
                 .map((tourMessage, idx) => (
-                  <TourMessage key={idx} tourMessages={tourMessages} tourMessage={tourMessage} setTourMessages={setTourMessages} />
+                  <TourMessage key={idx} 
+                               tourMessages={tourMessages} 
+                               tourMessage={tourMessage} 
+                               setTourMessages={setTourMessages} 
+                               setReplies={setReplies}
+                               replies={replies}
+                               isSubmitted={isSubmitted}
+                               setIsSubmitted={setIsSubmitted}
+                               allowedToDelete={allowedToDelete}
+                               setAllowedToDelete={setAllowedToDelete}
+                               />
                 ))
             ) : (
               <>moment prosím</>

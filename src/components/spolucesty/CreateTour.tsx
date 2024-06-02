@@ -10,7 +10,7 @@ import { useTourContext } from '../../context/tourContext';
 import { useNavigate } from "react-router-dom";
 import { TourProps } from '../../types';
 import BASE_URL, { config } from '../../config/config';
-
+import {  Flip, toast } from 'react-toastify';
 
 function CreateTour() {
   const {tours, setTours} = useTourContext()
@@ -25,6 +25,7 @@ function CreateTour() {
   const [errors, setErrors] = useState('');
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [backendError, setBackendError] = useState(null);
+  const [allowSubmitButton, setAllowSubmitButton] = useState(false);
   const [tour, setTour] = useState<TourProps>({
     id: 0,
     date: new Date(),
@@ -42,19 +43,37 @@ function CreateTour() {
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     const sanitizedValue = DOMPurify.sanitize(value); // Sanitize the value
-    setTour(prevState => ({
-      ...prevState,
-      [name]: sanitizedValue
-    }));
+  
+    setTour(prevState => {
+      const newState = { ...prevState, [name]: sanitizedValue };
+  
+      const hasCompleted = !newState.destination || selectedTypes.length === 0 || !newState.fellowtraveler || !newState.aboutme || !selectedDate ;
+  
+      setAllowSubmitButton(!hasCompleted);
+  
+      return newState;
+    });
   };
+  
 
   const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date); // Update selectedDate state with the selected date
-    setTour(prevState => ({ ...prevState, tourdate: date || new Date() })); // Update tourdate property in the tour state with the selected date
+    setSelectedDate(date); 
+    setSelectedDateEnd(date);// Update selectedDate state with the selected date
+    setTour(prevState => ({ ...prevState, tourdate: date || new Date(), tourdateEnd:  date || new Date()})); // Update tourdate property in the tour state with the selected date
+  
+    if (date && selectedDateEnd) {
+      if
+       (new Date(date) >= new Date(selectedDateEnd) ) {
+          setSelectedDateEnd(date)
+       };
+    }
+
+
   };
   const filterPastMonths = (date: Date | null)  => {
     // Disable dates before the selectedDate or in the past
     if (date && selectedDate) {
+
   
     return date >= selectedDate;
     }else {
@@ -80,23 +99,16 @@ function CreateTour() {
 
   const onSubmitFunction = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    let isValid = true;
-    const newErrors: { [key: string]: string } = {};
 
     if (!tour.destination || selectedTypes.length === 0 || !tour.fellowtraveler || !tour.aboutme || !selectedDate) {
-      newErrors['all'] = 'Všechna pole musí být vyplněna';
-      isValid = false;
+      setErrors('Všechna pole musí být vyplněna');
     }
-
-    if (!isValid) {
-      setErrors(newErrors['all']);
-      return;
-    }
+    
     const newTour: TourProps = {
       id: tours.length + 1, // Generate a unique ID
       date: tour.date,
       tourdate: tour.tourdate,
-      tourdateEnd: tour.tourdateEnd,
+      tourdateEnd: tour.tourdateEnd ,
       destination: tour.destination,
       tourtype: selectedTypes, // Use selectedTypes instead of tour.type
       fellowtraveler: tour.fellowtraveler,
@@ -107,13 +119,11 @@ function CreateTour() {
 
       try {
         const resultTours = await axios.post(`${BASE_URL}/tours`, newTour, config);
-        // Assuming 'tours.json' is the correct endpoint to post the data
-        console.log(resultTours.data); // Logging the response data if needed
 
-        setTours([newTour, ...tours]); // Prepend the new tour to the existing list of tours
+        setTours([newTour, ...tours]); 
 
-        // Reset the tour input
-        setTour({
+        if (resultTours.status === 201 ) {
+            setTour({
           id: 0,
           date: new Date(),
           tourdate: new Date(),
@@ -130,10 +140,35 @@ function CreateTour() {
         setChosenCountry('');
         setSearchTerm('');
         setBackendError(null);
+        navigate('/spolucesty')
+
+        toast.success(resultTours.data.message,  {
+          position: "top-left",
+          autoClose: 1500,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Flip,
+          });
+      }
 
       } catch (err:any) {
         console.error(err.response.data.error);
        setBackendError(err.response.data.error);
+       toast.error('Chyba při ukládání',  {
+        position: "top-left",
+        autoClose: 1500,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Flip,
+        });
       }
     };
   
@@ -408,7 +443,7 @@ function CreateTour() {
               </div>
               <div className='text-lightError pb-4 text-xl '>{errors ? errors : ''}</div>
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+               className={` ${allowSubmitButton ? ':hover:bg-blue-700  cursor-pointer':' opacity-30  cursor-default py-2 px-4 pointer-events-none ' } bg-blue-500 min-w-[150px]  text-whitefont-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline `}
                 type="submit"
               >
                 Odeslat

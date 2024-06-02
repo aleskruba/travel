@@ -100,7 +100,8 @@ const deleteMessage = async () => {
       try {
           const response = await axios.delete(`${BASE_URL}/message`, config);
           setReplyDiv(false);
-        console.log(response);
+
+          
           if (response.status === 201) {
             setAllowedToDelete(true) 
           }
@@ -185,11 +186,11 @@ return (
 > 
 
 
-    <div className="flex flex-col md:flex-row md:items-center gap-4 ">
+    <div className="flex flex-col md:flex-row md:items-center gap-4 relative ">
       <div className="flex  items-center gap-2"> 
          {message.user_id === user?.id &&
                  
-                 <div className={`${!isSubmitted && allowedToDelete ? '' : 'pointer-events-none '} min-w-[25px] text-red-700  cursor-pointer hover:text-red-500`} 
+                 <div className={`${!isSubmitted && allowedToDelete ? '' : 'pointer-events-none '} absolute top-1 right-1 min-w-[25px] text-red-700  cursor-pointer hover:text-red-500`} 
                       onClick={ ()=>handleDeleteMessageClick(message.id)}
                       >
             <FaRegTrashAlt /> 
@@ -213,7 +214,7 @@ return (
      
         </div>
       </div>
-        <div className="md:px-4 break-all" >
+        <div className="md:px-4 pt-4 break-all" >
           <p className="">{message.message} </p>
       </div>
      </div>
@@ -248,6 +249,7 @@ return (
              />
 
     }
+
 
 
 <div className=''>
@@ -302,10 +304,10 @@ return (
 
         <div           className={`shadow-xl rounded-lg transition-opacity duration-1000 ${deletedReply === reply.id ? 'opacity-0  bg-red-500 pointer-events-none '  : 'opacity-100'}`}
         key={reply.id}>
-        <div key={reply.id} className='flex flex-col relative pt-2  border-t border-gray-400 dark:text-gray-100'>
+        <div key={reply.id} className='flex flex-col  pt-2  border-t border-gray-400 dark:text-gray-100 relative'>
           <div className={`flex items-center gap-6 md:gap-2  cursor-pointer mt-1 ${reply.user_id ===  user?.id ? 'pl-1': 'p3-6' }`}>
             {reply.user_id === user?.id &&
-              <div className="text-red-700 hover:text-red-500 absolute top-20 left-24 md:left-4" onClick={() => handleDeleteClick(reply.id)}>
+              <div className="text-red-700 hover:text-red-500 absolute  top-3 right-1" onClick={() => handleDeleteClick(reply.id)}>
              {allowedToDelete &&  <FaRegTrashAlt />}
               </div>
             }
@@ -348,11 +350,11 @@ return (
     }
   })}
 
-
 </div>
 
 
     </div>
+
     <ConfirmationModal
   show={showModal}
   onClose={() => setShowModal(false)}

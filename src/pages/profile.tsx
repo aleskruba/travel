@@ -81,8 +81,6 @@ function Profile() {
         setBackendError('Email  musí mít 4 až 50 znaků F')
       }
       
-      console.log({...user});
-      console.log({...updateUser})
       
       setUser({ ...user, ...updateUser });
 
@@ -134,7 +132,7 @@ function Profile() {
     try {
 
       const response = await axios.put(`${BASE_URL}/updatepassword`, newPassword, config);
-      console.log(response)
+    
       if (response.status === 201) {
         toast.success(response.data.message, {
           position: "top-left",

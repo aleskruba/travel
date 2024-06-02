@@ -91,7 +91,7 @@ const handleUpdateSubmit = async (e: FormEvent<HTMLFormElement>)=> {
 
   try{
     const response = await axios.put(`${BASE_URL}/blogs`, updateCard, config);
-  console.log(response)
+
     if (response.status === 201){ 
 
       toast.success('Váš odkaz byl uspěšně přidán',  {
@@ -142,7 +142,7 @@ if (selectedCardToDelete !== null) {
   const updatedCards = cards.filter(card => card.id !== selectedCardToDelete);
   setCards(updatedCards)
 
-  console.log(selectedCardToDelete)
+ 
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -156,7 +156,7 @@ if (selectedCardToDelete !== null) {
 
   try {
     const response = await axios.delete(`${BASE_URL}/blogs`, config);
-    console.log(response)
+
    if (response.status === 201){ 
     setIsLoadingDelete(false)
       toast.success('Váš video blog byl smazán',  {

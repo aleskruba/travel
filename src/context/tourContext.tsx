@@ -6,13 +6,16 @@ import { TourProps } from '../types';
 interface TourContextProps {
     tours: TourProps[];
     setTours: React.Dispatch<React.SetStateAction<TourProps[]>>; // Corrected type
-  
+    yourTours: TourProps[];
+    setYourTours: React.Dispatch<React.SetStateAction<TourProps[]>>;
 
 }
 
 export const TourContext = createContext<TourContextProps>({
   tours: [],
   setTours: () => {},
+  yourTours: [],
+  setYourTours: () => {},
 
 });
 
@@ -25,12 +28,12 @@ interface TourProviderProps {
 
 export const TourProvider: React.FC<TourProviderProps> = ({ children }) => {
     const [tours, setTours] = useState<TourProps[]>([]);
-
+    const [yourTours, setYourTours] = useState<TourProps[]>([]);
 
   
 
   return (
-    <TourContext.Provider value={{ tours, setTours }}>
+    <TourContext.Provider value={{ tours, setTours,yourTours, setYourTours }}>
       {children}
     </TourContext.Provider>
   );
