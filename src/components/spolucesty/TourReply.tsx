@@ -1,10 +1,12 @@
-import React, { useState, FormEvent, useRef } from 'react';
+import React, { useState, FormEvent, useRef, useEffect } from 'react';
 import DOMPurify from 'dompurify';
 import axios from 'axios';
 import BASE_URL, { config } from '../../config/config';
 import { useAuthContext } from '../../context/authContext';
 import { TourMessageProps, ReplyProps } from '../../types';
-import { GoTriangleDown ,GoTriangleUp } from "react-icons/go";
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
+import { BsEmojiGrin } from "react-icons/bs";
 
 interface Props {
   setReplyDiv: React.Dispatch<boolean>;
@@ -27,6 +29,7 @@ function TourReply({
   const [backendError, setBackendError] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
   const [isPrivate, setIsPrivate] = useState<number | null>(null);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const [reply, setReply] = useState({
     id: 0,
@@ -41,7 +44,7 @@ function TourReply({
 
   const handleChangeReply = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const sanitizedMessage = DOMPurify.sanitize(event.target.value);
-    setReply((prevState) => ({
+      setReply((prevState) => ({
       ...prevState,
       message: sanitizedMessage,
     }));
@@ -104,9 +107,37 @@ function TourReply({
     }
   };
 
+
+
+
+
+  const addEmoji = (event: any) => {
+      const sym = event.unified.split("_");
+  
+      const codeArray: any[] = [];
+    
+      sym.forEach((el: any) => {
+        codeArray.push("0x" + el);
+      });
+      let emoji = String.fromCodePoint(...codeArray);
+    
+      
+    
+      // Ensure the message object is updated correctly
+      setReply((prevMessage: any) => ({
+        ...prevMessage,
+        message: (prevMessage.message || '') + emoji,
+      }));
+    };
+
+    useEffect(() => {
+      setShowEmojiPicker(false)
+    },[reply])
+
   return (
+    <div className='flex flex-col '>
     <form onSubmit={onSubmit} ref={formRef}>
-      <div className="flex flex-col items-center space-y-4 mt-4">
+      <div className="flex flex-col items-center space-y-4 mt-4 relative">
         <textarea
           name="reply"
           value={reply.message}
@@ -116,6 +147,8 @@ function TourReply({
           placeholder="Sdlej svůj názor (max 500 znaků)"
           maxLength={500}
         />
+          <div className='absolute top-5 right-2 dark:text-black text-xl cursor-pointer ' onClick={() => setShowEmojiPicker(!showEmojiPicker)} ><BsEmojiGrin /></div> 
+
         <div className="flex justify-center space-x-4">
           <button
             className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 transition-all duration-300 md:w-[130px] text-xs md:text-base text-white py-2 px-4 rounded-md focus:outline-none focus:ring focus:border-blue-700"
@@ -142,6 +175,16 @@ function TourReply({
         {backendError && <span className='text-red-500'>{backendError}</span>}
       </div>
     </form>
+        <div className='flex justify-center items-center flex-col mt-1 '>
+
+        {showEmojiPicker && (
+         <Picker
+               data={data}
+          onEmojiSelect={addEmoji}
+     />
+      )}
+      </div>
+      </div>
   );
 }
 

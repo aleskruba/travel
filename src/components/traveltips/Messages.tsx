@@ -12,7 +12,7 @@ import BASE_URL, { config } from '../../config/config';
 import CreateMessage from './CreateMessage';
 
 const ITEMS_PER_PAGE = 15;
-type PartialMessageProps = Partial<MessageProps>;
+//type PartialMessageProps = Partial<MessageProps>;
 
 function Messages() {
   const { user } = useAuthContext();
@@ -20,7 +20,16 @@ function Messages() {
   const [currentPage, setCurrentPage] = useState(0);
   const [replies, setReplies] = useState<ReplyProps[]>([]);
   const { chosenCountry } = useCountryContext();
-  const [message, setMessage] = useState<PartialMessageProps>({});
+  const [message, setMessage] = useState<MessageProps>({
+    id: 0,
+    firstName: '',
+    email:'',
+    date: new Date(),
+    image: '',
+    message: '' ,
+    country:'',
+    user_id: null,
+  });
   const [backendError, setBackendError] = useState('');
   const [messages, setMessages] = useState<MessageProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);

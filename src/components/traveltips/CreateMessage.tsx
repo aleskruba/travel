@@ -4,15 +4,15 @@ import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import { BsEmojiGrin } from "react-icons/bs";
 
-type PartialMessageProps = Partial<MessageProps>;
+//type PartialMessageProps = Partial<MessageProps>;
 
 interface CreateMessageProps {
     onSubmit: (event: FormEvent<HTMLFormElement>) => void;
     handleChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
     user: UserProps;
-    message: PartialMessageProps;
+    message: MessageProps;
     backendError: string;
-    setMessage: React.Dispatch<React.SetStateAction<Partial<MessageProps>>>
+    setMessage: React.Dispatch<React.SetStateAction<MessageProps>>
 
 }
 

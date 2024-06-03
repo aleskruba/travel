@@ -7,6 +7,7 @@ import { ReplyProps, TourMessageProps } from '../../types';
 import BASE_URL, { config } from '../../config/config';
 import { useAuthContext } from '../../context/authContext';
 import { useParams } from 'react-router-dom';
+import CreateTourMessage from './CreateTourMessage';
 
 const ITEMS_PER_PAGE = 5;
 
@@ -21,7 +22,7 @@ function TourMessages() {
     firstName: '',
     date: new Date(),
     image: '',
-    message: '',
+    message: '' ,
     user_id: null,
     tour_id: null,
   });
@@ -136,44 +137,14 @@ function TourMessages() {
         <div>Error: {error}</div>
       ) : (
         <>
-          <form onSubmit={onSubmit}>
-            <div className="flex justify-between items-center dark:text-lighTextColor gap-4 bg-gray-100 px-2 py-2 md:rounded-lg shadow-md mt-2">
-              <div className="flex items-center gap-2">
-                <div className="w-14 h-14 overflow-hidden rounded-full">
-                  <img src={user?.image ? user?.image : '/profile.png'} alt="Profile" className="w-full h-full object-cover" />
-                </div>
-              </div>
-              <div className="flex-1 hidden md:flex">
-                <textarea
-                  name="message"
-                  value={tourMessage.message}
-                  onChange={handleChange}
-                  className="w-full py-2 px-4 bg-gray-200 rounded-lg text-black focus:outline-none focus:ring focus:border-blue-500 resize-none"
-                  placeholder="Zde můžeš cestovateli napsat (max 500 characters)"
-                  maxLength={500}
-                />
-              </div>
-              <div>
-                <button type="submit" className="py-2 px-4 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring focus:border-green-700">
-                  Odešli
-                </button>
-              </div>
-            </div>
-
-            <div className="md:hidden">
-              <textarea
-                name="message"
-                value={tourMessage.message}
-                onChange={handleChange}
-                className="w-full py-2 px-4 bg-gray-200 text-black focus:outline-none focus:ring focus:border-blue-500 resize-none"
-                placeholder="Zde můžeš cestovateli napsat"
-                maxLength={500}
-              />
-            </div>
-
-            {backendError && <span className='text-red-500'>{backendError}</span>}
-          </form>
-
+        <CreateTourMessage
+            onSubmit={onSubmit}
+            handleChange={handleChange}
+            tourMessage={tourMessage}
+            backendError={backendError}
+            setTourMessage={setTourMessage}
+        />
+      
           <div className='flex flex-col mt-4 gap-1'>
             {!isLoading ? (
               currentMessages

@@ -19,7 +19,7 @@ export type MessageProps = {
     firstName: string;
     date: Date;
     image: string;
-    message: string | undefined;
+    message: string 
     country:string;
     user_id: number | null;
   
@@ -30,7 +30,7 @@ export type MessageProps = {
     firstName: string;
     date: Date;
     image: string;
-    message: string;
+    message: string ;
     user_id: number | null;
     tour_id: number | null;
   
