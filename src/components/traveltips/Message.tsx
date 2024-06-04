@@ -12,6 +12,8 @@ import BASE_URL from '../../config/config';
 import { motion, useAnimation } from 'framer-motion';
 import ConfirmationModal from '../ConfirmationModal';
 import Modal from '../Modal';
+import useVote from '../../hooks/useVote';
+import { useCountryContext } from '../../context/countryContext';
 
 type Props = {
   messages:MessageProps[];
@@ -37,6 +39,8 @@ const Message: React.FC<Props> = ({messages, message,setMessages,replies,setRepl
     const [showModal, setShowModal] = useState<boolean>(false);
     const [selectedReplyId, setSelectedReplyId] = useState<number | null>(null);
     const [selectedMessageId, setSelectedMessageId] = useState<number | null>(null);
+    const { chosenCountry } = useCountryContext();
+    const {  votes,handleVote,setVotes} = useVote(chosenCountry);
 
     const shakeAnimation = {
       shake: {
@@ -171,7 +175,63 @@ const closeModal = () => {
 };
 
 
+const handleVoteClick = async (voteType: 'thumb_up' | 'thumb_down',message_id:any) => {
+  try {
+    handleVote(voteType,message_id);
 
+    const newValue = votes.map(vote => {
+      if (vote.message_id === message_id && vote.user_id === user?.id) {
+        return { ...vote, vote_type: voteType };
+      }
+      return vote;
+    });
+    
+    const voteExists = votes.some(vote => vote.message_id === message_id && vote.user_id === user?.id);
+    
+    if (!voteExists && user) {
+      newValue.push({
+        message_id: message_id,
+        user_id: user?.id ,
+        vote_type: voteType,
+      });
+    }
+    
+    setVotes(newValue);
+    
+
+    // Optionally, update state or UI after voting
+  } catch (error) {
+    console.error('Error handling vote:', error);
+  }
+};
+
+
+
+const countThumbsUp = (message_id:any) =>{
+
+
+  let counter = 0;
+  votes.forEach(vote => {
+
+        if (vote.message_id === message_id && vote.vote_type === 'thumb_up') {
+            counter++
+          }
+      
+  }) ;
+  return counter 
+}
+
+const countThumbsDown = (message_id:any) =>{
+  let counter = 0;
+  votes.forEach(vote => {
+
+        if (vote.message_id === message_id && vote.vote_type === 'thumb_down') {
+            counter++
+          }
+      
+  }) ;
+  return counter 
+}
 
 return (
   <motion.div
@@ -225,9 +285,18 @@ return (
 
      <div className='flex items-center gap-2'>
         
-         <div className={`${user?.id === message.user_id ? 'pointer-events-none opacity-30 ': 'cursor-pointer'}`}><BiLike/></div>  
-              <div>126</div>
-           <div className={`${user?.id === message.user_id ? 'pointer-events-none opacity-30 ': 'cursor-pointer'}`}><BiDislike/></div>  
+     <div className='flex gap-4'>
+          <div className='flex flex-col'>         
+            <div onClick={() => handleVoteClick('thumb_up',message.id)} className='cursor-pointer'><BiLike /></div>
+               {/* @ts-ignore */}
+            <div>{ countThumbsUp(message.id)}</div>
+          </div>
+          <div className='flex flex-col'>    
+            <div onClick={() => handleVoteClick('thumb_down',message.id)} className='cursor-pointer'><BiDislike /></div>
+             {/* @ts-ignore */}
+            <div>{countThumbsDown((message.id))}</div>
+          </div>
+        </div>
 
 
        {!replyDiv &&  user?.id !== message.user_id  &&

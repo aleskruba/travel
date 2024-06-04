@@ -9,7 +9,7 @@ import { useAuthContext } from '../../context/authContext';
 import { useParams } from 'react-router-dom';
 import CreateTourMessage from './CreateTourMessage';
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 15;
 
 function TourMessages() {
   let { id } = useParams<string>(); // id is of type string | undefined
@@ -163,11 +163,11 @@ function TourMessages() {
                                />
                 ))
             ) : (
-              <>moment prosím</>
+              <>Moment prosím ...</>
             )}
           </div>
 
-          {tourMessages.length > 0 &&
+          {tourMessages.length > ITEMS_PER_PAGE &&
             <ReactPaginate
               previousLabel={'<<'}
               nextLabel={'>>'}

@@ -1,7 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
-import { countryNamesObjects } from '../../constants';
-import { typeOfTourObjects } from '../../constants';
+import { countryNamesObjects, typeOfTourObjects } from '../../constants';
 import { useSearchParams } from 'react-router-dom';
 
 interface SearchComponentProps {
@@ -32,25 +31,25 @@ function SearchComponent({ filterTours, selectedCountry, selectedTourType, selec
     }
 
     const handleCountryChange = (selectedOption: any) => {
-        setSelectedCountry(selectedOption);
-    //    console.log("Selected Country:", selectedOption);
+        setSelectedCountry(selectedOption || null);
     };
 
     const handleTourTypeChange = (selectedOption: any) => {
-        setSelectedTourType(selectedOption);
-       // console.log("Selected Tour Type:", selectedOption);
+        setSelectedTourType(selectedOption || null);
     };
 
     const handleDateChange = (selectedOption: any) => {
-        setSelectedDate(selectedOption);
-        // console.log("Selected Date:", selectedOption);
+        setSelectedDate(selectedOption || null);
     };
 
     const handleSubmit = () => {
         const params = new URLSearchParams(searchParams);
         if (selectedCountry) params.set('country', selectedCountry.value);
+        else params.delete('country');
         if (selectedTourType) params.set('type', selectedTourType.value);
+        else params.delete('type');
         if (selectedDate) params.set('date', selectedDate.value);
+        else params.delete('date');
 
         setSearchParams(params.toString());
         filterTours(selectedCountry ? selectedCountry.value : null, selectedTourType ? selectedTourType.value : null, selectedDate ? selectedDate.value : null);
@@ -76,7 +75,7 @@ function SearchComponent({ filterTours, selectedCountry, selectedTourType, selec
             <Select
                 options={countryNamesObjects}
                 className="basic-single w-full md:w-[200px] flex-shrink-0"
-                classNamePrefix="select "
+                classNamePrefix="select"
                 onChange={handleCountryChange}
                 isClearable={true}
                 value={selectedCountry}

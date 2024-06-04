@@ -11,7 +11,7 @@ import { useCountryContext } from '../../context/countryContext';
 import BASE_URL, { config } from '../../config/config';
 import CreateMessage from './CreateMessage';
 
-const ITEMS_PER_PAGE = 15;
+const ITEMS_PER_PAGE = 10;
 //type PartialMessageProps = Partial<MessageProps>;
 
 function Messages() {
@@ -172,7 +172,9 @@ function Messages() {
 
       <div className="flex flex-col mt-4 gap-1">
         {!isLoading ? (
-          currentMessages.map((message, idx) => (
+   
+   currentMessages
+   .sort((b, a) => new Date(a.date).getTime() - new Date(b.date).getTime()).map((message, idx) => (
             <Message
               key={idx}
               messages={messages}
@@ -192,7 +194,7 @@ function Messages() {
         )}
       </div>
 
-      {messages.length ? (
+      {messages.length > ITEMS_PER_PAGE  ? (
         <ReactPaginate
           previousLabel={'<<'}
           nextLabel={'>>'}

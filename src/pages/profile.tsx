@@ -82,14 +82,13 @@ function Profile() {
       }
       
       
-      setUser({ ...user, ...updateUser });
-
-  
+   
       try {
 
         const response = await axios.put(`${BASE_URL}/updateprofile`, updateUser, config);
    
         if (response.status === 201) {
+          setUser({ ...user, ...updateUser });
           toast.success(response.data.message, {
             position: "top-left",
             autoClose: 1500,

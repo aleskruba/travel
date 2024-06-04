@@ -12,7 +12,7 @@ import { config } from '../../config/config';
 import {  Flip, toast } from 'react-toastify';
 import { useDialogContext } from '../../context/dialogContext';
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 15;
 
 function Cards() {
   const { chosenCountry } = useCountryContext();
@@ -200,7 +200,7 @@ function Cards() {
           ))
         )}
       </div>
-      {chosenCountry && cards?.length ?
+      {chosenCountry && cards?.length > ITEMS_PER_PAGE ?
       <ReactPaginate
         previousLabel={'<<'}
         nextLabel={'>>'}
