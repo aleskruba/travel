@@ -16,6 +16,7 @@ type VoteResponse = {
   id?: number,
   user_id:number | null,
   message_id:string,
+  reply_id?:string,
   vote_type:string,
   vote_date? :Date
 }
@@ -25,15 +26,19 @@ type VoteResponse = {
     const { user } = useAuthContext();
   //const [vote, setVote] = useState<'thumb_up' | 'thumb_down' | null>(null);
   const [votes, setVotes] = useState<VoteResponse[]>([]);
+  const [votesReply, setVotesReply] = useState<VoteResponse[]>([]);
+  const  [isLoading, setIsLoading] = useState(true)
 
 
   useEffect(() => {
     const fetchVotes = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/${chosenCountry}/votes`);
-        console.log(response.data)
+        const responseReply = await axios.get(`${BASE_URL}/${chosenCountry}/votesreply`);
+   
         setVotes(response.data.votes)
-
+        setVotesReply(responseReply.data.votesReply)
+        setIsLoading(false)
       } catch (error) {
         console.error('Error fetching votes:', error);
       }
@@ -55,6 +60,32 @@ type VoteResponse = {
     try {
       const response = await axios.post(`${BASE_URL}/${country}/vote`,newVote,config);
 
+      const responseReply = await axios.post(`${BASE_URL}/${country}/votereply`,newVote,config);
+      console.log(response);
+      if (response.status === 201 ) {
+  
+      }
+    } catch (error) {
+      console.error('Error submitting vote:', error);
+    }
+  }
+  };
+
+  const handleVoteReply = async (voteType: 'thumb_up' | 'thumb_down',reply_id:any,message_id:any) => {
+
+    if (user) {
+
+      const newVote = {
+        user_id: user.id,
+        vote_type: voteType,
+        message_id:message_id,
+        reply_id:reply_id
+      }
+   
+    try {
+      const response = await axios.post(`${BASE_URL}/${country}/votereply`,newVote,config);
+
+
       console.log(response);
       if (response.status === 201 ) {
   
@@ -66,10 +97,13 @@ type VoteResponse = {
   };
 
   return {
-
+    isLoading,
   votes,
   handleVote,
-  setVotes
+  handleVoteReply,
+  setVotes,
+  votesReply,
+  setVotesReply
 };
 };
 

@@ -22,7 +22,6 @@ export const CountryContext = createContext<CountryContextProps>({
     language: '',
     capital: '',
     area: '',
-    timezone: '',
     continent: '',
     flag:''
   },
@@ -46,8 +45,7 @@ export const CountryProvider: React.FC<CountryProviderProps> = ({ children }) =>
     language: '',
     capital: '',
     area: '',
-    timezone: '',
-    continent: '',
+      continent: '',
     flag:'',
   } ) ;
 

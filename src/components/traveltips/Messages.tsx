@@ -10,6 +10,8 @@ import { useDialogContext } from '../../context/dialogContext';
 import { useCountryContext } from '../../context/countryContext';
 import BASE_URL, { config } from '../../config/config';
 import CreateMessage from './CreateMessage';
+import { io } from 'socket.io-client';
+
 
 const ITEMS_PER_PAGE = 10;
 //type PartialMessageProps = Partial<MessageProps>;
@@ -36,12 +38,23 @@ function Messages() {
   const [allowedToDelete, setAllowedToDelete] = useState(true);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  const socket = io('http://localhost:3001');
+
+
+useEffect(()=>{
+socket.on("receive_message",(data: any)=>{
+
+  setMessages([...messages,data.message]);
+});
+},[socket])
+
   useEffect(() => {
     if (!isLoading) {
       setIsLoading(true);
       const fetchData = async () => {
         try {
           const resultMessages = await axios.get(`${BASE_URL}/messages/${chosenCountry}`);
+          console.log(resultMessages)
           const resultReplies = await axios.get(`${BASE_URL}/replies/${chosenCountry}`);
           setReplies(resultReplies.data);
           setMessages(resultMessages.data);
@@ -64,7 +77,7 @@ function Messages() {
     event.preventDefault();
     setAllowedToDelete(false);
     setIsSubmitted(true);
-
+    socket.emit('send_message', {message:message});    
     if (!message.message || !message.message.trim()) {
       setAllowedToDelete(true);
       setIsSubmitted(false);

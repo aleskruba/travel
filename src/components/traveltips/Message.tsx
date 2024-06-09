@@ -26,9 +26,10 @@ type Props = {
   setAllowedToDelete: React.Dispatch<React.SetStateAction<boolean>>
   isSubmitted:boolean
   setIsSubmitted: React.Dispatch<React.SetStateAction<boolean>>
+
 };
 
-const Message: React.FC<Props> = ({messages, message,setMessages,replies,setReplies,allowedToDelete ,isLoading,setIsSubmitted,setAllowedToDelete,isSubmitted}) => {
+const Message: React.FC<Props> = ({messages, message,setMessages,replies,setReplies,allowedToDelete ,setIsSubmitted,setAllowedToDelete,isSubmitted}) => {
 
   const { user} = useAuthContext();
     const [replyDiv, setReplyDiv] = useState<boolean>(false);
@@ -40,7 +41,11 @@ const Message: React.FC<Props> = ({messages, message,setMessages,replies,setRepl
     const [selectedReplyId, setSelectedReplyId] = useState<number | null>(null);
     const [selectedMessageId, setSelectedMessageId] = useState<number | null>(null);
     const { chosenCountry } = useCountryContext();
-    const {  votes,handleVote,setVotes} = useVote(chosenCountry);
+    const {  votes,votesReply,handleVote,handleVoteReply,setVotes,setVotesReply,isLoading} = useVote(chosenCountry);
+    const [liked, setLiked] = useState(false);
+    const [disliked, setdisLiked] = useState(false);
+    const [likedReply, setLikedReply] = useState(false);
+    const [dislikedReply, setdisLikedReply] = useState(false);
 
     const shakeAnimation = {
       shake: {
@@ -176,6 +181,20 @@ const closeModal = () => {
 
 
 const handleVoteClick = async (voteType: 'thumb_up' | 'thumb_down',message_id:any) => {
+
+  if (voteType === 'thumb_up') {
+  setLiked(true);
+  setTimeout(() => {
+    setLiked(false);
+  }, 500); 
+}
+if (voteType === 'thumb_down') {
+  setdisLiked(true);
+  setTimeout(() => {
+    setdisLiked(false);
+  }, 500); 
+}
+
   try {
     handleVote(voteType,message_id);
 
@@ -206,30 +225,88 @@ const handleVoteClick = async (voteType: 'thumb_up' | 'thumb_down',message_id:an
 };
 
 
+const handleVoteClickReply = async (voteType: 'thumb_up' | 'thumb_down',reply_id:any,message_id:any) => {
+  if (voteType === 'thumb_up') {
+    setLikedReply(true);
+    setTimeout(() => {
+      setLikedReply(false);
+    }, 500); 
+  }
+  if (voteType === 'thumb_down') {
+    setdisLikedReply(true);
+    setTimeout(() => {
+      setdisLikedReply(false);
+    }, 500); 
+  }
+
+  try {
+    handleVoteReply(voteType,reply_id,message_id);
+
+    const newValue = votesReply.map(vote => {
+      if (vote.reply_id === reply_id && vote.user_id === user?.id) {
+        return { ...vote, vote_type: voteType };
+      }
+      return vote;
+    });
+    
+    const voteExists = votesReply.some(vote => vote.reply_id === reply_id && vote.user_id === user?.id);
+    
+    if (!voteExists && user) {
+      newValue.push({
+        reply_id:reply_id,
+        message_id: message_id,
+        user_id: user?.id ,
+        vote_type: voteType,
+      });
+    }
+    
+    setVotesReply(newValue);
+    
+
+    // Optionally, update state or UI after voting
+  } catch (error) {
+    console.error('Error handling vote:', error);
+  }
+};
+
 
 const countThumbsUp = (message_id:any) =>{
-
-
   let counter = 0;
   votes.forEach(vote => {
-
-        if (vote.message_id === message_id && vote.vote_type === 'thumb_up') {
+    if (vote.message_id === message_id && vote.vote_type === 'thumb_up') {
             counter++
           }
-      
-  }) ;
+      }) ;
   return counter 
 }
 
 const countThumbsDown = (message_id:any) =>{
   let counter = 0;
   votes.forEach(vote => {
-
-        if (vote.message_id === message_id && vote.vote_type === 'thumb_down') {
+    if (vote.message_id === message_id && vote.vote_type === 'thumb_down') {
             counter++
           }
-      
-  }) ;
+        }) ;
+  return counter 
+}
+
+const countThumbsUpReply = (reply_id:any) =>{
+  let counter = 0;
+  votesReply.forEach(vote => {
+    if (vote.reply_id === reply_id && vote.vote_type === 'thumb_up') {
+            counter++
+          }
+      }) ;
+  return counter 
+}
+
+const countThumbsDownReply = (reply_id:any) =>{
+  let counter = 0;
+  votesReply.forEach(vote => {
+    if (vote.reply_id === reply_id && vote.vote_type === 'thumb_down') {
+            counter++
+          }
+        }) ;
   return counter 
 }
 
@@ -284,19 +361,47 @@ return (
  
 
      <div className='flex items-center gap-2'>
-        
+        {!isLoading &&
      <div className='flex gap-4'>
           <div className='flex flex-col'>         
-            <div onClick={() => handleVoteClick('thumb_up',message.id)} className='cursor-pointer'><BiLike /></div>
-               {/* @ts-ignore */}
+            <div onClick={() => handleVoteClick('thumb_up',message.id)} 
+            className={`
+              ${user?.id === message.user_id ? 'opacity-20 pointer-events-none' : 'cursor-pointer transition-transform'}
+              ${votes.some(vote => String(message.id) === String(vote.message_id) && vote.vote_type ==='thumb_up') 
+                  ? `pointer-events-none text-yellow-500 ${liked 
+                                   ? 'scale-150 rotate-10 text-yellow-500' 
+                                   : 'scale-100 rotate-0 text-yellow-500'} ` 
+                  : `   `}
+       
+            `} >
+            
+                        
+                    
+              
+  
+              <BiLike />
+
+              </div>
+               
             <div>{ countThumbsUp(message.id)}</div>
           </div>
           <div className='flex flex-col'>    
-            <div onClick={() => handleVoteClick('thumb_down',message.id)} className='cursor-pointer'><BiDislike /></div>
-             {/* @ts-ignore */}
+            <div onClick={() => handleVoteClick('thumb_down',message.id)} 
+                      className={`
+                        ${user?.id === message.user_id ? 'opacity-20 pointer-events-none' : 'cursor-pointer transition-transform'}
+                        ${votes.some(vote => String(message.id) === String(vote.message_id) && vote.vote_type ==='thumb_down' && user?.id === vote.user_id) 
+                            ? `pointer-events-none text-red-400 ${disliked 
+                                             ? 'scale-150 rotate-10 text-red-400' 
+                                             : 'scale-100 rotate-0 text-red-400'} ` 
+                            : `   `}
+                 
+                      `} >
+              <BiDislike /></div>
+        
             <div>{countThumbsDown((message.id))}</div>
           </div>
-        </div>
+        </div>}
+
 
 
        {!replyDiv &&  user?.id !== message.user_id  &&
@@ -405,10 +510,39 @@ return (
   
       </div>
         
-         <div className='flex items-center gap-2 md:pl-14'>
-            <div className={`${user?.id === reply.user_id ? 'pointer-events-none opacity-30 ': 'cursor-pointer'}`}><BiLike/></div>  
-              <div>126</div>
-           <div className={`${user?.id === reply.user_id ? 'pointer-events-none opacity-30 ': 'cursor-pointer'}`}><BiDislike/></div>  
+        <div className='flex gap-4 md:pl-14'>
+          <div className='flex flex-col'>         
+            <div onClick={() => handleVoteClickReply('thumb_up',reply.id,message.id)} 
+                  className={`
+                    ${user?.id === reply.user_id ? 'opacity-20 pointer-events-none' : 'cursor-pointer transition-transform'}
+                    ${votesReply.some(vote => String(reply.id) === String(vote.reply_id) && vote.vote_type ==='thumb_up' && user?.id === vote.user_id) 
+                        ? `pointer-events-none text-yellow-500 ${likedReply 
+                                         ? 'scale-150 rotate-10 text-yellow-500' 
+                                         : 'scale-100 rotate-0 text-yellow-500'} ` 
+                        : `   `}
+             
+                  `} >
+              
+              <BiLike /></div>
+               
+            <div>{ countThumbsUpReply(reply.id)}</div>
+          </div>
+          <div className='flex flex-col'>    
+            <div onClick={() => handleVoteClickReply('thumb_down',reply.id,message.id)} 
+          className={`
+            ${user?.id === reply.user_id ? 'opacity-20 pointer-events-none' : 'cursor-pointer transition-transform'}
+            ${votesReply.some(vote => String(reply.id) === String(vote.reply_id) && vote.vote_type ==='thumb_down' && user?.id === vote.user_id) 
+                ? `pointer-events-none text-red-400 ${dislikedReply 
+                                 ? 'scale-150 rotate-10 text-red-400' 
+                                 : 'scale-100 rotate-0 text-red-400'} ` 
+                : `   `}
+     
+          `} >
+              
+              <BiDislike /></div>
+        
+            <div>{countThumbsDownReply((reply.id))}</div>
+          </div>
         </div>
         
       </div>

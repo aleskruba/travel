@@ -1,7 +1,16 @@
-import React from 'react';
+import React,{useEffect, useState} from 'react';
 import Select from 'react-select';
-import { countryNamesObjects, typeOfTourObjects } from '../../constants';
+import {  typeOfTourObjects } from '../../constants';
 import { useSearchParams } from 'react-router-dom';
+import axios from 'axios';
+import BASE_URL from '../../config/config';
+import { TourProps } from '../../types';
+
+type countryNamesObjects =  {
+        value: string;
+        label: string;
+
+}
 
 interface SearchComponentProps {
     filterTours: (country: string | null, tourType: string | null, date: string | Date | null) => void;
@@ -11,9 +20,15 @@ interface SearchComponentProps {
     setSelectedCountry: (selectedCountry: { value: string; label: string } | null) => void;
     setSelectedTourType: (selectedTourType: { value: string; label: string } | null) => void;
     setSelectedDate: (selectedDate: { value: string; label: string } | null) => void;
+    countryNamesObjects: countryNamesObjects[]
 }
 
-function SearchComponent({ filterTours, selectedCountry, selectedTourType, selectedDate, setSelectedCountry, setSelectedTourType, setSelectedDate }: SearchComponentProps) {
+function SearchComponent({ countryNamesObjects,filterTours, selectedCountry, selectedTourType, selectedDate, setSelectedCountry, setSelectedTourType, setSelectedDate }: SearchComponentProps) {
+   
+  
+
+
+   
     const [searchParams, setSearchParams] = useSearchParams();
 
     const futureDates = [];
@@ -60,6 +75,7 @@ function SearchComponent({ filterTours, selectedCountry, selectedTourType, selec
         setSelectedTourType(null);
         setSelectedDate(null);
         filterTours(null, null, null);
+        
 
         setSearchParams({});
     };

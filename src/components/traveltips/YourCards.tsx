@@ -7,6 +7,7 @@ import DOMPurify from 'dompurify';
 import {  Flip, toast } from 'react-toastify';
 import { useAuthContext } from '../../context/authContext';
 import ConfirmationModal from '../ConfirmationModal';
+import { Link } from 'react-router-dom';
 
 function YourCards() {
 
@@ -193,8 +194,19 @@ if (selectedCardToDelete !== null) {
 }
 
 
-return (
-  <div className="grid grid-cols-1 md:grid-cols-auto lg:grid-cols-3 gap-4 border-b-4 border-indigo-500 pb-4">
+return ( <> 
+
+  {!cards.length && <div className="flex flex-col justify-center items-center"> 
+  <div className='dark:text-white'>Nemáš uložený žádný video blog.</div>
+  <div className='dark:text-white'> Uložit video blog můžeš v sekci TravelTips Video Blogy</div>
+   <Link to='/traveltips' className='text-blue-400 underline'> TravelTips</Link>
+
+
+<img src={process.env.PUBLIC_URL + '/emoji.png'} alt="" className='mt-10'/>
+ </div>}
+<div className="grid grid-cols-1 md:grid-cols-auto lg:grid-cols-3 gap-4 border-b-4 border-indigo-500 pb-4">
+
+
     {cards.map((card) => (
       <div key={card.id} className="flex flex-col">
         {updateClick && selectedCard === card.id ? (
@@ -252,6 +264,7 @@ return (
   message="Chceš opravdu smazat tento Blog?"
 />
   </div>
+  </>
 );
 
 }

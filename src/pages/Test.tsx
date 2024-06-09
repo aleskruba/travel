@@ -1,11 +1,30 @@
-import React from 'react'
-
+import React, { useEffect } from 'react'
+import { io } from 'socket.io-client';
 
 function Test() {
+
+    const socket = io('http://localhost:3001');
+
+    const sendMessage = () => {
+      socket.emit('send_message', {message:"hello from client"});    
+    
+    }
+
+useEffect(()=>{
+  socket.on("receive_message",(data: any)=>{
+    console.log(data.message);
+  });
+},[socket])
+
   return (
     <div className='text-black bg-gray-300 px-8 py-8'>
 
-<nav>
+
+
+      <input type="text" placeholder='send message' />
+      <button onClick={()=>sendMessage()}>Send</button>
+
+<nav className='mt-12'>
         <ul className='flex  justify-between items-center'>
             <li className="p-2 bg-red-400 "><a href="#about">About US PS  </a></li>
             <li className="p-2 bg-yellow-400 text-5xl flex-grow flex-shrink-0"><a href="#service">About US </a></li>

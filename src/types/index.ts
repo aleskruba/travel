@@ -22,6 +22,7 @@ export type MessageProps = {
     message: string 
     country:string;
     user_id: number | null;
+    votes_id?: number | null;
   
   };
 
@@ -64,7 +65,6 @@ export type ChosenCountryData = {
     language: string;
     capital: string;
     area: string;
-    timezone: string;
     continent: string;
     flag:string;
   };

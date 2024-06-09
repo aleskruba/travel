@@ -21,6 +21,7 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ onSubmit, handleChange, u
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
 
+ 
 
 
   const addEmoji = (event: any) => {

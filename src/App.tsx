@@ -69,10 +69,13 @@ function App() {
 
                 <Route path="/test" element={<Test />}/> 
                 <Route path='*' element={<NotFound404 />} />
+             
                 </Route>
+      
             </Routes>
+            <Footer/>
           </div>
-          <Footer/>
+     
         </>
       )}
     </div>

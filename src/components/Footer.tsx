@@ -18,7 +18,7 @@ function Footer() {
   ];
 
   return (
-    <footer className="bg-gray-800 text-gray-300  pb-20 ">
+    <footer className="dark:text-lightPrimary pb-20 ">
       <div className=" px-8  flex flex-around border-t border-white  py-8  ">
         <div className="w-full flex justify-center  mb-4 ">
           <div>

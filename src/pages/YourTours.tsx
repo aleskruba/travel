@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { BsArrowReturnLeft } from "react-icons/bs";
 import axios from "axios";
 import BASE_URL from "../config/config";
+import { Link } from 'react-router-dom';
 
 function YourTours() {
 
@@ -58,6 +59,14 @@ function YourTours() {
       </div>
 
       <div className="flex justify-center flex-wrap gap-2">
+
+        {!yourTours.length && <div className="fex flex-col justify-center items-center"> 
+          <div className='dark:text-white'>Nemáš vytvořenou žádnou spolucestu.</div>
+          <div className='dark:text-white'> Přidat novou spolucestu můžeš
+          <Link to='/novacesta' className='text-blue-400 underline'> zde</Link></div>
+     
+        <img src={process.env.PUBLIC_URL + '/emoji.png'} alt="" className='mt-10'/>
+         </div>}
   {!isLoading ? 
   
     yourTours.map(yourTour=> { return (   

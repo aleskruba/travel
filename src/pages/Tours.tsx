@@ -10,6 +10,14 @@ import ReactPaginate from 'react-paginate';
 
 const ITEMS_PER_PAGE = 20;
 
+
+
+type countryNamesObjects =  {
+  value: string;
+  label: string;
+
+}
+
 function Tours() {
   const { tours, setTours } = useTourContext();
   const [filteredTours, setFilteredTours] = useState<TourProps[]>([]);
@@ -20,7 +28,7 @@ function Tours() {
   const [searchParams] = useSearchParams();
   const [updateParams, setUpdateParams] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
-
+  const [countryNamesObjects,setCountryNamesObjects] = useState<countryNamesObjects[]>([])
 
 
   useEffect(() => {
@@ -32,13 +40,33 @@ function Tours() {
         setTours(resultTours.data.tours);
         setFilteredTours(resultTours.data.tours);
         setIsLoading(false);
-
+        
+        if (resultTours.data.tours) {
+          const uniqueDestinations = new Set();
+          const arr = resultTours.data.tours.reduce((acc: { value: string; label: string; }[], tour: { destination: string; }) => {
+            if (!uniqueDestinations.has(tour.destination)) {
+              uniqueDestinations.add(tour.destination);
+              acc.push({
+                value: tour.destination,
+                label: tour.destination
+              });
+            }
+            return acc;
+          }, []);
+      
+          console.log(arr);
+          setCountryNamesObjects(arr);
+        }
+        
         const country = searchParams.get('country');
         const tourType = searchParams.get('type');
         const date = searchParams.get('date') as string | Date | null;
 
         if (country || tourType || date) {
           setUpdateParams(true);
+
+       
+
         }
       } catch (error) {
         console.error('Error fetching tours:', error);
@@ -47,7 +75,7 @@ function Tours() {
     };
 
     fetchData();
-  }, [setTours, searchParams]);
+  }, [ ]);
 
   const filterTours = (country: string | null, tourType: string | null, date: string | Date | null) => {
     let filtered = [...tours];
@@ -112,10 +140,11 @@ function Tours() {
           setSelectedCountry={setSelectedCountry}
           setSelectedTourType={setSelectedTourType}
           setSelectedDate={setSelectedDate}
+          countryNamesObjects={countryNamesObjects}
         />
       </div>
 
-      <div className="flex flex-wrap justify-center gap-4 mt-4">
+      <div className="flex flex-wrap justify-center gap-4 mt-4 dark:text-white">
         {isLoading ? (
           <p>Moment prosím ...</p>
         ) : (
@@ -123,7 +152,12 @@ function Tours() {
           currentMessages.length > 0 ?
             currentMessages.map((tour) => <Tour key={tour.id} tour={tour} />)
                                     :
-              <>  Žádná shoda     </>
+              <div className='flex justify-center items-center flex-col pb-52'>  Žádná shoda  
+              
+              <div className='w-64 h-64'>
+              <img src={process.env.PUBLIC_URL + '/emojisad.png'} alt="" className='flex pt-12 w-full object-cover'/>
+              </div>
+                 </div>
         )}
       </div>
 
