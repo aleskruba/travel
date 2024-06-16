@@ -8,7 +8,7 @@ import { ReplyProps } from '../../types';
 import { useAuthContext } from '../../context/authContext';
 import { useDialogContext } from '../../context/dialogContext';
 import { useCountryContext } from '../../context/countryContext';
-import BASE_URL, { config } from '../../config/config';
+import BASE_URL, { SOCKET_URL, config } from '../../config/config';
 import CreateMessage from './CreateMessage';
 import { io } from 'socket.io-client';
 
@@ -37,16 +37,88 @@ function Messages() {
   const [isLoading, setIsLoading] = useState(false);
   const [allowedToDelete, setAllowedToDelete] = useState(true);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [replyDiv, setReplyDiv] = useState<boolean>(false);
 
-  const socket = io('http://localhost:3001');
+  const socket = io(SOCKET_URL);
+
+  useEffect(() => {
+    socket.on('receive_message', (data) => {
+      console.log(data);
+      console.log(data.user_id,user?.id   );
+      if (data.user_id !== user?.id ) {
+   
+        setMessages((prevMessages) => [...prevMessages, data].sort((a, b) => b.id - a.id));
+      }
+    });
 
 
-useEffect(()=>{
-socket.on("receive_message",(data: any)=>{
+    socket.on('receive_deleted_message', (data) => {
 
-  setMessages([...messages,data.message]);
-});
-},[socket])
+      console.log(data);
+      console.log(data.messages,data.messageID,user?.id);
+     // console.log(data.messages.some((message: { id: any, user_id:any; }) => message.id == data.messageID && message.user_id != user?.id))
+      if (data.messages.some((message: { id: any, user_id:any; }) => message.id == data.messageID && message.user_id != user?.id)) {
+
+        const newValue = data.messages.map((element: { id: any; }) => {
+          if (element.id === data.messageID) {
+            return { ...element, message:'TATO ZPRÁVA BYLA SMAZÁNA !!!!!' };
+          }
+          return element;
+        });
+      
+        setMessages(newValue);
+        setReplyDiv(false)
+        const updatedMessages = data.messages.filter((message: { id: any; }) => message.id !== data.messageID);
+
+   
+        setTimeout(()=>{   setMessages(updatedMessages)},1100) 
+
+    }
+    });
+
+
+    socket.on('receive_reply', (data) => {
+      console.log(data);
+      if (data.user_id !== user?.id ) {
+        console.log('socket', data.senderId);
+        setReplies((prevReplies) => [...prevReplies, data].sort((a, b) => b.id - a.id)
+      );
+      }
+    });
+    
+
+    socket.on('receive_deleted_reply', (data) => {
+      console.log(data);
+      if (data.replies.some((reply: { id: any, user_id:any; }) => reply.id == data.replyID && reply.user_id != user?.id)) {
+
+        const newValue = data.replies.map((element: { id: any; }) => {
+          if (element.id === data.replyID) {
+            return { ...element, message:'TATO ZPRÁVA BYLA SMAZÁNA !!!!!' };
+          }
+          return element;
+        });
+        setReplyDiv(false)
+        setReplies(newValue);
+        const updatedReplies = data.replies.filter((reply: { id: any; }) => reply.id !== data.replyID);
+
+   
+        setTimeout(()=>{   setReplies(updatedReplies)},1100) 
+    }
+  });
+
+    return () => {
+      socket.off('receive_message');
+      socket.off('receive_reply');
+      socket.off('receive_deleted_message');
+      socket.off('receive_deleted_reply');
+    };
+  }, [user, chosenCountry]);
+
+  useEffect(() => {
+    if (chosenCountry) {
+        socket.emit('join_room', chosenCountry, user?.id);
+    }
+  }, [chosenCountry, user?.id]);
 
   useEffect(() => {
     if (!isLoading) {
@@ -54,7 +126,7 @@ socket.on("receive_message",(data: any)=>{
       const fetchData = async () => {
         try {
           const resultMessages = await axios.get(`${BASE_URL}/messages/${chosenCountry}`);
-          console.log(resultMessages)
+    
           const resultReplies = await axios.get(`${BASE_URL}/replies/${chosenCountry}`);
           setReplies(resultReplies.data);
           setMessages(resultMessages.data);
@@ -77,7 +149,8 @@ socket.on("receive_message",(data: any)=>{
     event.preventDefault();
     setAllowedToDelete(false);
     setIsSubmitted(true);
-    socket.emit('send_message', {message:message});    
+
+       
     if (!message.message || !message.message.trim()) {
       setAllowedToDelete(true);
       setIsSubmitted(false);
@@ -93,8 +166,10 @@ socket.on("receive_message",(data: any)=>{
     }
 
     try {
+      const newMessageId = messages.reduce((maxId, msg) => Math.max(msg.id, maxId), 0) + 1;
+
       const newMessage = {
-        id: messages.length + 1,
+        id: newMessageId,
         email: user?.email || '',
         country: chosenCountry,
         firstName: user?.firstName || '',
@@ -104,12 +179,17 @@ socket.on("receive_message",(data: any)=>{
         user_id: user?.id || 0
       };
 
+
       const response = await axios.post(`${BASE_URL}/message`, newMessage, config);
       setAllowedToDelete(true);
-      
       if (response.status === 201) {
-        const updatedMessage = { ...newMessage, id: response.data.message };
-        setMessages((prevMessages) => [updatedMessage, ...prevMessages].sort((a, b) => b.id - a.id));
+
+           
+      const updatedMessage = { ...newMessage, id: response.data.message };
+      
+      socket.emit('send_message', {message:updatedMessage,chosenCountry});    
+      setMessages((prevMessages) => [updatedMessage, ...prevMessages].sort((a, b) => b.id - a.id));      
+
         setIsSubmitted(false);
         setMessage({
           id: 0,
@@ -167,12 +247,13 @@ socket.on("receive_message",(data: any)=>{
     <div className="flex flex-col px-2 md:px-4 w-full">
       {user ? (
         <CreateMessage
-          onSubmit={handleSubmit}
+        handleSubmit={handleSubmit}
           handleChange={handleChange}
           user={user}
           message={message}
           backendError={backendError}
           setMessage={setMessage}
+          allowedToDelete={allowedToDelete}
         />
       ) : (
         <div className="p-4 bg-blue-100 text-blue-800 border border-blue-300 rounded-md shadow-lg">
@@ -200,6 +281,9 @@ socket.on("receive_message",(data: any)=>{
               isLoading={isLoading}
               isSubmitted={isSubmitted}
               setIsSubmitted={setIsSubmitted}
+              replyDiv={replyDiv}
+               setReplyDiv={setReplyDiv}
+     
             />
           ))
         ) : (

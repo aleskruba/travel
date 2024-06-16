@@ -8,12 +8,15 @@ import { MessageProps } from '../../types';
 import { ReplyProps } from '../../types';
 import { useAuthContext } from '../../context/authContext';
 import axios from 'axios';
-import BASE_URL from '../../config/config';
+import BASE_URL, { SOCKET_URL } from '../../config/config';
 import { motion, useAnimation } from 'framer-motion';
 import ConfirmationModal from '../ConfirmationModal';
 import Modal from '../Modal';
 import useVote from '../../hooks/useVote';
 import { useCountryContext } from '../../context/countryContext';
+import { useNavigate  } from 'react-router-dom';
+import { useDialogContext } from '../../context/dialogContext';
+import { io } from 'socket.io-client';
 
 type Props = {
   messages:MessageProps[];
@@ -26,19 +29,22 @@ type Props = {
   setAllowedToDelete: React.Dispatch<React.SetStateAction<boolean>>
   isSubmitted:boolean
   setIsSubmitted: React.Dispatch<React.SetStateAction<boolean>>
+  replyDiv:  boolean
+  setReplyDiv:React.Dispatch<React.SetStateAction<boolean>>
 
 };
 
-const Message: React.FC<Props> = ({messages, message,setMessages,replies,setReplies,allowedToDelete ,setIsSubmitted,setAllowedToDelete,isSubmitted}) => {
+const Message: React.FC<Props> = ({messages, message,replyDiv, setReplyDiv,setMessages,replies,setReplies,allowedToDelete ,setIsSubmitted,setAllowedToDelete,isSubmitted}) => {
 
   const { user} = useAuthContext();
-    const [replyDiv, setReplyDiv] = useState<boolean>(false);
+
     const [hiddenAnswers,setHiddenAnswes] = useState(true);
     const [deleted, setDeleted] = useState(false);
     const controls = useAnimation();
     const[deletedReply,setDeletedReply] = useState<number | null>(null);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [selectedReplyId, setSelectedReplyId] = useState<number | null>(null);
+    const [selectedReplyDivId, setSelectedReplyDivId] = useState<number | null>(null);
     const [selectedMessageId, setSelectedMessageId] = useState<number | null>(null);
     const { chosenCountry } = useCountryContext();
     const {  votes,votesReply,handleVote,handleVoteReply,setVotes,setVotesReply,isLoading} = useVote(chosenCountry);
@@ -46,6 +52,9 @@ const Message: React.FC<Props> = ({messages, message,setMessages,replies,setRepl
     const [disliked, setdisLiked] = useState(false);
     const [likedReply, setLikedReply] = useState(false);
     const [dislikedReply, setdisLikedReply] = useState(false);
+    const { handleLoginClick } = useDialogContext();
+    const navigate = useNavigate();
+    const socket = io(SOCKET_URL);
 
     const shakeAnimation = {
       shake: {
@@ -84,14 +93,17 @@ const handleDeleteMessageClick = (ID: number) => {
 const deleteMessage = async () => {
 
   if (selectedMessageId !== null)  {
-      setAllowedToDelete(false)
+    setAllowedToDelete(false)
+    setTimeout(()=>{setAllowedToDelete(true)},1500) 
+      
       setShowModal(false);
       setDeleted(true)
            
      
+      socket.emit('delete_message', {messageID:selectedMessageId,messages:messages,chosenCountry});
           const updatedMessages = messages.filter(message => message.id !== selectedMessageId);    
   
-
+           
           setTimeout(()=>{setMessages(updatedMessages)},1500) 
 
 
@@ -109,10 +121,10 @@ const deleteMessage = async () => {
       try {
           const response = await axios.delete(`${BASE_URL}/message`, config);
           setReplyDiv(false);
-
           
           if (response.status === 201) {
-            setAllowedToDelete(true) 
+
+        
           }
         } catch (error) {
           console.error("Error deleting message:", error);
@@ -133,6 +145,9 @@ const deleteReply = async () => {
     setAllowedToDelete(false)
     setDeletedReply(selectedReplyId)
     setShowModal(false);
+
+
+    socket.emit('delete_reply', {replyID:selectedReplyId,replies:replies,chosenCountry});
     const updatedReplies = replies.filter(reply => reply.id !== selectedReplyId);
 
    
@@ -182,13 +197,18 @@ const closeModal = () => {
 
 const handleVoteClick = async (voteType: 'thumb_up' | 'thumb_down',message_id:any) => {
 
+  if (!user) {
+    navigate('/')
+    handleLoginClick()
+  } 
+
   if (voteType === 'thumb_up') {
   setLiked(true);
   setTimeout(() => {
     setLiked(false);
   }, 500); 
 }
-if (voteType === 'thumb_down') {
+else if (voteType === 'thumb_down') {
   setdisLiked(true);
   setTimeout(() => {
     setdisLiked(false);
@@ -226,6 +246,12 @@ if (voteType === 'thumb_down') {
 
 
 const handleVoteClickReply = async (voteType: 'thumb_up' | 'thumb_down',reply_id:any,message_id:any) => {
+
+  if (!user) {
+    navigate('/')
+    handleLoginClick()
+  } 
+  
   if (voteType === 'thumb_up') {
     setLikedReply(true);
     setTimeout(() => {
@@ -359,19 +385,18 @@ return (
 
 
  
-
      <div className='flex items-center gap-2'>
         {!isLoading &&
      <div className='flex gap-4'>
           <div className='flex flex-col'>         
             <div onClick={() => handleVoteClick('thumb_up',message.id)} 
             className={`
-              ${user?.id === message.user_id ? 'opacity-20 pointer-events-none' : 'cursor-pointer transition-transform'}
-              ${votes.some(vote => String(message.id) === String(vote.message_id) && vote.vote_type ==='thumb_up') 
-                  ? `pointer-events-none text-yellow-500 ${liked 
-                                   ? 'scale-150 rotate-10 text-yellow-500' 
-                                   : 'scale-100 rotate-0 text-yellow-500'} ` 
-                  : `   `}
+              ${user?.id === message.user_id ? 'opacity-20 pointer-events-none' : `cursor-pointer transition-transform
+                ${liked 
+                                   ? 'scale-150 rotate-10 ' 
+                                   : 'scale-100 rotate-0 '}
+                `}
+     
        
             `} >
             
@@ -387,15 +412,16 @@ return (
           </div>
           <div className='flex flex-col'>    
             <div onClick={() => handleVoteClick('thumb_down',message.id)} 
-                      className={`
-                        ${user?.id === message.user_id ? 'opacity-20 pointer-events-none' : 'cursor-pointer transition-transform'}
-                        ${votes.some(vote => String(message.id) === String(vote.message_id) && vote.vote_type ==='thumb_down' && user?.id === vote.user_id) 
-                            ? `pointer-events-none text-red-400 ${disliked 
-                                             ? 'scale-150 rotate-10 text-red-400' 
-                                             : 'scale-100 rotate-0 text-red-400'} ` 
-                            : `   `}
-                 
-                      `} >
+                 className={`
+                  ${user?.id === message.user_id ? 'opacity-20 pointer-events-none' : `cursor-pointer transition-transform
+                    ${disliked 
+                                       ? 'scale-150 rotate-10 ' 
+                                       : 'scale-100 rotate-0 '}
+                    `}
+         
+           
+                `} >
+                
               <BiDislike /></div>
         
             <div>{countThumbsDown((message.id))}</div>
@@ -406,20 +432,22 @@ return (
 
        {!replyDiv &&  user?.id !== message.user_id  &&
      <button className='bg-gray-300 text-gray-700 px-4 py-1 text-sm	 rounded-full hover:bg-gray-400 focus:outline-none focus:ring focus:border-gray-500'
-             onClick={()=>{setReplyDiv(true);setHiddenAnswes(false)}} >
+             onClick={()=>{setReplyDiv(true);setHiddenAnswes(false);setSelectedReplyDivId(message.id )}} >
         Odpověz
       </button>
       }
 
 
     </div>
-    {replyDiv &&
+    
+    {replyDiv && message.id === selectedReplyDivId &&
         <Reply setReplyDiv={setReplyDiv} 
              setReplies={setReplies}
              replies={replies} 
              message={message}
              setAllowedToDelete={setAllowedToDelete}
              setIsSubmitted={setIsSubmitted}
+      
              />
 
     }
@@ -500,7 +528,7 @@ return (
             </div>
             <div className="flex gap-1 ">
             <p className={` ${reply.user_id ===  user?.id ? 'text-red-600 dark:text-lightAccent' : 'text-gray-600 dark:text-gray-100' }  font-bold  `}>{reply.firstName ? reply.firstName.slice(0, 10) : '' }</p>
-            <p className="text-gray-600  dark:bg-gray-500 dark:text-gray-100 italic">   {displayText}</p>
+            <p className="text-gray-600  dark:bg-gray-500 dark:text-gray-100 italic">  text {displayText}</p>
             </div>
           </div>
          
@@ -513,15 +541,15 @@ return (
         <div className='flex gap-4 md:pl-14'>
           <div className='flex flex-col'>         
             <div onClick={() => handleVoteClickReply('thumb_up',reply.id,message.id)} 
-                  className={`
-                    ${user?.id === reply.user_id ? 'opacity-20 pointer-events-none' : 'cursor-pointer transition-transform'}
-                    ${votesReply.some(vote => String(reply.id) === String(vote.reply_id) && vote.vote_type ==='thumb_up' && user?.id === vote.user_id) 
-                        ? `pointer-events-none text-yellow-500 ${likedReply 
-                                         ? 'scale-150 rotate-10 text-yellow-500' 
-                                         : 'scale-100 rotate-0 text-yellow-500'} ` 
-                        : `   `}
-             
-                  `} >
+                     className={`
+                  ${user?.id === message.user_id ? 'opacity-20 pointer-events-none' : `cursor-pointer transition-transform
+                    ${likedReply 
+                                       ? 'scale-150 rotate-10 ' 
+                                       : 'scale-100 rotate-0 '}
+                    `}
+         
+           
+                `} >
               
               <BiLike /></div>
                
@@ -529,15 +557,15 @@ return (
           </div>
           <div className='flex flex-col'>    
             <div onClick={() => handleVoteClickReply('thumb_down',reply.id,message.id)} 
-          className={`
-            ${user?.id === reply.user_id ? 'opacity-20 pointer-events-none' : 'cursor-pointer transition-transform'}
-            ${votesReply.some(vote => String(reply.id) === String(vote.reply_id) && vote.vote_type ==='thumb_down' && user?.id === vote.user_id) 
-                ? `pointer-events-none text-red-400 ${dislikedReply 
-                                 ? 'scale-150 rotate-10 text-red-400' 
-                                 : 'scale-100 rotate-0 text-red-400'} ` 
-                : `   `}
-     
-          `} >
+                  className={`
+                    ${user?.id === message.user_id ? 'opacity-20 pointer-events-none' : `cursor-pointer transition-transform
+                      ${dislikedReply 
+                                         ? 'scale-150 rotate-10 ' 
+                                         : 'scale-100 rotate-0 '}
+                      `}
+           
+             
+                  `} >
               
               <BiDislike /></div>
         

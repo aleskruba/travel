@@ -1,12 +1,14 @@
 import React, { useState, FormEvent, useRef, useEffect } from 'react';
 import DOMPurify from 'dompurify';
 import axios from 'axios';
-import BASE_URL, { config } from '../../config/config';
+import BASE_URL, { SOCKET_URL, config } from '../../config/config';
 import { useAuthContext } from '../../context/authContext';
 import { TourMessageProps, ReplyProps } from '../../types';
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import { BsEmojiGrin } from "react-icons/bs";
+import { io } from 'socket.io-client';
+import { useParams } from 'react-router-dom';
 
 interface Props {
   setReplyDiv: React.Dispatch<boolean>;
@@ -33,7 +35,7 @@ function TourReply({
 
   const [reply, setReply] = useState({
     id: 0,
-    firstName: '',
+    firstName: user?.firstName || '',
     date: new Date(),
     image: '',
     messageType: null,
@@ -41,6 +43,12 @@ function TourReply({
     message_id: null,
     user_id: null,
   });
+
+  
+  const socket = io(SOCKET_URL);
+
+  let { id } = useParams<string>(); // id is of type string | undefined
+  const intId = id ? parseInt(id) : NaN;
 
   const handleChangeReply = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const sanitizedMessage = DOMPurify.sanitize(event.target.value);
@@ -60,7 +68,7 @@ function TourReply({
     }, 0);
   };
 
-  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const onSubmitFunction = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (user) {
       if (!tourMessage.message || !tourMessage.message.trim()) {
@@ -72,19 +80,29 @@ function TourReply({
         return;
       }
       try {
+        const newReplyId = replies.reduce((maxId, msg) => Math.max(msg.id, maxId), 0) + 1;
+
         const newReply = {
-          id: replies.length + 1, // Generate a unique ID
+          id: newReplyId,
           image: user?.image || '',
+          firstName:reply.firstName,
           messageType: isPrivate,
           message: reply.message,
           message_id: tourMessage.id,
           user_id: user.id,
         };
+        console.log(newReply);
 
         const response = await axios.post(`${BASE_URL}/tourreplies`, newReply, config);
 
         if (response.status === 201) {
           const updatedMessage = { ...newReply, id: response.data.message };
+          console.log("send_message_tour",updatedMessage);
+          if (isPrivate === 1) {
+            socket.emit('send_private_reply_tour',  {reply:updatedMessage,tour_room:tourMessage.user_id} );
+          } else 
+          socket.emit('send_reply_tour', {reply:updatedMessage,tour_room: intId.toString(),user_id:user?.id});    
+
           setReplies((prevMessages) => [updatedMessage, ...prevMessages].sort((a, b) => b.id - a.id));
           setBackendError('')
           setReply({
@@ -136,7 +154,7 @@ function TourReply({
 
   return (
     <div className='flex flex-col '>
-    <form onSubmit={onSubmit} ref={formRef}>
+    <form onSubmit={onSubmitFunction} ref={formRef}>
       <div className="flex flex-col items-center space-y-4 mt-4 relative">
         <textarea
           name="reply"

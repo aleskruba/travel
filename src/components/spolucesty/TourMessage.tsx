@@ -8,10 +8,12 @@ import TourReply from './TourReply';
 import { TourMessageProps } from '../../types';
 import { ReplyProps } from '../../types';
 import { useAuthContext } from '../../context/authContext';
-import BASE_URL from '../../config/config';
+import BASE_URL, { SOCKET_URL } from '../../config/config';
 import axios from 'axios';
 import ConfirmationModal from '../ConfirmationModal';
 import Modal from '../Modal';
+import { io } from 'socket.io-client';
+import { useParams } from 'react-router-dom';
 
 type Props = {
     tourMessages:TourMessageProps[];
@@ -30,10 +32,14 @@ const TourMessage: React.FC<Props> = ({tourMessages, tourMessage,setTourMessages
   const { user} = useAuthContext();
   const [selectedMessageId, setSelectedMessageId] = useState<number | null>(null);
   const [selectedReplyId, setSelectedReplyId] = useState<number | null>(null);
+  const [selectedReplyDivId, setSelectedReplyDivId] = useState<number | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [replyDiv, setReplyDiv] = useState<boolean>(false);
   const [hiddenAnswers,setHiddenAnswes] = useState(true);
   const[deletedReply,setDeletedReply] = useState<number | null>(null);
+  const socket = io(SOCKET_URL);
+  let { id } = useParams<string>(); // id is of type string | undefined
+  const intId = id ? parseInt(id) : NaN;
+  const [replyDiv, setReplyDiv] = useState<boolean>(false);
 
 const handleDeleteMessageClick = (ID: number) => {
   setSelectedMessageId(ID);
@@ -43,6 +49,8 @@ const handleDeleteMessageClick = (ID: number) => {
 const deleteMessage = async () => {
   const updatedMessages = tourMessages.filter(message => message.id !== selectedMessageId);
   setAllowedToDelete(false)
+
+  socket.emit('delete_message_tour', {messageID:selectedMessageId,messages:tourMessages,tour_room: intId.toString()});
   
   const config = {
     headers: {
@@ -82,6 +90,9 @@ const deleteReply = async () => {
     setAllowedToDelete(false)
     setDeletedReply(selectedReplyId)
     setShowModal(false);
+
+    socket.emit('delete_reply_tour', {replyID:selectedReplyId,replies:replies,tour_room: intId.toString()});
+
     const updatedReplies = replies.filter(reply => reply.id !== selectedReplyId);
 
    
@@ -164,11 +175,11 @@ return (
 
       {!replyDiv &&  user?.id !== tourMessage.user_id  &&
       <button className='bg-gray-300 text-gray-700 px-4 py-1 text-sm mt-2	w-[100px] rounded-full hover:bg-gray-400 focus:outline-none focus:ring focus:border-gray-500'
-             onClick={()=>{setReplyDiv(!replyDiv);setHiddenAnswes(false)}} >
+             onClick={()=>{setReplyDiv(!replyDiv);setHiddenAnswes(false);setSelectedReplyDivId(tourMessage.id )}} >
         Odpověz
       </button>
   }
-      {replyDiv &&
+      {replyDiv && tourMessage.id === selectedReplyDivId &&
         <TourReply setReplyDiv={setReplyDiv} 
              setReplies={setReplies}
              replies={replies} 
@@ -234,7 +245,7 @@ return (
         <div           className={`shadow-xl rounded-lg transition-opacity duration-1000 ${deletedReply === reply.id ? 'opacity-0  bg-red-500 pointer-events-none '  : 'opacity-100'}`}
         key={reply.id}>
         <div key={reply.id} className={`${reply?.messageType === 1 ? 'dark:bg-gradient-to-r dark:from-shinyblack to-gray dark:text-white rounded-lg bg-gradient-to-r bg-gray-300 to-gray-400 ':''} flex flex-col px-1 relative pt-2 pb-2  border-t border-gray-400 dark:text-gray-100`}>
-        <span className='absolute text-xs left-16 top-1 px-6 text-center'>{reply.messageType == 1 ? `Tato zpáva je zašifrovaná a vidí ji pouze uživatel ${user?.firstName} a ${tourMessage.firstName} `:''}</span>
+        <span className='absolute text-xs left-16 top-1 px-6 text-center'>{reply.messageType == 1 ? `Tato zpáva je zašifrovaná a vidí ji pouze ${tourMessage.firstName}  a ${reply.firstName} `:''}</span>
           <div className={`flex items-center gap-6 md:gap-2 px-2   mt-1 ${reply.user_id ===  user?.id ? 'pl-1': 'p3-6' }`}>
             {reply.user_id === user?.id &&
               <div className="text-red-700 hover:text-red-500 absolute  cursor-pointer top-1 right-1 " onClick={() => handleDeleteClick(reply.id)}>

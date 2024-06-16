@@ -8,14 +8,14 @@ import { useAuthContext } from '../../context/authContext';
 //type PartialMessageProps = Partial<TourMessageProps>;
 
 interface CreateTourMessageProps {
-    onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  onSubmitFunction: (event: FormEvent<HTMLFormElement>) => void;
     handleChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
     tourMessage: TourMessageProps;
     backendError: string;
     setTourMessage: React.Dispatch<React.SetStateAction<TourMessageProps>>;
   }
 
-const  CreateTourMessage: React.FC<CreateTourMessageProps> = ({ onSubmit, handleChange,  tourMessage, backendError, setTourMessage }) => {
+const  CreateTourMessage: React.FC<CreateTourMessageProps> = ({ onSubmitFunction, handleChange,  tourMessage, backendError, setTourMessage }) => {
     const { user } = useAuthContext();
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
@@ -46,7 +46,7 @@ const  CreateTourMessage: React.FC<CreateTourMessageProps> = ({ onSubmit, handle
 
 return (
     <div className='flex flex-col '>
-<form onSubmit={onSubmit}>
+<form onSubmit={onSubmitFunction}>
     <div className="flex justify-between items-center dark:text-lighTextColor gap-4 bg-gray-100 px-2 py-2 md:rounded-lg shadow-md mt-2">
       <div className="flex items-center gap-2">
         <div className="w-14 h-14 overflow-hidden rounded-full">

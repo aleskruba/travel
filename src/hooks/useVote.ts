@@ -61,7 +61,7 @@ type VoteResponse = {
       const response = await axios.post(`${BASE_URL}/${country}/vote`,newVote,config);
 
       const responseReply = await axios.post(`${BASE_URL}/${country}/votereply`,newVote,config);
-      console.log(response);
+ 
       if (response.status === 201 ) {
   
       }

@@ -3,7 +3,7 @@ import React from 'react'
 
 function NotFound404() {
   return (
-    <div className='pt-10 pb-10 flex justify-center items-center flex-col gap-10'>
+    <div className='pt-10 pb-10 flex justify-center items-center flex-col gap-10 dark:text-white'>
 
       
     <h1 className='text-3xl font-thin'>

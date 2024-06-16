@@ -4,11 +4,12 @@ import { MessageProps } from '../../types';
 import { ReplyProps } from '../../types';
 import { useAuthContext } from '../../context/authContext';
 import axios from 'axios';
-import BASE_URL, { config } from '../../config/config';
+import BASE_URL, { SOCKET_URL, config } from '../../config/config';
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import { BsEmojiGrin } from "react-icons/bs";
-
+import { useCountryContext } from '../../context/countryContext';
+import { io } from 'socket.io-client';
 
   interface Props {
     setReplyDiv: React.Dispatch<boolean>; 
@@ -17,14 +18,20 @@ import { BsEmojiGrin } from "react-icons/bs";
     message:MessageProps
     setAllowedToDelete: React.Dispatch<React.SetStateAction<boolean>>
     setIsSubmitted: React.Dispatch<React.SetStateAction<boolean>>
+
 }
 type PartialReplyProps = Partial<ReplyProps>;
 
 function Reply({setReplyDiv,setReplies,replies,message,setAllowedToDelete,setIsSubmitted}:Props) {
-  const { user} = useAuthContext();
+       const { user} = useAuthContext();
+       const { chosenCountry } = useCountryContext();
 
       const [reply, setReply] = useState<PartialReplyProps>({});
       const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+      const [backendError,setBackendError] = useState('');
+
+ 
+      const socket = io(SOCKET_URL);
 
       const addEmoji = (event: any) => {
         const sym = event.unified.split("_");
@@ -53,7 +60,7 @@ function Reply({setReplyDiv,setReplies,replies,message,setAllowedToDelete,setIsS
       
 
       
-      const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+      const onSubmitFunction = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
       
         try {
@@ -62,9 +69,11 @@ function Reply({setReplyDiv,setReplies,replies,message,setAllowedToDelete,setIsS
             setIsSubmitted(false);
             return;
           }
-      
+     
+          const newReplyId = replies.reduce((maxId, reply) => Math.max(reply.id, maxId), 0) + 1;
+
           const newReply = {
-            id: 0,
+            id: newReplyId,
             firstName: user?.firstName || '',
             date: new Date(),
             image: user?.image || '',
@@ -72,6 +81,7 @@ function Reply({setReplyDiv,setReplies,replies,message,setAllowedToDelete,setIsS
             message_id: message.id || 0,
             user_id: user?.id || 0,
           };
+        
           setReplyDiv(false);
           setReplies([newReply, ...replies]);
       
@@ -79,6 +89,8 @@ function Reply({setReplyDiv,setReplies,replies,message,setAllowedToDelete,setIsS
       
           if (response.status === 201) {
             const updatedReply = { ...newReply, id: response.data.message };
+
+            socket.emit('send_reply', {reply:updatedReply,chosenCountry});    
             setReplies([updatedReply, ...replies]);
       
             setReply({
@@ -93,9 +105,10 @@ function Reply({setReplyDiv,setReplies,replies,message,setAllowedToDelete,setIsS
       
             
           }
-        } catch (error) {
-          console.error('Error submitting reply:', error);
-          // Handle error, e.g., show a toast message to the user
+        } catch (error:any) {
+          console.error('Error submitting reply:', error.response.data.error);
+          setBackendError(error.response.data.error)
+          setTimeout(() =>setBackendError(''),1000);
         }
       };
       useEffect(() => {
@@ -104,7 +117,7 @@ function Reply({setReplyDiv,setReplies,replies,message,setAllowedToDelete,setIsS
 
   return (
    
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmitFunction}>
     <div className="flex flex-col items-center space-y-4 mt-4">
       <div className='relative w-full'>
     <textarea
@@ -120,11 +133,13 @@ function Reply({setReplyDiv,setReplies,replies,message,setAllowedToDelete,setIsS
         </div>
     <div className="flex justify-center space-x-4">
       
+      {message.message !== 'TATO ZPRÁVA BYLA SMAZÁNA !!!!!'?   
       <button className="bg-blue-500 w-[80px] text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-700"
               type="submit" 
       >
+        
         Odešli
-      </button>
+      </button> : null }
       <button className="bg-gray-300 w-[80px] text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400 focus:outline-none focus:ring focus:border-gray-500" 
               onClick={() => setReplyDiv(false)}
               type='button'>
@@ -133,6 +148,7 @@ function Reply({setReplyDiv,setReplies,replies,message,setAllowedToDelete,setIsS
 
     </div>
   </div>
+  <div>{backendError ? backendError : ''}</div>
   <div className='flex justify-center mt-2 '>
  {showEmojiPicker && (
        <Picker

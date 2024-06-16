@@ -27,7 +27,11 @@ import YourCards from './components/traveltips/YourCards';
 function App() {
   const { theme } = useThemeContext();
   const { showDialog,showSignUpDialog ,showForgottenPasswordDialog} = useDialogContext();
-  const { backendServerError } = useAuthContext();
+  const { backendServerError,isLoading } = useAuthContext();
+
+  if (isLoading) {
+    return <div className="loading-spinner">Loading...</div>; // Replace with your actual loading spinner
+  }
 
   return (
     <div className={`${theme === 'dark' ? 'dark' : ''} relative screen`}>

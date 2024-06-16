@@ -7,16 +7,16 @@ import { BsEmojiGrin } from "react-icons/bs";
 //type PartialMessageProps = Partial<MessageProps>;
 
 interface CreateMessageProps {
-    onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
     handleChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
     user: UserProps;
     message: MessageProps;
     backendError: string;
     setMessage: React.Dispatch<React.SetStateAction<MessageProps>>
-
+    allowedToDelete:boolean
 }
 
-const CreateMessage: React.FC<CreateMessageProps> = ({ onSubmit, handleChange, user, message, backendError,setMessage }) => {
+const CreateMessage: React.FC<CreateMessageProps> = ({ handleSubmit, handleChange, user, message, backendError,setMessage,allowedToDelete }) => {
 
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
@@ -45,11 +45,12 @@ const CreateMessage: React.FC<CreateMessageProps> = ({ onSubmit, handleChange, u
   
 useEffect(() => {
   setShowEmojiPicker(false)
-},[message])
+
+},[])
 
     return (
       <div className='flex flex-col '>
-<form onSubmit={onSubmit}>
+<form onSubmit={handleSubmit}>
 
     <div className="flex justify-between items-center dark:text-lighTextColor gap-4 bg-gray-100 px-2 py-2 md:rounded-lg shadow-md mt-2">
       <div className="flex items-center gap-2"> 
@@ -72,7 +73,7 @@ useEffect(() => {
       </div>
    
       <div>
-        <button type="submit" className="py-2 px-4 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring focus:border-green-700">Odešli</button>
+        <button type="submit" className={`py-2 px-4 bg-green-500 text-white rounded-lg shadow-md focus:outline-none focus:ring focus:border-green-700 ${!allowedToDelete ? 'cursor-default pointer-events-none opacity-30':'hover:bg-green-600 '}`}>Odešli</button>
       </div>
 
     </div>

@@ -4,10 +4,11 @@ import DOMPurify from 'dompurify';
 import axios from 'axios';
 import TourMessage from './TourMessage';
 import { ReplyProps, TourMessageProps } from '../../types';
-import BASE_URL, { config } from '../../config/config';
+import BASE_URL, { SOCKET_URL, config } from '../../config/config';
 import { useAuthContext } from '../../context/authContext';
 import { useParams } from 'react-router-dom';
 import CreateTourMessage from './CreateTourMessage';
+import { io } from 'socket.io-client';
 
 const ITEMS_PER_PAGE = 15;
 
@@ -34,6 +35,120 @@ function TourMessages() {
   const [replies, setReplies] = useState<ReplyProps[]>([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [allowedToDelete, setAllowedToDelete] = useState(true);
+ 
+
+  const socket = io(SOCKET_URL);
+
+  useEffect(() => {
+    socket.on('receive_message_tour', (data) => {
+      console.log(data);
+      console.log(data.user_id,user?.id   );
+      if (data.user_id !== user?.id ) {
+        console.log('socket', data.senderId);
+        setTourMessages((prevMessages) => [...prevMessages, data].sort((a, b) => b.id - a.id));
+      }
+    });
+
+
+    socket.on('receive_deleted_message_tour', (data) => {
+
+      console.log(data);
+      console.log(data.messages,data.messageID,user?.id);
+     // console.log(data.messages.some((message: { id: any, user_id:any; }) => message.id == data.messageID && message.user_id != user?.id))
+      if (data.messages.some((message: { id: any, user_id:any; }) => message.id == data.messageID && message.user_id != user?.id)) {
+
+        const newValue = data.messages.map((element: { id: any; }) => {
+          if (element.id === data.messageID) {
+            return { ...element, message:'TATO ZPRÁVA BYLA SMAZÁNA !!!!!' };
+          }
+          return element;
+        });
+      
+        setTourMessages(newValue);
+   
+        const updatedMessages = data.messages.filter((message: { id: any; }) => message.id !== data.messageID);
+
+   
+        setTimeout(()=>{   setTourMessages(updatedMessages)},1100) 
+
+    }
+    });
+
+
+    socket.on('receive_reply_tour', (data) => {
+      console.log(data);
+      if (data.user_id !== user?.id && !tourMessages.some(message => message.id === data.message_id)) {
+        console.log('socket', data.senderId);
+        setReplies((prevReplies) => [...prevReplies, data].sort((a, b) => b.id - a.id)
+      );
+      }
+    });
+
+
+
+/*     socket.on('receive_private_reply_tour', (data) => {
+      console.log(data);
+      if (user?.id == data.tour_room) {
+        console.log('socket', data);
+        setReplies((prevReplies) => [...prevReplies, data.reply].sort((a, b) => b.id - a.id)
+      );
+      }
+    }); */
+
+    socket.on('receive_deleted_reply_tour', (data) => {
+      console.log(data);
+      if (data.replies.some((reply: { id: any, user_id:any; }) => reply.id == data.replyID && reply.user_id != user?.id)) {
+
+        const newValue = data.replies.map((element: { id: any; }) => {
+          if (element.id === data.replyID) {
+            return { ...element, message:'TATO ZPRÁVA BYLA SMAZÁNA !!!!!' };
+          }
+          return element;
+        });
+   
+        setReplies(newValue);
+        const updatedReplies = data.replies.filter((reply: { id: any; }) => reply.id !== data.replyID);
+
+   
+        setTimeout(()=>{   setReplies(updatedReplies)},1100) 
+    }
+  });
+
+    return () => {
+      socket.off('receive_message_tour');
+      socket.off('receive_reply_tour');
+      socket.off('receive_private_reply_tour');
+      socket.off('receive_deleted_message_tour');
+      socket.off('receive_deleted_reply_tour');
+   
+    };
+  }, [user, intId]);
+
+  useEffect(() => {
+    if (intId) {
+        socket.emit('join_tour_room', intId.toString(), user?.id);
+        socket.emit('private_message_room', user?.id);
+    }
+    
+  }, [intId, user?.id,]);
+  
+
+  useEffect(() => {
+    socket.on('receive_private_reply_tour', (data) => {
+        console.log(data);
+        if (user?.id === data.tour_room) {
+            console.log('socket', data);
+            setReplies((prevReplies) => [...prevReplies, data.reply].sort((a, b) => b.id - a.id));
+        }
+    });
+
+    // Clean up the socket listeners on component unmount
+    return () => {
+        socket.off('receive_private_reply_tour');
+    };
+}, [user]);
+
+
 
 
   const configGet = {
@@ -76,7 +191,7 @@ function TourMessages() {
     setTourMessage({ ...tourMessage, [event.target.name]: sanitizedMessage });
   };
 
-  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const onSubmitFunction = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!tourMessage.message || !tourMessage.message.trim()) {
@@ -89,8 +204,11 @@ function TourMessages() {
     }
 
     try {
+
+      const newMessageId = tourMessages.reduce((maxId, msg) => Math.max(msg.id, maxId), 0) + 1;
+
       const newMessage = {
-        id: tourMessages.length + 1, // Generate a unique ID
+        id: newMessageId,
         firstName: user?.firstName || '', // Default to empty string if undefined
         date: new Date(),
         image: user?.image || '', // Default to empty string if undefined
@@ -103,6 +221,7 @@ function TourMessages() {
 
       if (response.status === 201) {
         const updatedMessage = { ...newMessage, id: response.data.message };
+        socket.emit('send_message_tour', {message:updatedMessage,tour_room: intId.toString()});    
         setBackendError('')
         setTourMessages((prevMessages) => [updatedMessage, ...prevMessages].sort((a, b) => b.id - a.id));
         setTourMessage({
@@ -138,7 +257,7 @@ function TourMessages() {
       ) : (
         <>
         <CreateTourMessage
-            onSubmit={onSubmit}
+            onSubmitFunction={onSubmitFunction}
             handleChange={handleChange}
             tourMessage={tourMessage}
             backendError={backendError}
@@ -160,6 +279,7 @@ function TourMessages() {
                                setIsSubmitted={setIsSubmitted}
                                allowedToDelete={allowedToDelete}
                                setAllowedToDelete={setAllowedToDelete}
+              
                                />
                 ))
             ) : (
