@@ -29,9 +29,9 @@ function App() {
   const { showDialog,showSignUpDialog ,showForgottenPasswordDialog} = useDialogContext();
   const { backendServerError,isLoading } = useAuthContext();
 
-  if (isLoading) {
+/*   if (isLoading) {
     return <div className="loading-spinner">Loading...</div>; // Replace with your actual loading spinner
-  }
+  } */
 
   return (
     <div className={`${theme === 'dark' ? 'dark' : ''} relative screen`}>
