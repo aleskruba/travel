@@ -141,7 +141,7 @@ return (
     <div className='flex flex-col  dark:bg-gray-500 dark:text-gray-100  px-4 py-2  shadow-2xl rounded-lg '>
       <div className='flex flex-col'>
      <div className="flex flex-col md:flex-row md:items-center gap-4 relative ">
-      <div className="flex  items-center gap-2"> 
+      <div className="flex  items-center gap-4"> 
          {tourMessage.user_id == user?.id &&
                   <div className={`${allowedToDelete ? ' text-red-700  cursor-pointer hover:text-red-500' : 'pointer-events-none opacity-20  cursor-default'} absolute right-1 top-1 `} 
                       onClick={()=>handleDeleteMessageClick(tourMessage.id)}
@@ -152,10 +152,10 @@ return (
 
 
         <div
-            className={'w-14 h-14 overflow-hidden rounded-full cursor-pointer'}
+            className='w-18 h-18 overflow-hidden rounded-full'
             onClick={showFotoFunction}
           >
-          <img src={tourMessage?.image ? tourMessage?.image : '/profile.png'} alt="Profile" className="w-full h-full object-cover" />
+          <img src={tourMessage?.image ? tourMessage?.image : '/profile.png'} alt="Profile"      className="w-full z-30 h-full object-cover" />
           </div>
           <Modal show={showFoto} onClose={closeModal} imageUrl={tourMessage?.image ? tourMessage?.image : '/profile.png'} />
 
