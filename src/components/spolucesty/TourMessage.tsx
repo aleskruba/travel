@@ -246,7 +246,7 @@ return (
         key={reply.id}>
         <div key={reply.id} className={`${reply?.messageType === 1 ? 'dark:bg-gradient-to-r dark:from-shinyblack to-gray dark:text-white rounded-lg bg-gradient-to-r bg-gray-300 to-gray-400 ':''} flex flex-col px-1 relative pt-2 pb-2  border-t border-gray-400 dark:text-gray-100`}>
         <span className='absolute text-xs left-16 top-1 px-6 text-center'>{reply.messageType == 1 ? `Tato zpáva je zašifrovaná a vidí ji pouze ${tourMessage.firstName}  a ${reply.firstName} `:''}</span>
-          <div className={`flex items-center gap-6 md:gap-2 px-2   mt-1 ${reply.user_id ===  user?.id ? 'pl-1': 'p3-6' }`}>
+          <div className={`flex items-center gap-2 md:gap-2 px-2   mt-1 ${reply.user_id ===  user?.id ? 'pl-1': 'p3-6' }`}>
             {reply.user_id === user?.id &&
               <div className="text-red-700 hover:text-red-500 absolute  cursor-pointer top-1 right-1 " onClick={() => handleDeleteClick(reply.id)}>
              {allowedToDelete &&  <FaRegTrashAlt />}
@@ -265,13 +265,13 @@ return (
 
 
             </div>
-            <div className="flex gap-1 ">
+            <div className="flex gap-8 ">
             <p className={` ${reply.user_id ===  user?.id ? 'text-blue-800 dark:text-lightAccent' : 'text-gray-600 dark:text-gray-100' }  font-bold  `}>{reply.firstName ? reply.firstName.slice(0, 10) : '' }</p>
             <p className="text-gray-600   dark:text-gray-100 italic">   {displayText}</p> 
             </div>
           </div>
          
-          <div className="md:pl-14 break-all" >
+          <div className="md:pl-14 break-all pt-2" >
             <p className={` ${reply.user_id ===  user?.id ? 'text-blue-800 dark:text-lightAccent'  : 'text-gray-600 dark:text-gray-100' }`}>{reply.message}</p>
          </div>
   
