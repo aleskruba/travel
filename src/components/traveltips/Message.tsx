@@ -542,7 +542,7 @@ return (
           <div className='flex flex-col'>         
             <div onClick={() => handleVoteClickReply('thumb_up',reply.id,message.id)} 
                      className={`
-                  ${user?.id === message.user_id ? 'opacity-20 pointer-events-none' : `cursor-pointer transition-transform
+                  ${user?.id === reply.user_id ? 'opacity-20 pointer-events-none' : `cursor-pointer transition-transform
                     ${likedReply 
                                        ? 'scale-150 rotate-10 ' 
                                        : 'scale-100 rotate-0 '}
@@ -558,7 +558,7 @@ return (
           <div className='flex flex-col'>    
             <div onClick={() => handleVoteClickReply('thumb_down',reply.id,message.id)} 
                   className={`
-                    ${user?.id === message.user_id ? 'opacity-20 pointer-events-none' : `cursor-pointer transition-transform
+                    ${user?.id === reply.user_id ? 'opacity-20 pointer-events-none' : `cursor-pointer transition-transform
                       ${dislikedReply 
                                          ? 'scale-150 rotate-10 ' 
                                          : 'scale-100 rotate-0 '}
