@@ -160,7 +160,7 @@ return (
           <Modal show={showFoto} onClose={closeModal} imageUrl={tourMessage?.image ? tourMessage?.image : '/profile.png'} />
 
 
-        <div className="flex flex-row gap-4 md:gap-2">
+        <div className="flex flex-row gap-8 md:gap-2 bg-blue-400 w-full">
         <p className="text-gray-600 dark:bg-gray-500 dark:text-gray-100 font-semibold">{tourMessage?.firstName.slice(0, 10)}</p>
         <p className="text-gray-600 dark:bg-gray-500 dark:text-gray-100 w-[80px]  shrink-0 whitespace-nowrap overflow-hidden text-ellipsis">{moment(tourMessage.date).format('DD-MM YYYY ')}</p>
 
