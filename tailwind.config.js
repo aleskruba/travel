@@ -21,6 +21,7 @@ module.exports = {
         facebook: '#3d59c4',
         shinyblack: '#0d0d0d', // Shiny black
         nicegray: '#b0b0b0', // Nice gray
+        lightRed: '#ffcccc',
       },
       keyframes: {
         fadeOut: {

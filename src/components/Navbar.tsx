@@ -118,15 +118,15 @@ function Navbar() {
 
     <div className={`${visible ? 'md:hidden fixed  bg-darkAccent z-50  bottom-1 border rounded-lg shadow-lg left-1/2 transform -translate-x-1/2 w-[95%] md:w-[50%] ' : 'fixed  bg-darkAccent z-50   bottom-1 border rounded-lg shadow-lg left-1/2 transform -translate-x-1/2 w-[95%] md:w-[60%] '}`}>
         
-    <div className='flex justify-between w-full px-1 py-4 text-white text-xs'>
+    <div className='flex justify-between w-full px-1 py-2 text-white text-xs md:text-base'>
              
                 <div className='flex gap-1 md:gap-6'>
                 
              
-                <Link to="/traveltips" className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg relative">TravelTips                </Link>
-                <Link to="/spolucesty" className="hover:bg-lightAccent hover:text-darkBackground  hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg">Spolucesty</Link>
+                <Link to="/traveltips" className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-1 py-2 rounded-lg relative">TravelTips                </Link>
+                <Link to="/spolucesty" className="hover:bg-lightAccent hover:text-darkBackground  hover:transition duration-100 cursor-pointer border border-white px-1 py-2 rounded-lg">Spolucesty</Link>
                
-               <Link to="/" className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-5 py-1 rounded-lg text-base" >
+               <Link to="/" className=" hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-5 py-2 rounded-lg md:text-xl" >
                 <IoHomeOutline /> 
                 
                 </Link>
@@ -136,21 +136,21 @@ function Navbar() {
                 {!user ?
 
                  <div className='flex  ml-1 gap-2 md:gap-6'>
-                    <div className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg"
+                    <div className="hover:bg-lightAccent hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-1 py-2 rounded-lg"
                          onClick={handleSignUpClick}>
                           Registrace</div>
-                    <div className="hover:bg-lightAccent hover:text-darkBackground  hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg"
+                    <div className="hover:bg-lightAccent hover:text-darkBackground  hover:transition duration-100 cursor-pointer border border-white px-1 py-2 rounded-lg"
                           onClick={handleLoginClick}>
                           Přihlásit</div>
                </div>
                : 
                
                <div className='flex ml-1 gap-2 md:gap-6'>
-               <Link to={'/profile'} className="hover:bg-lightAccent min-w-[60px] text-center hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg">
+               <Link to={'/profile'} className="hover:bg-lightAccent min-w-[60px] text-center hover:text-darkBackground hover:transition duration-100 cursor-pointer border border-white md:px-6  py-2 rounded-lg">
                   Profil </Link>
                
          
-               <div className="hover:bg-lightAccent hover:text-darkBackground  hover:transition duration-100 cursor-pointer border border-white px-1 py-1 rounded-lg"
+               <div className="hover:bg-lightAccent hover:text-darkBackground  hover:transition duration-100 cursor-pointer border border-white px-1 py-2 rounded-lg"
                      onClick={logOutFunction}>
                      Odhlásit</div>
           </div>
