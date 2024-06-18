@@ -91,10 +91,34 @@ function Tours() {
       const [selectedYear, selectedMonth] = selectedDate.split('-');
 
       filtered = filtered.filter(tour => {
-        const tourDate = typeof tour.tourdate === 'string' ? tour.tourdate : tour.tourdate.toISOString().split('T')[0];
-        const [tourYear, tourMonth] = tourDate.split('-');
-        return tourYear === selectedYear && tourMonth === selectedMonth;
+        // Define variables for tour dates
+        let tourDate = null;
+        let tourDateEnd = null;
+      
+        // Check if tour.tourdate is a string or Date and format accordingly
+        if (typeof tour.tourdate === 'string') {
+          tourDate = tour.tourdate;
+        } else if (tour.tourdate instanceof Date) {
+          tourDate = tour.tourdate.toISOString().split('T')[0];
+        }
+      
+        // Check if tour.tourdateEnd is a string or Date and format accordingly
+        if (typeof tour.tourdateEnd === 'string') {
+          tourDateEnd = tour.tourdateEnd;
+        } else if (tour.tourdateEnd instanceof Date) {
+          tourDateEnd = tour.tourdateEnd.toISOString().split('T')[0];
+        }
+      
+        // Extract year and month from tourDate
+        const [tourYear, tourMonth] = tourDate ? tourDate.split('-') : [null, null];
+        // Extract year and month from tourDateEnd
+        const [tourYearEnd, tourMonthEnd] = tourDateEnd ? tourDateEnd.split('-') : [null, null];
+      
+        // Return true if either tourDate or tourDateEnd matches the selected year and month
+        return (tourYear === selectedYear && tourMonth === selectedMonth) ||
+               (tourYearEnd === selectedYear && tourMonthEnd === selectedMonth);
       });
+      
     }
 
     setFilteredTours(filtered);
@@ -126,7 +150,7 @@ function Tours() {
 
   const startIndex = currentPage * ITEMS_PER_PAGE;
   const endIndex = (currentPage + 1) * ITEMS_PER_PAGE;
-  const currentMessages = filteredTours.slice(startIndex, endIndex);
+  const currentTours = filteredTours.slice(startIndex, endIndex);
 
   return (
     <div className={`flex flex-col items-center pb-4`}>
@@ -149,8 +173,8 @@ function Tours() {
           <p>Moment prosím ...</p>
         ) : (
 
-          currentMessages.length > 0 ?
-            currentMessages.map((tour) => <Tour key={tour.id} tour={tour} />)
+          currentTours.length > 0 ?
+          currentTours.map((tour) => <Tour key={tour.id} tour={tour} />)
                                     :
               <div className='flex justify-center items-center flex-col pb-52'>  Žádná shoda  
               

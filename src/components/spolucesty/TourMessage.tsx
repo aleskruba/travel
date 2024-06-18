@@ -152,17 +152,18 @@ return (
 
 
         <div
-            className='w-18 h-18 overflow-hidden rounded-full'
+            className='w-14 h-14 bg-red-500 overflow-hidden cursor-pointer rounded-full'
+
             onClick={showFotoFunction}
           >
-          <img src={tourMessage?.image ? tourMessage?.image : '/profile.png'} alt="Profile"      className="w-full z-30 h-full object-cover" />
+          <img src={tourMessage?.image ? tourMessage?.image : '/profile.png'} alt="Profile"   className="w-full h-full object-cover object-center" />
           </div>
           <Modal show={showFoto} onClose={closeModal} imageUrl={tourMessage?.image ? tourMessage?.image : '/profile.png'} />
 
 
-        <div className="flex flex-row gap-8 md:gap-2 w-full">
-        <p className="text-gray-600 dark:bg-gray-500 dark:text-gray-100 font-semibold">{tourMessage?.firstName.slice(0, 10)}</p>
-        <p className="text-gray-600 dark:bg-gray-500 dark:text-gray-100 w-full  shrink-0 whitespace-nowrap ">{moment(tourMessage.date).format('DD-MM YYYY ')}</p>
+        <div className="flex flex-row">
+        <div className="text-gray-600 dark:bg-gray-500 dark:text-gray-100 font-semibold mr-4">{tourMessage?.firstName.slice(0, 10)}</div>
+        <div className="text-gray-600 dark:bg-gray-500 dark:text-gray-100 w-full  shrink-0 whitespace-nowrap ">{moment(tourMessage.date).format('DD-MM YYYY ')}</div>
 
      
         </div>
