@@ -17,16 +17,10 @@ interface Props {
   tourMessage: TourMessageProps;
   setAllowedToDelete: React.Dispatch<React.SetStateAction<boolean>>;
   setIsSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedReplyDivId: React.Dispatch<React.SetStateAction<number|null>>;
 }
 
-function TourReply({
-  setReplyDiv,
-  setReplies,
-  replies,
-  tourMessage,
-  setAllowedToDelete,
-  setIsSubmitted,
-}: Props) {
+function TourReply({ setSelectedReplyDivId, setReplyDiv,setReplies,replies,tourMessage,setAllowedToDelete,setIsSubmitted,}: Props) {
   const { user } = useAuthContext();
   const [backendError, setBackendError] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
@@ -152,6 +146,7 @@ function TourReply({
       setShowEmojiPicker(false)
     },[reply])
 
+
   return (
     <div className='flex flex-col '>
     <form onSubmit={onSubmitFunction} ref={formRef}>
@@ -184,7 +179,7 @@ function TourReply({
           </button>
           <button
             className="bg-gray-300 md:w-[130px] text-xs md:text-base text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400 focus:outline-none focus:ring focus:border-gray-500"
-            onClick={() => setReplyDiv(false)}
+            onClick={() => {setReplyDiv(false);setSelectedReplyDivId(null)}}
             type="button"
           >
             Zpět

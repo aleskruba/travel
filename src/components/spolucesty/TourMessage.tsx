@@ -191,6 +191,7 @@ return (
              tourMessage={tourMessage}
              setAllowedToDelete={setAllowedToDelete}
              setIsSubmitted={setIsSubmitted}
+             setSelectedReplyDivId={setSelectedReplyDivId}
              />
 
     }

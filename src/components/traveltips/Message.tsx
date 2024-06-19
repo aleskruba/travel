@@ -448,7 +448,7 @@ return (
              message={message}
              setAllowedToDelete={setAllowedToDelete}
              setIsSubmitted={setIsSubmitted}
-      
+             setSelectedReplyDivId={setSelectedReplyDivId}
              />
 
     }

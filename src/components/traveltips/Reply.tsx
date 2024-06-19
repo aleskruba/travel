@@ -18,11 +18,11 @@ import { io } from 'socket.io-client';
     message:MessageProps
     setAllowedToDelete: React.Dispatch<React.SetStateAction<boolean>>
     setIsSubmitted: React.Dispatch<React.SetStateAction<boolean>>
-
+    setSelectedReplyDivId:React.Dispatch<React.SetStateAction<number | null>>
 }
 type PartialReplyProps = Partial<ReplyProps>;
 
-function Reply({setReplyDiv,setReplies,replies,message,setAllowedToDelete,setIsSubmitted}:Props) {
+function Reply({setReplyDiv,setReplies,replies,message,setAllowedToDelete,setIsSubmitted,setSelectedReplyDivId}:Props) {
        const { user} = useAuthContext();
        const { chosenCountry } = useCountryContext();
 
@@ -141,7 +141,7 @@ function Reply({setReplyDiv,setReplies,replies,message,setAllowedToDelete,setIsS
         Odešli
       </button> : null }
       <button className="bg-gray-300 w-[80px] text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400 focus:outline-none focus:ring focus:border-gray-500" 
-              onClick={() => setReplyDiv(false)}
+              onClick={() => {setReplyDiv(false);setSelectedReplyDivId(null)}}
               type='button'>
         Zpět
       </button>
