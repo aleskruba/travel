@@ -250,7 +250,7 @@ return (
         <div           className={`shadow-xl rounded-lg transition-opacity duration-1000 ${deletedReply === reply.id ? 'opacity-0  bg-red-500 pointer-events-none '  : 'opacity-100'}`}
         key={reply.id}>
         <div key={reply.id} className={`${reply?.messageType === 1 ? 'dark:bg-gradient-to-r dark:from-shinyblack to-gray dark:text-white rounded-lg bg-gradient-to-r bg-gray-300 to-gray-400 ':''} flex flex-col px-1 relative pt-2 pb-2  border-t border-gray-400 dark:text-gray-100`}>
-        <span className='absolute text-xs left-16 top-1 px-6 text-center'>{reply.messageType == 1 ? `Tato zprávu vidí pouze ${tourMessage.firstName}  a ${reply.firstName} `:''}</span>
+        <span className='absolute text-xs left-16 top-1 px-6 text-center'>{reply.messageType == 1 ? `Tuto zprávu vidí pouze ${tourMessage.firstName}  a ${reply.firstName} `:''}</span>
           <div className={`flex items-center gap-2 md:gap-2 px-2   mt-1 ${reply.user_id ===  user?.id ? 'pl-1': 'p3-6' }`}>
             {reply.user_id === user?.id &&
               <div className="text-red-700 hover:text-red-500 absolute  cursor-pointer top-1 right-1 " onClick={() => handleDeleteClick(reply.id)}>
