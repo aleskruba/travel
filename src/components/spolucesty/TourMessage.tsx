@@ -15,6 +15,7 @@ import Modal from '../Modal';
 import { io } from 'socket.io-client';
 import { useParams } from 'react-router-dom';
 
+
 type Props = {
     tourMessages:TourMessageProps[];
   setTourMessages:React.Dispatch<React.SetStateAction<TourMessageProps[]>>;
@@ -125,12 +126,14 @@ const deleteReply = async () => {
 
 const [showFoto,setShowFoto] = useState(false)
 const [showReplyFoto,setShowReplyFoto] = useState(false)
-
+    
+const [replyImage,setReplyImage] = useState<string>()
 
 const showFotoFunction = () => {
   setShowFoto(true);
 
 };
+
 
 const closeModal = () => {
   setShowFoto(false);
@@ -158,8 +161,9 @@ return (
           >
           <img src={tourMessage?.image ? tourMessage?.image : '/profile.png'} alt="Profile"   className="w-full h-full object-cover object-center" />
           </div>
-          <Modal show={showFoto} onClose={closeModal} imageUrl={tourMessage?.image ? tourMessage?.image : '/profile.png'} />
-
+          {showFoto && 
+          <Modal show={showFoto} onClose={closeModal} imageUrl={tourMessage?.image && showFoto ? tourMessage?.image : '/profile.png'} />
+          }
 
         <div className="flex flex-row">
         <div className="text-gray-600 dark:bg-gray-500 dark:text-gray-100 font-semibold mr-4">{tourMessage?.firstName.slice(0, 10)}</div>
@@ -240,7 +244,7 @@ return (
       } else { // For dates in the future or more than a day ago
         displayText = moment(reply.date).format('YY DD-MM HH:mm');
       }
-    
+
       return (
 
         <div           className={`shadow-xl rounded-lg transition-opacity duration-1000 ${deletedReply === reply.id ? 'opacity-0  bg-red-500 pointer-events-none '  : 'opacity-100'}`}
@@ -253,16 +257,17 @@ return (
              {allowedToDelete &&  <FaRegTrashAlt />}
               </div>
             }
-            <div className={'w-14 h-14 overflow-hidden rounded-full cursor-pointer'}
-            onClick={()=>!showReplyFoto && setShowReplyFoto(true)}>
+          <div className={'w-14 h-14 overflow-hidden rounded-full cursor-pointer'}
+            onClick={()=> {!showReplyFoto && setShowReplyFoto(true) ;setReplyImage(reply.image)}  }>
             <img
               src={reply.image ? reply.image : 'profile.png' }
               alt="Profile"
               className="w-full z-30 h-full object-cover"
             />
-    <Modal show={showReplyFoto} onClose={()=>setShowReplyFoto(false)} imageUrl={reply.image} />
-
-
+  
+            {showReplyFoto &&
+          <Modal show={showReplyFoto} onClose={()=>setShowReplyFoto(false)} imageUrl={replyImage && showReplyFoto && replyImage} />
+            }
 
 
             </div>

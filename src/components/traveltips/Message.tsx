@@ -183,6 +183,7 @@ const imageUrl = message?.image ? message?.image : '/profile.png';
 
 const [showFoto,setShowFoto] = useState(false)
 const [showReplyFoto,setShowReplyFoto] = useState(false)
+const [replyImage,setReplyImage] = useState<string>()
 
 
 const showFotoFunction = () => {
@@ -513,16 +514,17 @@ return (
              {allowedToDelete &&  <FaRegTrashAlt />}
               </div>
             }
-            <div className={'w-14 h-14 overflow-hidden rounded-full cursor-pointer'}
-            onClick={()=>!showReplyFoto && setShowReplyFoto(true)}>
+          <div className={'w-14 h-14 overflow-hidden rounded-full cursor-pointer'}
+            onClick={()=> {!showReplyFoto && setShowReplyFoto(true) ;setReplyImage(reply.image)}  }>
             <img
               src={reply.image ? reply.image : 'profile.png' }
               alt="Profile"
               className="w-full z-30 h-full object-cover"
             />
-    <Modal show={showReplyFoto} onClose={()=>setShowReplyFoto(false)} imageUrl={reply.image} />
-
-
+  
+            {showReplyFoto &&
+          <Modal show={showReplyFoto} onClose={()=>setShowReplyFoto(false)} imageUrl={replyImage && showReplyFoto && replyImage} />
+            }
 
 
             </div>

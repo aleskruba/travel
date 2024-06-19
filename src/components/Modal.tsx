@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 const Modal = ({ show, onClose, imageUrl }: any) => {
+ 
+  console.log(show&& imageUrl);
   const [isVisible, setIsVisible] = useState(show);
 
   useEffect(() => {
@@ -14,7 +16,7 @@ const Modal = ({ show, onClose, imageUrl }: any) => {
   }, [show]);
 
   const handleClose = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (e.target === e.currentTarget) {
+    if (e.target === e.currentTarget && isVisible) {
       onClose();
       
 
