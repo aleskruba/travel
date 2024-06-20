@@ -177,8 +177,8 @@ function Profile() {
         try {
           Resizer.imageFileResizer(
             file,
-            300,
-            300,
+            200,
+            200,
             'JPEG',
             100,
             orientation,
@@ -192,7 +192,7 @@ function Profile() {
         }
       });
 
-
+console.log(resizeFile)
 
       const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
