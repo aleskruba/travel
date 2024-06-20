@@ -195,10 +195,10 @@ function Profile() {
     if (selectedFile) {
       // Check file size
       const maxSize = 150 * 1024; // Convert KB to bytes
-      if (selectedFile.size > maxSize) {
+/*       if (selectedFile.size > maxSize) {
         alert('File size exceeds the maximum limit of 150KB.');
         return;
-      }
+      } */
   
       const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
       if (!allowedTypes.includes(selectedFile.type)) {
