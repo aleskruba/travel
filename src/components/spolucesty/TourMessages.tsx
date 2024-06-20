@@ -37,7 +37,12 @@ function TourMessages() {
   const [allowedToDelete, setAllowedToDelete] = useState(true);
  
 
-  const socket = io(SOCKET_URL);
+    const socket = io(SOCKET_URL, {
+    reconnection: true,
+    reconnectionAttempts: 5,
+  
+
+  });
 
   useEffect(() => {
     socket.on('receive_message_tour', (data) => {
