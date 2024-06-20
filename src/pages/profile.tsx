@@ -9,7 +9,7 @@ import DOMPurify from 'dompurify';
 import Resizer from "react-image-file-resizer";
 import { FaEye ,FaEyeSlash } from "react-icons/fa";
 import Modal from '../components/Modal';
-
+import EXIF from 'exif-js';
 
 
 
@@ -157,7 +157,7 @@ function Profile() {
 
   }
 
-  const resizeFile = (file:any) =>
+/*   const resizeFile = (file:any) =>
     new Promise((resolve) => {
       Resizer.imageFileResizer(
         file,
@@ -171,9 +171,83 @@ function Profile() {
         },
         "base64"
       );
-    });
-  
-  const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    }); */
+    const resizeFile = (file: any, orientation: number) =>
+      new Promise((resolve, reject) => {
+        try {
+          Resizer.imageFileResizer(
+            file,
+            300,
+            300,
+            'JPEG',
+            100,
+            orientation,
+            (uri) => {
+              resolve(uri);
+            },
+            'base64'
+          );
+        } catch (err) {
+          reject(err);
+        }
+      });
+
+
+
+      const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
+        const selectedFile = e.target.files?.[0];
+      
+        if (selectedFile) {
+          //@ts-ignore
+          EXIF.getData(selectedFile, async function() {
+                    //@ts-ignore
+            const orientation = EXIF.getTag(this, 'Orientation') || 1; // Default to 1 if no orientation tag
+      
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              setUser((prevUser: UserProps | null) => ({
+                ...prevUser!,
+                image: event.target?.result as string,
+              }));
+            };
+            reader.readAsDataURL(selectedFile);
+      
+            // Check file size
+            const maxSize = 150 * 1024; // Convert KB to bytes
+            /* if (selectedFile.size > maxSize) {
+              alert('File size exceeds the maximum limit of 150KB.');
+              return;
+            } */
+      
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+            if (!allowedTypes.includes(selectedFile.type)) {
+              alert('Invalid file type. Only JPEG, JPG, or PNG images are allowed.');
+              return;
+            }
+      
+            try {
+              // Resize the image with the correct orientation
+              const resizedFile = await resizeFile(selectedFile, orientation);
+              if (resizedFile) {
+                // Upload the resized image
+                const response = await axios.put(
+                  `${BASE_URL}/uploadprofileimage`,
+                  { image: resizedFile },
+                  config
+                );
+                user && setUser({ ...user, image: response.data.imageUrl });
+              } else {
+                setBackendImageError('Error resizing the image.');
+                console.error('Error resizing the image.');
+              }
+            } catch (error) {
+              console.error('Error resizing the image:', error);
+              setBackendImageError('Error resizing the image.');
+            }
+          });
+        }
+      };
+/*   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
  
     if (selectedFile) {
@@ -193,12 +267,6 @@ function Profile() {
     
  
     if (selectedFile) {
-      // Check file size
-      const maxSize = 150 * 1024; // Convert KB to bytes
-/*       if (selectedFile.size > maxSize) {
-        alert('File size exceeds the maximum limit of 150KB.');
-        return;
-      } */
   
       const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
       if (!allowedTypes.includes(selectedFile.type)) {
@@ -222,20 +290,11 @@ function Profile() {
         setBackendImageError('Error resizing the image.')
       }
     }
-  };
+  }; */
 
   const [showFoto,setShowFoto] = useState(false)
  
-  
-  const showFotoFunction = () => {
-    setShowFoto(true);
-  
-  };
-  
-  const closeModal = () => {
-    setShowFoto(false);
-  };
-  
+
 
   return (
      <div className="flex  items-center h-full pb-4 flex-col pt-8 gap-6">
@@ -271,6 +330,7 @@ function Profile() {
             <input
               type="file"
               id="imageInput"
+              accept="image/*"
               className="hidden"
               onChange={handleImageChange}
             />
